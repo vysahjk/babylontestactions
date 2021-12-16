@@ -83,7 +83,7 @@ function buildAdditionalParameters(scenario, scenarioList) {
   const parameters = [];
   if (scenarioData && scenarioList?.length > 0) {
     if (ADD_SCENARIO_NAME_PARAMETER) {
-      _addScenarioParameter('ScenarioName', 'string', scenarioData.name, parameters);
+      _addScenarioParameter('scenario_name', 'string', scenarioData.name, parameters);
     }
     if (ADD_SCENARIO_ID_PARAMETER) {
       _addScenarioParameter('ScenarioId', 'string', scenarioData.id, parameters);

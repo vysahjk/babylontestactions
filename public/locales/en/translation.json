@@ -122,8 +122,8 @@
     "scenariomanager": {
       "treelist": {
         "node": {
-          "dataset_one": "Dataset",
-          "dataset_other": "Datasets",
+          "dataset": "Dataset",
+          "dataset_plural": "Datasets",
           "status": {
             "label": "Run status",
             "successful": "Successful",
@@ -132,11 +132,27 @@
           },
           "text": {
             "search": "Search"
-          }
+          },
+          "dataset_one": "Dataset",
+          "dataset_other": "Datasets"
         },
         "search": {
+          "info": "{{count}} scenario found",
+          "info_plural": "{{count}} scenarios found",
           "info_one": "{{count}} scenario found",
           "info_other": "{{count}} scenarios found"
+        }
+      }
+    },
+    "tab": {
+      "scenario": {
+        "parameters": {
+          "time_configuration": "Time configuration",
+          "mass_action_lever": "Mass action lever",
+          "optimization_configuration": "Optimization settings",
+          "uncertainty_configuration": "Uncertainties settings",
+          "behavior_configuration": "Model behavior configuration",
+          "flow_management_policies": "Flows management policies"
         }
       }
     },
@@ -211,13 +227,6 @@
     }
   },
   "genericcomponent": {
-    "dateInput": {
-      "error": {
-        "minDateMessage": "Minimum date is not respected",
-        "maxDateMessage": "Maximum date is not respected",
-        "invalidDateMessage": "Date is invalid"
-      }
-    },
     "uploadfile": {
       "button": {
         "browse": "Browse",
@@ -225,6 +234,10 @@
       },
       "tooltip": {
         "isvalidfile": "Error: column name must be a string"
+      },
+      "mass_action_lever": {
+        "download": "Download dataset from ADT",
+        "generate": "Generate download link"
       }
     },
     "loading": {
@@ -267,6 +280,9 @@
         "msal": {
           "title": "Sign in with Microsoft"
         }
+      },
+      "download": {
+        "dataset": "Download dataset from ADT"
       }
     },
     "userinfo": {
@@ -274,12 +290,11 @@
         "change": {
           "language": "Change language"
         },
+        "download": {
+          "documentation": "Download documentation"
+        },
         "logout": "Sign out"
       }
-    },
-    "helpmenu": {
-      "documentation": "Documentation",
-      "support": "Contact support"
     },
     "dialog": {
       "scenario": {
@@ -296,13 +311,149 @@
     "text": {
       "scenario": {
         "parameters": {
+          "placeholder": "No parameters to edit.",
+          "title": "Scenario parameters",
+          "time_configuration": {
+            "start_date": "Start date",
+            "end_date": "End date",
+            "date_boundaries_error": "The simulation start date must be before the simulation end date",
+            "simulation_granularity": "Simulation granularity"
+          },
+          "units": {
+            "min": "Minute",
+            "hour": "Hour",
+            "day": "Day",
+            "week": "Week",
+            "month": "Month",
+            "quarter": "Quarter",
+            "year": "Year"
+          },
+          "optimization_configuration": {
+            "optimization_objective": {
+              "service_level_maximization": "Service level maximization",
+              "profit_maximization": "Profit maximization",
+              "title": "Optimization objective",
+              "tooltip": "Objective pursued by automatic optimization"
+            }
+          },
+          "uncertainty": {
+            "distribution": {
+              "gaussian": "Gaussian",
+              "uniform": "Uniform",
+              "title": "Uncertainties probability distribution law",
+              "tooltip": "Select the type of probability distribution used for uncertainties"
+            }
+          },
+          "behavior": {
+            "stock_dispatch": {
+              "title": "Intermediary stock dispatch policy",
+              "tooltip": "By default, at each time step, intermediate stocks dispatch their available quantity to downstream operations. This parameter is used to add a share to this dispatch. This part corresponds to a quantity that the stock can reserve to retain it.",
+              "dispatch_all": "Dispatch all quantities downstream",
+              "allow_retention": "Can retain quantities"
+            },
+            "manage_backlog": {
+              "title": "Track and serve backlog orders",
+              "tooltip": "Activate the ability to keep in memory the quantities not served in full on time and to serve them as soon as possible"
+            },
+            "obsolete_stock": {
+              "title": "Automatic obsolete stock deletion",
+              "tooltip": "If activated: model will automatically delete stocks during simulation when no further demand exists"
+            },
+            "batch_size": {
+              "title": "Batch size",
+              "tooltip": "Multiple to be observed at the end of production operation before being able to move on to the next operation (default value is 0 which means no batch size constraint) - Is applied to all production operations."
+            },
+            "financial_cost": {
+              "title": "Financial cost of stock",
+              "tooltip": "Cost of the financial asset due to inventory (ratio between 0 and 1 applied to inventory value for each time step)"
+            }
+          },
+          "flow_management_policies": {
+            "stock": {
+              "label": "Stock policy",
+              "tooltip": "Will be applied to all stocks.",
+              "none": {
+                "value": "None",
+                "tooltip": "No stock policy."
+              },
+              "op_fixed": {
+                "value": "Order point, fixed quantity",
+                "tooltip": "Stock policy on order point and fixed quantity (r,q)."
+              },
+              "op_variable": {
+                "value": "Order point, variable quantity",
+                "tooltip": "Stock policy on order point aiming to replenish the stock up to an user-defined level (s,S)."
+              }
+            },
+            "sourcing": {
+              "label": "Sourcing policy",
+              "tooltip": "Rule to apply in case of multi-sources to a stock.\nWill be applied to all stocks.",
+              "equi": {
+                "value": "Equidistribution",
+                "tooltip": "Orders are evenly distributed on all production operations and transports."
+              },
+              "highest": {
+                "value": "The highest available stock first",
+                "tooltip": "Orders are assigned to the path which has the highest stocks levels directly upstream up to limiting upstream stock quantity available and the excesses are assigned to next path up to its capacity, etc."
+              }
+            },
+            "stockDispatch": {
+              "label": "Stock dispatch policy",
+              "tooltip": "Rule to apply in case of multi-destinations from a stock.\nWill be applied to all stocks.",
+              "equi": {
+                "value": "Equidistribution",
+                "tooltip": "Stock is distributed evenly between all the production operations and transports which require any quantity."
+              },
+              "greatest": {
+                "value": "The greatest required quantities first",
+                "tooltip": "Consider the production operations and transports one by one in a determined order following their required quantities with the greatest first."
+              },
+              "smallest": {
+                "value": "The smallest required quantities first",
+                "tooltip": "Consider the production operations and transports one by one in a determined order following their required quantities with the smallest first."
+              },
+              "none": {
+                "value": "None",
+                "tooltip": "No stock dispatch policy."
+              }
+            },
+            "production": {
+              "label": "Production policy",
+              "tooltip": "Rule to apply in case of multi-operations for a production resource.\nWill be applied to all production resources.",
+              "equi": {
+                "value": "Equidistribution",
+                "tooltip": "Available time of the resource is evenly distributed between all operations which require any quantity."
+              },
+              "greatest": {
+                "value": "The greatest workload first",
+                "tooltip": "Consider the operations one by one in a determined order following their required time with the greatest first."
+              },
+              "smallest": {
+                "value": "The smallest workload first",
+                "tooltip": "Consider the operations one by one in a determined order following their required time with the smallest first."
+              },
+              "none": {
+                "value": "None",
+                "tooltip": "No production policy."
+              }
+            }
+          },
           "tabs": {
             "placeholder": "These parameters are confidential and you don't have permission to get access to them. If you think this is a mistake, please contact your application administrator."
-          },
-          "placeholder": "No parameters to edit.",
-          "title": "Scenario parameters"
+          }
         }
       }
+    },
+    "dateInput": {
+      "error": {
+        "minDateMessage": "Minimum date is not respected",
+        "maxDateMessage": "Maximum date is not respected",
+        "invalidDateMessage": "Date is invalid"
+      }
+    },
+    "helpmenu": {
+      "documentation": "Documentation",
+      "support": "Contact support"
     },
     "table": {
       "button": {

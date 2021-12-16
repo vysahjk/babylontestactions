@@ -11,7 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { SimpleTwoActionsDialog } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
-import { ScenarioParametersTabFactory } from '../../utils/scenarioParameters/factories/ScenarioParametersTabFactory';
+// eslint-disable-next-line
+import { SupplychainParametersTabFactory } from '../../utils/scenarioParameters/factories/SupplychainParameterTabFactory';
 import { PERMISSIONS } from '../../services/config/Permissions';
 import { PermissionsGate } from '../PermissionsGate';
 
@@ -136,13 +137,15 @@ const ScenarioParameters = ({
 
   // Generate input components for each scenario parameters tab
   for (const parametersGroupMetadata of parametersGroupsMetadata) {
-    parametersGroupMetadata.tab = ScenarioParametersTabFactory.create(
+    parametersGroupMetadata.tab = SupplychainParametersTabFactory.create(
       t,
       datasets,
       parametersGroupMetadata,
       parametersValuesToRender,
       setParametersValuesToRender,
-      editMode
+      editMode,
+      workspaceId,
+      currentScenario
     );
   }
 

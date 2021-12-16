@@ -1,11 +1,7 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import {
-  POWER_BI_FIELD_ENUM,
-  PowerBIReportEmbedSimpleFilter,
-  PowerBIReportEmbedMultipleFilter,
-} from '@cosmotech/azure';
+import { POWER_BI_FIELD_ENUM, PowerBIReportEmbedSimpleFilter } from '@cosmotech/azure';
 
 // For further information about settings or filters see:
 // https://github.com/microsoft/powerbi-client-react
@@ -19,7 +15,7 @@ export const SCENARIO_DASHBOARD_CONFIG = [
       en: 'Scenario dashboard',
       fr: 'Rapport du scenario',
     },
-    reportId: '608b7bef-f5e3-4aae-b8db-19bbb38325d5',
+    reportId: '27df322b-a230-4041-8e8c-734c8dc8b550',
     settings: {
       navContentPaneEnabled: false,
       panes: {
@@ -29,17 +25,16 @@ export const SCENARIO_DASHBOARD_CONFIG = [
         },
       },
     },
-    staticFilters: [new PowerBIReportEmbedMultipleFilter('Bar', 'id', ['MyBar', 'MyBar2'])],
     dynamicFilters: [
       new PowerBIReportEmbedSimpleFilter(
-        'StockProbe',
-        'SimulationRun',
+        'GetScenarios',
+        'LastSimulationRun',
         POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
       ),
     ],
     pageName: {
-      en: 'ReportSection',
-      fr: 'ReportSection',
+      en: 'ReportSectionf0bd28f6841925a40020',
+      fr: 'ReportSectionf0bd28f6841925a40020',
     },
   },
 ];
@@ -53,10 +48,50 @@ export const SCENARIO_DASHBOARD_CONFIG = [
 export const DASHBOARDS_LIST_CONFIG = [
   {
     title: {
-      en: 'Digital Twin Structure',
-      fr: 'Structure du jumeau numérique',
+      en: 'Scorecard',
+      fr: 'Scorecard',
     },
-    reportId: '608b7bef-f5e3-4aae-b8db-19bbb38325d5',
+    reportId: 'd2f6987c-2bcf-4351-b939-ffb306964b10',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSection007766d808b40ee0e2aa',
+      fr: 'ReportSection007766d808b40ee0e2aa',
+    },
+  },
+  {
+    title: {
+      en: 'KPIs',
+      fr: 'KPIs',
+    },
+    reportId: 'e064b3b0-32d5-4a54-923c-434aba6c0f21',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSection',
+      fr: 'ReportSection',
+    },
+  },
+  {
+    title: {
+      en: 'Bottlenecks identification',
+      fr: 'Bottlenecks identification',
+    },
+    reportId: '204d1351-7483-4137-8ccb-ba01e398f50a',
     settings: {
       navContentPaneEnabled: false,
       panes: {
@@ -66,47 +101,19 @@ export const DASHBOARDS_LIST_CONFIG = [
         },
       },
     },
-    dynamicFilters: [
-      new PowerBIReportEmbedSimpleFilter(
-        'StockProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter('Bar', 'simulationrun', POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN),
-      new PowerBIReportEmbedSimpleFilter(
-        'contains_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'arc_to_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'parameters',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'CustomerSatisfactionProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-    ],
     pageName: {
-      en: 'ReportSectionf3ef30b8ad34c9c2e8c4',
-      fr: 'ReportSectionf3ef30b8ad34c9c2e8c4',
+      en: 'ReportSection',
+      fr: 'ReportSection',
     },
   },
   {
     title: {
-      en: 'Stocks Follow-up',
-      fr: 'Suivi de stock',
+      en: 'Input Data',
+      fr: 'Input Data',
     },
-    reportId: '608b7bef-f5e3-4aae-b8db-19bbb38325d5',
+    reportId: '82af5333-400f-4d18-bb64-cd41e8f9ef9d',
     settings: {
-      navContentPaneEnabled: false,
+      navContentPaneEnabled: true,
       panes: {
         filters: {
           expanded: true,
@@ -114,85 +121,69 @@ export const DASHBOARDS_LIST_CONFIG = [
         },
       },
     },
-    dynamicFilters: [
-      new PowerBIReportEmbedSimpleFilter(
-        'StockProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter('Bar', 'simulationrun', POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN),
-      new PowerBIReportEmbedSimpleFilter(
-        'contains_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'arc_to_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'parameters',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'CustomerSatisfactionProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-    ],
     pageName: {
-      en: 'ReportSectionca125957a3f5ea936a30',
-      fr: 'ReportSectionca125957a3f5ea936a30',
+      en: 'ReportSection3fe7d3fa163e8d89c07f',
+      fr: 'ReportSection3fe7d3fa163e8d89c07f',
     },
   },
   {
     title: {
-      en: 'Customer Satisfaction',
-      fr: 'Satisfaction client',
+      en: 'Uncertainty Analysis',
+      fr: "Analyse d'incertitude",
     },
-    reportId: '608b7bef-f5e3-4aae-b8db-19bbb38325d5',
+    reportId: 'dd25f002-2685-4a16-8d7a-bf76f28623c7',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSectionf4029cb5f314a5f3a6c3',
+      fr: 'ReportSectionf4029cb5f314a5f3a6c3',
+    },
+  },
+  {
+    title: {
+      en: 'Test refresh KPIs',
+      fr: 'Test refresh KPIs',
+    },
+    reportId: '4f3d594d-b7af-406b-b8a9-6ece33cbdeff',
     settings: {
       navContentPaneEnabled: false,
       panes: {
         filters: {
           expanded: false,
+          visible: false,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSectionf0bd28f6841925a40020',
+      fr: 'ReportSectionf0bd28f6841925a40020',
+    },
+  },
+  {
+    title: {
+      en: 'Test Import Mode',
+      fr: 'Test Import Mode',
+    },
+    reportId: 'd1cafc46-4ae0-4d5a-8451-271f261f4e14',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
           visible: true,
         },
       },
     },
-    dynamicFilters: [
-      new PowerBIReportEmbedSimpleFilter(
-        'StockProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter('Bar', 'simulationrun', POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN),
-      new PowerBIReportEmbedSimpleFilter(
-        'contains_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'arc_to_Customer',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'parameters',
-        'simulationrun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-      new PowerBIReportEmbedSimpleFilter(
-        'CustomerSatisfactionProbe',
-        'SimulationRun',
-        POWER_BI_FIELD_ENUM.SCENARIO_CSM_SIMULATION_RUN
-      ),
-    ],
     pageName: {
-      en: 'ReportSectiond5265d03b73060af4244',
-      fr: 'ReportSectiond5265d03b73060af4244',
+      en: 'ReportSection',
+      fr: 'ReportSection',
     },
   },
 ];

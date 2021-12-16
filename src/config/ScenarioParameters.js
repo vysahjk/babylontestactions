@@ -1,12 +1,63 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
+import { getDateAtMidnight } from '../utils/DateUtils';
+// Time configuration parameters
+const getDefaultStartDate = () => getDateAtMidnight(new Date());
+const getDefaultEndDate = () => getDefaultStartDate();
 // Use the PARAMETERS dict below to override or add information to the scenario parameters defined in your solution
 // description, such as:
 //  - a default value for each scenario parameter on scenario creation
 //  - lists of possible values for "enum" parameters
 //  - translation labels
-const PARAMETERS = {};
+const PARAMETERS = {
+  start_date: {
+    defaultValue: getDefaultStartDate(),
+  },
+  end_date: {
+    defaultValue: getDefaultEndDate(),
+  },
+  simulation_granularity: {
+    defaultValue: 'day',
+  },
+  optimization_objective: {
+    defaultValue: 'ServiceLevelMaximization',
+  },
+  manage_backlog_quantities: {
+    defaultValue: false,
+  },
+  empty_obsolete_stocks: {
+    defaultValue: false,
+  },
+  batch_size: {
+    defaultValue: 0.0,
+  },
+  financial_cost_of_stocks: {
+    defaultValue: 0.0,
+  },
+  uncertainties_probability_distribution: {
+    defaultValue: 'Gaussian',
+  },
+  intermediary_stock_dispatch: {
+    defaultValue: 'DispatchAll',
+  },
+  mass_lever_excel_file: {
+    connectorId: 'C-XPv4LBVGAL',
+    defaultFileTypeFilter: '.xlsx,.zip',
+  },
+  stock_policy: {
+    defaultValue: 'None',
+  },
+  sourcing_policy: {
+    defaultValue: 'Equidistribution',
+  },
+  stock_dispatch_policy: {
+    defaultValue: 'Equidistribution',
+  },
+  production_policy: {
+    defaultValue: 'Equidistribution',
+  },
+};
 
 // Use the PARAMETERS_GROUPS dict below to override or add information to the parameters groups defined in your solution
 // description, such as:

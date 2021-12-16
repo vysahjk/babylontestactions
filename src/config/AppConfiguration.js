@@ -27,7 +27,7 @@ export const SUPPORT_URL = 'http://support.cosmotech.com';
 export const DOCUMENTATION_URL = 'doc.pdf';
 
 // Additional parameters to put in scenario parameters
-export const ADD_SCENARIO_NAME_PARAMETER = false;
+export const ADD_SCENARIO_NAME_PARAMETER = true;
 export const ADD_SCENARIO_ID_PARAMETER = false;
 export const ADD_SCENARIO_LAST_RUN_ID_PARAMETER = false;
 export const ADD_SCENARIO_PARENT_ID_PARAMETER = false;
@@ -37,4 +37,4 @@ export const ADD_SCENARIO_MASTER_LAST_RUN_ID_PARAMETER = false;
 export const ADD_SCENARIO_RUN_TEMPLATE_NAME_PARAMETER = false;
 
 // Power BI
-export const USE_POWER_BI_WITH_USER_CREDENTIALS = false;
+export const USE_POWER_BI_WITH_USER_CREDENTIALS = true;

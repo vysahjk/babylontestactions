@@ -122,8 +122,8 @@
     "scenariomanager": {
       "treelist": {
         "node": {
-          "dataset_one": "Dataset",
-          "dataset_other": "Datasets",
+          "dataset": "Dataset",
+          "dataset_plural": "Datasets",
           "status": {
             "label": "Statut",
             "successful": "Succès",
@@ -132,11 +132,27 @@
           },
           "text": {
             "search": "Rechercher"
-          }
+          },
+          "dataset_one": "Dataset",
+          "dataset_other": "Datasets"
         },
         "search": {
+          "info": "{{count}} scénario trouvé",
+          "info_plural": "{{count}} scénarios trouvés",
           "info_one": "{{count}} scénario trouvé",
           "info_other": "{{count}} scénarios trouvés"
+        }
+      }
+    },
+    "tab": {
+      "scenario": {
+        "parameters": {
+          "time_configuration": "Paramètres temporels",
+          "mass_action_lever": "Levier d'action global",
+          "optimization_configuration": "Réglages de l'optimisation",
+          "uncertainty_configuration": "Analyse d'incertitude",
+          "behavior_configuration": "Comportement du modèle",
+          "flow_management_policies": "Politiques de gestion des flux"
         }
       }
     },
@@ -211,13 +227,6 @@
     }
   },
   "genericcomponent": {
-    "dateInput": {
-      "error": {
-        "minDateMessage": "La date minimale n'est pas respectée",
-        "maxDateMessage": "La date maximale n'est pas respectée",
-        "invalidDateMessage": "Format de date incorrect"
-      }
-    },
     "uploadfile": {
       "button": {
         "browse": "Parcourir",
@@ -225,6 +234,10 @@
       },
       "tooltip": {
         "isvalidfile": "Erreur: la colonne requiert une chaine de caractères"
+      },
+      "mass_action_lever": {
+        "download": "Téléchager le dataset depuis ADT",
+        "generate": "Générer le lien de téléchargement"
       }
     },
     "loading": {
@@ -267,6 +280,9 @@
         "msal": {
           "title": "Se connecter avec Microsoft"
         }
+      },
+      "download": {
+        "dataset": "Télécharger le jeu de données depuis ADT"
       }
     },
     "userinfo": {
@@ -274,12 +290,11 @@
         "change": {
           "language": "Changer la langue"
         },
+        "download": {
+          "documentation": "Télécharger la documentation"
+        },
         "logout": "Se déconnecter"
       }
-    },
-    "helpmenu": {
-      "documentation": "Documentation",
-      "support": "Contacter le support"
     },
     "dialog": {
       "scenario": {
@@ -296,13 +311,149 @@
     "text": {
       "scenario": {
         "parameters": {
+          "placeholder": "Aucun paramètre à éditer.",
+          "title": "Paramètres de scénario",
+          "time_configuration": {
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "date_boundaries_error": "La date de début de la simulation doit être avant la date de fin de la simulation",
+            "simulation_granularity": "Pas de temps de la simulation"
+          },
+          "units": {
+            "min": "Minute",
+            "hour": "Heure",
+            "day": "Jour",
+            "week": "Semaine",
+            "month": "Mois",
+            "quarter": "Trimestre",
+            "year": "Année"
+          },
+          "optimization_configuration": {
+            "optimization_objective": {
+              "service_level_maximization": "Maximisation du taux de service",
+              "profit_maximization": "Maximisation du profit",
+              "title": "Objectif de l'optimisation",
+              "tooltip": "Objectif poursuivi par l'optimisation automatique"
+            }
+          },
+          "uncertainty": {
+            "distribution": {
+              "gaussian": "Gaussienne",
+              "uniform": "Uniforme",
+              "title": "Loi de probabilité pour les incertitudes",
+              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les incertitudes"
+            }
+          },
+          "behavior": {
+            "stock_dispatch": {
+              "title": "Politique de distribution des stocks intermédiaires",
+              "tooltip": "Par défaut, à chaque pas de temps, les stocks intermédiaires répartissent leur quantité disponible vers les opérations en aval. Ce paramètre permet d'ajouter une part à cette répartition. Cette part correspond à une quantité que le stock peut réserver pour la retenir.",
+              "dispatch_all": "Distribue toutes les quantités vers l'aval",
+              "allow_retention": "Peut retenir des quantités"
+            },
+            "manage_backlog": {
+              "title": "Prise en compte des retards de service de la demande",
+              "tooltip": "Activer la capacité de garder en mémoire les quantités non servies en totalité et à temps puis de les servir dès que possible"
+            },
+            "obsolete_stock": {
+              "title": "Suppression automatique des stocks obsolètes",
+              "tooltip": "Si activé : le modèle supprimera automatiquement les stocks pendant la simulation lorsqu'il n'y aura plus de demande"
+            },
+            "batch_size": {
+              "title": "Taille de lot",
+              "tooltip": "Multiple à observer en fin d'opération de production avant de pouvoir passer à l'opération suivante (la valeur par défaut est 0 ce qui signifie aucune contrainte de taille de lot) - S'applique à toutes les opérations de production."
+            },
+            "financial_cost": {
+              "title": "Coût financier des stocks",
+              "tooltip": "Coût financier dû au cash immobilisé en stock (ratio entre 0 et 1 appliqué à la valeur de stock pour chaque pas de temps)"
+            }
+          },
+          "flow_management_policies": {
+            "stock": {
+              "label": "Politique de stock",
+              "tooltip": "S’appliquera à tous les stocks.",
+              "none": {
+                "value": "Aucune",
+                "tooltip": "Pas de politique de stock"
+              },
+              "op_fixed": {
+                "value": "Point de commande, quantité fixe",
+                "tooltip": "Politique de stock sur point de commande et à quantité fixe (r,q)."
+              },
+              "op_variable": {
+                "value": "Point de commande, quantité variable",
+                "tooltip": "Politique de stock sur point de commande visant à recompléter le stock jusqu'à un niveau défini par l'utilisateur (s,S)."
+              }
+            },
+            "sourcing": {
+              "label": "Politique d'approvisionnement",
+              "tooltip": "Règle à appliquer en cas de plusieurs sources possibles vers un même stock.\nS’appliquera à tous les stocks.",
+              "equi": {
+                "value": "Equirépartition",
+                "tooltip": "Les commandes sont uniformément réparties sur toutes les opérations de production et de transport."
+              },
+              "highest": {
+                "value": "Stock avec la plus grande quantité disponible en premier",
+                "tooltip": "Les commandes sont affectées aux opérations qui ont les niveaux de stocks amont les plus élevés (une fois la quantité de production maximum atteinte, affectation à l’opération suivante etc.)."
+              }
+            },
+            "stockDispatch": {
+              "label": "Politique de distribution des stocks",
+              "tooltip": "Règle à appliquer en cas de plusieurs destinations possibles depuis un même stock.\nS’appliquera à tous les stocks.",
+              "equi": {
+                "value": "Equirépartition",
+                "tooltip": "Le stock est réparti uniformément entre toutes les opérations de production et de transport qui réclament une quantité."
+              },
+              "greatest": {
+                "value": "La plus grande quantité requise en premier",
+                "tooltip": "On considère les opérations de production et de transport une à une dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus grande quantité en premier."
+              },
+              "smallest": {
+                "value": "La plus petite quantité requise en premier",
+                "tooltip": "On considère les opérations de production et de transport une à une dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus petite quantité en premier."
+              },
+              "none": {
+                "value": "Aucune",
+                "tooltip": "Pas de politique de distribution des stocks"
+              }
+            },
+            "production": {
+              "label": "Politique de production",
+              "tooltip": "Règle à appliquer en cas de plusieurs opérations faisables par une même ressource de production.\nS’appliquera à toutes les ressources de production.",
+              "equi": {
+                "value": "Equirépartition",
+                "tooltip": "Le temps disponible de la ressource est uniformément réparti entre toutes les opérations qui réclament une quantité."
+              },
+              "greatest": {
+                "value": "La plus grande charge de travail en premier",
+                "tooltip": "On considère les opérations une par une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus grande charge de travail en premier."
+              },
+              "smallest": {
+                "value": "La plus petite charge de travail en premier",
+                "tooltip": "On considère les opérations une par une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus petite charge de travail en premier."
+              },
+              "none": {
+                "value": "Aucune",
+                "tooltip": "Pas de politique de production"
+              }
+            }
+          },
           "tabs": {
             "placeholder": "Ces paramètres sont confidentiels et vous n'avez pas les accès nécessaires pour les voir. Si vous pensez que c'est une erreur, merci de contacter l'administrateur de l'application."
-          },
-          "placeholder": "Aucun paramètre à éditer.",
-          "title": "Paramètres de scénario"
+          }
         }
       }
+    },
+    "dateInput": {
+      "error": {
+        "minDateMessage": "La date minimale n'est pas respectée",
+        "maxDateMessage": "La date maximale n'est pas respectée",
+        "invalidDateMessage": "Format de date incorrect"
+      }
+    },
+    "helpmenu": {
+      "documentation": "Documentation",
+      "support": "Contacter le support"
     },
     "table": {
       "button": {
