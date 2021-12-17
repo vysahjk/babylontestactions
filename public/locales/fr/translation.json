@@ -504,6 +504,15 @@
       "text": {
         "scenariotype": "Type de scénario"
       }
+    },
+    "runtemplate": {
+      "title": {
+        "Lever": "Simulation d'une tactique de production prédéterminée",
+        "UncertaintyAnalysis": "Analyse d'incertitude",
+        "MILPOptimization": "Optimisation par programmation linéaire",
+        "ClientSpecificLever": "Simulation d'une tactique de production prédéterminée",
+        "MILPOptimization_ParameterHandlerCloud": "Optimisation par programmation linéaire"
+      }
     }
   },
   "layouts": {

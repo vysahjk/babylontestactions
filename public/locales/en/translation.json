@@ -504,6 +504,15 @@
       "text": {
         "scenariotype": "Run type"
       }
+    },
+    "runtemplate": {
+      "title": {
+        "Lever": "Predetermined production tactic simulation",
+        "UncertaintyAnalysis": "Uncertainty analysis",
+        "MILPOptimization": "Optimization using linear programming",
+        "ClientSpecificLever": "Predetermined production tactic simulation",
+        "MILPOptimization_ParameterHandlerCloud": "Optimization using linear programming"
+      }
     }
   },
   "layouts": {

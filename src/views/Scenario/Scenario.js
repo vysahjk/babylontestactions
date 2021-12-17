@@ -160,13 +160,21 @@ const Scenario = (props) => {
     },
   };
 
-  let filteredRunTemplates = solution?.data?.runTemplates || [];
+  let beforeRenameTemplates = solution?.data?.runTemplates || [];
   const solutionRunTemplates = workspace.data?.solution?.runTemplateFilter;
   if (solutionRunTemplates) {
-    filteredRunTemplates = filteredRunTemplates.filter(
+    beforeRenameTemplates = beforeRenameTemplates.filter(
       (runTemplate) => solutionRunTemplates.indexOf(runTemplate.id) !== -1
     );
   }
+
+  const filteredRunTemplates = [];
+  beforeRenameTemplates.forEach((template) => {
+    filteredRunTemplates.push({
+      ...template,
+      name: t('views.runtemplate.title.' + template.id, template.name),
+    });
+  });
 
   return (
     <>
@@ -191,7 +199,11 @@ const Scenario = (props) => {
                 {currentScenario.data && (
                   <Grid item xs={7}>
                     <Typography>
-                      {t('views.scenario.text.scenariotype')}: {currentScenario.data.runTemplateName}
+                      {t('views.scenario.text.scenariotype') + ': '}
+                      {t(
+                        'views.runtemplate.title.' + currentScenario.data.runTemplateId,
+                        currentScenario.data.runTemplateName
+                      )}
                     </Typography>
                   </Grid>
                 )}
