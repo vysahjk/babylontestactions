@@ -83,15 +83,20 @@ const MassActionLeverParameterTab = (
   const acceptedFileTypesToUpload = parametersGroupData.parameters[0].defaultFileTypeFilter;
 
   return (
-    <FileUpload
-      file={file}
-      setFile={setFile}
-      datasetId={datasetId}
-      acceptedFileTypesToUpload={acceptedFileTypesToUpload}
-      editMode={editMode}
-      scenario={currentScenario.data}
-      workspaceId={workspaceId}
-    />
+    <PermissionsGate
+      RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
+      authorizedRoles={parametersGroupData.authorizedRoles}
+    >
+      <FileUpload
+        file={file}
+        setFile={setFile}
+        datasetId={datasetId}
+        acceptedFileTypesToUpload={acceptedFileTypesToUpload}
+        editMode={editMode}
+        scenario={currentScenario.data}
+        workspaceId={workspaceId}
+      />
+    </PermissionsGate>
   );
 };
 
