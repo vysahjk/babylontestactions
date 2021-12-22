@@ -42,7 +42,7 @@ const PARAMETERS = {
     defaultValue: 'DispatchAll',
   },
   mass_lever_excel_file: {
-    connectorId: 'C-XPv4LBVGAL',
+    connectorId: 'c-4pdqy8pvm07zg',
     defaultFileTypeFilter: '.xlsx,.zip',
   },
   stock_policy: {
