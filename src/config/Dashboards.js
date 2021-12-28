@@ -148,26 +148,6 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Test refresh KPIs',
-      fr: 'Test refresh KPIs',
-    },
-    reportId: '4f3d594d-b7af-406b-b8a9-6ece33cbdeff',
-    settings: {
-      navContentPaneEnabled: false,
-      panes: {
-        filters: {
-          expanded: false,
-          visible: false,
-        },
-      },
-    },
-    pageName: {
-      en: 'ReportSectionf0bd28f6841925a40020',
-      fr: 'ReportSectionf0bd28f6841925a40020',
-    },
-  },
-  {
-    title: {
       en: 'Test Import Mode',
       fr: 'Test Import Mode',
     },
