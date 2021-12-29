@@ -193,7 +193,28 @@ const ScenarioParameters = ({
       runTemplateParametersIds
     );
     const additionalParameters = ScenarioParametersUtils.buildAdditionalParameters(currentScenario, scenarioList);
-    return parametersData.concat(additionalParameters);
+
+    const keptAdditionalParameters = additionalParameters.filter((elem) => {
+      return !parametersData.some((elem2) => {
+        return elem.parameterId === elem2.parameterId;
+      });
+    });
+    console.log(keptAdditionalParameters);
+    const toUpdateAdditionalParameters = additionalParameters.filter((elem) => {
+      return parametersData.some((elem2) => {
+        return elem.parameterId === elem2.parameterId;
+      });
+    });
+
+    toUpdateAdditionalParameters.forEach((element) => {
+      parametersData.forEach((element2, index, arr) => {
+        if (element.parameterId === element2.parameterId) {
+          arr[index].value = element.value;
+        }
+      });
+    });
+
+    return parametersData.concat(keptAdditionalParameters);
   };
 
   const startParametersEdition = () => changeEditMode(true);
@@ -218,7 +239,6 @@ const ScenarioParameters = ({
     if (!currentScenario.data.parametersValues || currentScenario.data.parametersValues.length === 0) {
       forceUpdate = true;
     }
-
     await setParametersValuesRefFromParametersValuesToRender();
     if (forceUpdate) {
       const parametersForUpdate = getParametersForUpdate();
