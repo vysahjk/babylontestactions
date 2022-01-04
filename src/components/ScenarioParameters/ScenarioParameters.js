@@ -199,7 +199,6 @@ const ScenarioParameters = ({
         return elem.parameterId === elem2.parameterId;
       });
     });
-    console.log(keptAdditionalParameters);
     const toUpdateAdditionalParameters = additionalParameters.filter((elem) => {
       return parametersData.some((elem2) => {
         return elem.parameterId === elem2.parameterId;

@@ -72,7 +72,12 @@ const FileUpload = ({
     generateLink: t('genericcomponent.uploadfile.mass_action_lever.generate', 'mass_action_lever.generate'),
   };
 
-  function setClientFileDescriptorStatus(newStatus) {}
+  function setClientFileDescriptorStatus(newStatus) {
+    setFile({
+      ...file,
+      status: newStatus,
+    });
+  }
 
   return (
     <div>
@@ -89,7 +94,7 @@ const FileUpload = ({
         key={keyValue}
         acceptedFileTypes={acceptedFileTypesToUpload}
         handleUploadFile={(event) => FileManagementUtils.prepareToUpload(event, file, setFile)}
-        handleDeleteFile={() => FileManagementUtils.prepareToDeleteFile(file, setFile)}
+        handleDeleteFile={() => FileManagementUtils.prepareToDeleteFile(setClientFileDescriptorStatus)}
         handleDownloadFile={(event) => {
           event.preventDefault();
           FileManagementUtils.downloadFile(datasetId, setClientFileDescriptorStatus);
