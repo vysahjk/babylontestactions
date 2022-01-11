@@ -158,7 +158,7 @@
     },
     "text": {
       "application": {
-        "title": "Cosmo Tech Web Application Sample"
+        "title": "Cosmo Tech Supply chain"
       },
       "contact": {
         "get": {
@@ -482,7 +482,7 @@
       }
     },
     "signin": {
-      "title": "Azure Sample Web Application"
+      "title": "Cosmo Tech Supply chain"
     },
     "unauthorized": {
       "scenario": {
@@ -490,7 +490,7 @@
           "title": "Scenario Specialists"
         }
       },
-      "title": "Azure Sample Web Application"
+      "title": "Cosmo Tech Supply chain"
     },
     "scenario": {
       "dropdown": {
