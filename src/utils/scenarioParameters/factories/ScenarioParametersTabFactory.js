@@ -9,7 +9,7 @@ const noPermissionsPlaceHolder = (t) => {
   return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
 };
 
-const create = (t, datasets, parametersGroupData, parametersState, setParametersState, editMode) => {
+const create = (t, datasets, parametersGroupData, parametersState, setParametersState, editMode, currentScenario) => {
   return (
     <PermissionsGate
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
@@ -23,7 +23,8 @@ const create = (t, datasets, parametersGroupData, parametersState, setParameters
             parameterData,
             parametersState,
             setParametersState,
-            editMode
+            editMode,
+            currentScenario
           )
         )}
       </div>

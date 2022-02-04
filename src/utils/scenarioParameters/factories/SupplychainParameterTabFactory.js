@@ -320,13 +320,14 @@ const create = (
     );
   } else {
     // Fallback to generic generation
-    ScenarioParametersTabFactory.create(
+    return ScenarioParametersTabFactory.create(
       t,
       datasets,
       parametersGroupData,
       parametersState,
       setParametersState,
-      editMode
+      editMode,
+      currentScenario
     );
   }
 };

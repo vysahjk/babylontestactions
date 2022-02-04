@@ -5,7 +5,7 @@ import React from 'react';
 import { UploadFile } from '@cosmotech/ui';
 import { FileManagementUtils } from '../../../../components/ScenarioParameters/FileManagementUtils';
 
-const create = (t, datasets, parameterData, parametersState, setParametersState, editMode) => {
+const create = (t, datasets, parameterData, parametersState, setParametersState, editMode, currentScenario) => {
   const parameterId = parameterData.id;
   const parameter = parametersState[parameterId] || {};
   const datasetId = parameter.id;

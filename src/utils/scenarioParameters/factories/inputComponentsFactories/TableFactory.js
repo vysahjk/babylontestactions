@@ -21,7 +21,7 @@ const _generateGridDataFromXLSX = async (fileBlob, parameterMetadata, options) =
   return await AgGridUtils.fromXLSX(fileBlob, parameterMetadata.hasHeader || true, parameterMetadata.columns, options);
 };
 
-const create = (t, datasets, parameterMetadata, parametersState, setParametersState, editMode) => {
+const create = (t, datasets, parameterMetadata, parametersState, setParametersState, editMode, currentScenario) => {
   const parameterId = parameterMetadata.id;
   const parameter = parametersState[parameterId] || {};
 
