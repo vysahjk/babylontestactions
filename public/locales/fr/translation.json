@@ -395,6 +395,10 @@
               "highest": {
                 "value": "Stock avec la plus grande quantité disponible en premier",
                 "tooltip": "Les commandes sont affectées aux opérations qui ont les niveaux de stocks amont les plus élevés (une fois la quantité de production maximum atteinte, affectation à l’opération suivante etc.)."
+              },
+              "priority": {
+                "value": "La plus haute priorité en premier",
+                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant leurs priorités avec la plus haute en premier. Les commandes commandes sont affectées dans la limite des quantitiés disponibles."
               }
             },
             "stockDispatch": {
@@ -402,15 +406,19 @@
               "tooltip": "Règle à appliquer en cas de plusieurs destinations possibles depuis un même stock.\nS’appliquera à tous les stocks.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "Le stock est réparti uniformément entre toutes les opérations de production et de transport qui réclament une quantité."
+                "tooltip": "Le stock est réparti uniformément entre toutes les opérations de production et les transports qui réclament une quantité."
               },
               "greatest": {
                 "value": "La plus grande quantité requise en premier",
-                "tooltip": "On considère les opérations de production et de transport une à une dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus grande quantité en premier."
+                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus grande quantité en premier."
               },
               "smallest": {
                 "value": "La plus petite quantité requise en premier",
-                "tooltip": "On considère les opérations de production et de transport une à une dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus petite quantité en premier."
+                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus petite quantité en premier."
+              },
+              "priority": {
+                "value": "La plus haute priorité en premier",
+                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant leurs priorités avec la plus haute en premier."
               },
               "none": {
                 "value": "Aucune",
@@ -422,15 +430,19 @@
               "tooltip": "Règle à appliquer en cas de plusieurs opérations faisables par une même ressource de production.\nS’appliquera à toutes les ressources de production.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "Le temps disponible de la ressource est uniformément réparti entre toutes les opérations qui réclament une quantité."
+                "tooltip": "Le temps disponible de la ressource est uniformément réparti entre toutes les opérations de production qui réclament une quantité."
               },
               "greatest": {
                 "value": "La plus grande charge de travail en premier",
-                "tooltip": "On considère les opérations une par une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus grande charge de travail en premier."
+                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus grande charge de travail en premier."
               },
               "smallest": {
                 "value": "La plus petite charge de travail en premier",
-                "tooltip": "On considère les opérations une par une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus petite charge de travail en premier."
+                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus petite charge de travail en premier."
+              },
+              "priority": {
+                "value": "La plus haute priorité en premier",
+                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant leurs priorités avec la plus haute en premier."
               },
               "none": {
                 "value": "Aucune",

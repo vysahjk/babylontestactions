@@ -390,11 +390,15 @@
               "tooltip": "Rule to apply in case of multi-sources to a stock.\nWill be applied to all stocks.",
               "equi": {
                 "value": "Equidistribution",
-                "tooltip": "Orders are evenly distributed on all production operations and transports."
+                "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations and transports."
               },
               "highest": {
                 "value": "The highest available stock first",
-                "tooltip": "Orders are assigned to the path which has the highest stocks levels directly upstream up to limiting upstream stock quantity available and the excesses are assigned to next path up to its capacity, etc."
+                "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their available quantities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned following an equidistribution."
+              },
+              "priority": {
+                "value": "The highest priority first",
+                "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned to the first."
               }
             },
             "stockDispatch": {
@@ -402,15 +406,19 @@
               "tooltip": "Rule to apply in case of multi-destinations from a stock.\nWill be applied to all stocks.",
               "equi": {
                 "value": "Equidistribution",
-                "tooltip": "Stock is distributed evenly between all the production operations and transports which require any quantity."
+                "tooltip": "The available quantity in the stock is evenly distributed among the directly downstream production operations and transports which received an order for the current time step and the stock itself if stock retention is allowed and the stock has a demand or a backlog for the current time step."
               },
               "greatest": {
-                "value": "The greatest required quantities first",
-                "tooltip": "Consider the production operations and transports one by one in a determined order following their required quantities with the greatest first."
+                "value": "The greatest required quantity first",
+                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
               },
               "smallest": {
-                "value": "The smallest required quantities first",
-                "tooltip": "Consider the production operations and transports one by one in a determined order following their required quantities with the smallest first."
+                "value": "The smallest required quantity first",
+                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
+              },
+              "priority": {
+                "value": "The highest priority first",
+                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
               },
               "none": {
                 "value": "None",
@@ -422,15 +430,19 @@
               "tooltip": "Rule to apply in case of multi-operations for a production resource.\nWill be applied to all production resources.",
               "equi": {
                 "value": "Equidistribution",
-                "tooltip": "Available time of the resource is evenly distributed between all operations which require any quantity."
+                "tooltip": "The available time of the production resource is evenly distributed among the contained production operations which received an order for the current time step."
               },
               "greatest": {
                 "value": "The greatest workload first",
-                "tooltip": "Consider the operations one by one in a determined order following their required time with the greatest first."
+                "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
               },
               "smallest": {
                 "value": "The smallest workload first",
-                "tooltip": "Consider the operations one by one in a determined order following their required time with the smallest first."
+                "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
+              },
+              "priority": {
+                "value": "The highest priority first",
+                "tooltip": "Consider the contained production operations one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
               },
               "none": {
                 "value": "None",

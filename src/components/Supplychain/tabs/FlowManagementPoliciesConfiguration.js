@@ -88,6 +88,11 @@ const FlowManagementPoliciesConfiguration = ({
       value: t(baseTranslation + '.' + 'sourcing.highest.value', 'sourcing.highest.value'),
       tooltip: t(baseTranslation + '.' + 'sourcing.highest.tooltip', 'sourcing.highest.tooltip'),
     },
+    {
+      key: 'HighestPriority',
+      value: t(baseTranslation + '.' + 'sourcing.priority.value', 'sourcing.priority.value'),
+      tooltip: t(baseTranslation + '.' + 'sourcing.priority.tooltip', 'sourcing.priority.tooltip'),
+    },
   ];
 
   const stockDispatchEnumValues = [
@@ -114,6 +119,11 @@ const FlowManagementPoliciesConfiguration = ({
       value: t(baseTranslation + '.' + 'stockDispatch.smallest.value', 'stockDispatch.smallest.value'),
       tooltip: t(baseTranslation + '.' + 'stockDispatch.smallest.tooltip', 'stockDispatch.smallest.tooltip'),
     },
+    {
+      key: 'HighestPriority',
+      value: t(baseTranslation + '.' + 'stockDispatch.priority.value', 'stockDispatch.priority.value'),
+      tooltip: t(baseTranslation + '.' + 'stockDispatch.priority.tooltip', 'stockDispatch.priority.tooltip'),
+    },
   ];
 
   const productionEnumValues = [
@@ -139,6 +149,11 @@ const FlowManagementPoliciesConfiguration = ({
       key: 'SmallestWorkload',
       value: t(baseTranslation + '.' + 'production.smallest.value', 'production.smallest.value'),
       tooltip: t(baseTranslation + '.' + 'production.smallest.tooltip', 'production.smallest.tooltip'),
+    },
+    {
+      key: 'HighestPriority',
+      value: t(baseTranslation + '.' + 'production.priority.value', 'production.priority.value'),
+      tooltip: t(baseTranslation + '.' + 'production.priority.tooltip', 'production.priority.tooltip'),
     },
   ];
 
