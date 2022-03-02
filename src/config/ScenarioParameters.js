@@ -64,6 +64,13 @@ const PARAMETERS = {
     azureFunction: 'https://supplychain-dataset-download.azurewebsites.net/api/DemandsPlan',
     azureFunctionHeaders: { 'x-functions-key': 'eWwFDboF385Nmgica4OJHmHRrrC2UOa7c4Zq4BhhRnyoapZl0aBRng==' },
   },
+  transport_duration: {
+    connectorId: 'c-d7e5p9o0kjn9',
+    defaultFileTypeFilter: '.csv',
+    subType: 'AZURETABLE',
+    azureFunction: 'https://supplychain-dataset-download.azurewebsites.net/api/TransportDuration',
+    azureFunctionHeaders: { 'x-functions-key': 'eWwFDboF385Nmgica4OJHmHRrrC2UOa7c4Zq4BhhRnyoapZl0aBRng==' },
+  },
 };
 
 // Use the PARAMETERS_GROUPS dict below to override or add information to the parameters groups defined in your solution
