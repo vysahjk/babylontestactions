@@ -152,7 +152,7 @@
           "optimization_configuration": "Optimization settings",
           "uncertainty_configuration": "Uncertainties settings",
           "behavior_configuration": "Model behavior configuration",
-          "flow_management_policies": "Flows management policies"
+          "flow_management_policies": "Flow management policies"
         }
       }
     },
