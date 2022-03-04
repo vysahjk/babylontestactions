@@ -410,15 +410,15 @@
               "tooltip": "Règle à appliquer en cas de plusieurs sources possibles vers un même stock.\nS’appliquera à tous les stocks.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "Les commandes sont uniformément réparties sur toutes les opérations de production et de transport."
+                "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
               },
               "highest": {
-                "value": "Stock avec la plus grande quantité disponible en premier",
-                "tooltip": "Les commandes sont affectées aux opérations qui ont les niveaux de stocks amont les plus élevés (une fois la quantité de production maximum atteinte, affectation à l’opération suivante etc.)."
+                "value": "La plus grande quantité disponible en premier",
+                "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs quantités disponibles, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée en suivant une équirépartition."
               },
               "priority": {
                 "value": "La plus haute priorité en premier",
-                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant leurs priorités avec la plus haute en premier. Les commandes commandes sont affectées dans la limite des quantitiés disponibles."
+                "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée au premier."
               }
             },
             "stockDispatch": {
@@ -426,19 +426,19 @@
               "tooltip": "Règle à appliquer en cas de plusieurs destinations possibles depuis un même stock.\nS’appliquera à tous les stocks.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "Le stock est réparti uniformément entre toutes les opérations de production et les transports qui réclament une quantité."
+                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre les opérations de production et les transports directement en aval qui ont reçu une commande pour le pas de temps en cours et le stock lui-même si la rétention de stock est autorisée et que le stock a une demande ou un arriéré pour le pas de temps en cours."
               },
               "greatest": {
                 "value": "La plus grande quantité requise en premier",
-                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus grande quantité en premier."
+                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
               },
               "smallest": {
                 "value": "La plus petite quantité requise en premier",
-                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant les quantités qu’elles réclament avec la plus petite quantité en premier."
+                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre croissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
               },
               "priority": {
                 "value": "La plus haute priorité en premier",
-                "tooltip": "On considère les opérations de production et les transports un à un dans un ordre déterminé suivant leurs priorités avec la plus haute en premier."
+                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
               },
               "none": {
                 "value": "Aucune",
@@ -450,19 +450,19 @@
               "tooltip": "Règle à appliquer en cas de plusieurs opérations faisables par une même ressource de production.\nS’appliquera à toutes les ressources de production.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "Le temps disponible de la ressource est uniformément réparti entre toutes les opérations de production qui réclament une quantité."
+                "tooltip": "Le temps disponible de la ressource de production est réparti uniformément entre les opérations de production contenues qui requièrent une quantité."
               },
               "greatest": {
                 "value": "La plus grande charge de travail en premier",
-                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus grande charge de travail en premier."
+                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
               },
               "smallest": {
                 "value": "La plus petite charge de travail en premier",
-                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant la charge de travail (en minutes) qu’elles représentent avec la plus petite charge de travail en premier."
+                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre croissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
               },
               "priority": {
                 "value": "La plus haute priorité en premier",
-                "tooltip": "On considère les opérations de production une à une dans un ordre déterminé suivant leurs priorités avec la plus haute en premier."
+                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs priorités, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
               },
               "none": {
                 "value": "Aucune",
