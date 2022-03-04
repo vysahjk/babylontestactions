@@ -85,6 +85,26 @@
         }
       }
     },
+    "cytoviz": {
+      "elementDetails": "Détails",
+      "loading": "Chargement...",
+      "noSelectedElement": "Sélectionnez un noeud ou un lien pour afficher ses informations",
+      "settings": {
+        "compactMode": "Mode compact",
+        "layout": "Agencement",
+        "title": "Paramètres",
+        "spacingFactor": "Espacement",
+        "zoomLimits": "Zoom min/max"
+      },
+      "elementData": {
+        "dictKey": "Clé",
+        "dictValue": "Valeur",
+        "noData": "Aucune donnée à afficher pour cet élément.",
+        "attributes": {
+          "PlantName": "Usine"
+        }
+      }
+    },
     "iframe": {
       "scenario": {
         "results": {
@@ -532,6 +552,11 @@
       "scenario": {
         "tab": {
           "title": "Vue scénario"
+        }
+      },
+      "flowchart": {
+        "tab": {
+          "title": "Organigramme"
         }
       },
       "scenariomanager": {
