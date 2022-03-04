@@ -49,7 +49,7 @@ export const DASHBOARDS_LIST_CONFIG = [
   {
     title: {
       en: 'Scorecard',
-      fr: 'Scorecard',
+      fr: 'Tableau de bord',
     },
     reportId: 'd2f6987c-2bcf-4351-b939-ffb306964b10',
     settings: {
@@ -69,7 +69,7 @@ export const DASHBOARDS_LIST_CONFIG = [
   {
     title: {
       en: 'KPIs',
-      fr: 'KPIs',
+      fr: 'ICP',
     },
     reportId: 'e064b3b0-32d5-4a54-923c-434aba6c0f21',
     settings: {
@@ -88,8 +88,8 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Bottlenecks identification',
-      fr: 'Bottlenecks identification',
+      en: 'Bottleneck identification',
+      fr: "Identification des goulots d'étranglement",
     },
     reportId: '204d1351-7483-4137-8ccb-ba01e398f50a',
     settings: {
@@ -108,8 +108,8 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Input Data',
-      fr: 'Input Data',
+      en: 'Input data',
+      fr: "Données d'entrée",
     },
     reportId: '82af5333-400f-4d18-bb64-cd41e8f9ef9d',
     settings: {
@@ -128,7 +128,7 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Uncertainty Analysis',
+      en: 'Uncertainty analysis',
       fr: "Analyse d'incertitude",
     },
     reportId: 'dd25f002-2685-4a16-8d7a-bf76f28623c7',
