@@ -29,10 +29,10 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
   const options = { dateFormat: dateFormat };
 
   const setParameterInState = (newValue) => {
-    setParametersState({
-      ...parametersState,
+    setParametersState((currentParametersState) => ({
+      ...currentParametersState,
       [parameterId]: newValue,
-    });
+    }));
   };
 
   const setClientFileDescriptorStatuses = (newFileStatus, newTableDataStatus) => {
@@ -46,12 +46,11 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
   const _checkForLock = () => {
     if (create.downloadLocked === undefined) {
       create.downloadLocked = {};
-    } else if (parameterId in create.downloadLocked === false) {
-      create.downloadLocked[parameterId] = false;
-    } else if (create.downloadLocked[parameterId]) {
-      return true;
     }
-    return false;
+    if (parameterId in create.downloadLocked === false) {
+      create.downloadLocked[parameterId] = false;
+    }
+    return create.downloadLocked[parameterId];
   };
 
   const _downloadDatasetContentFromAzureFunction = async (parameterDescriptor, setparameterDescriptor) => {
@@ -149,7 +148,7 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
     const data = await FileManagementUtils.downloadFileData(datasets, datasetId, setClientFileDescriptorStatuses);
     if (data) {
       const fileName = clientFileDescriptor.name;
-      const finalStatus = UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD;
+      const finalStatus = UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD;
       _parseCSVFileContent(data, fileName, clientFileDescriptor, setClientFileDescriptor, finalStatus);
     } else {
       setClientFileDescriptor({
@@ -240,9 +239,12 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
 
   const alreadyDownloaded =
     parameter.tableDataStatus !== undefined &&
-    [TABLE_DATA_STATUS.ERROR, TABLE_DATA_STATUS.DOWNLOADING, TABLE_DATA_STATUS.PARSING].includes(
-      parameter.tableDataStatus
-    );
+    [
+      TABLE_DATA_STATUS.ERROR,
+      TABLE_DATA_STATUS.DOWNLOADING,
+      TABLE_DATA_STATUS.READY,
+      TABLE_DATA_STATUS.PARSING,
+    ].includes(parameter.tableDataStatus);
 
   if (
     parameter.id &&
