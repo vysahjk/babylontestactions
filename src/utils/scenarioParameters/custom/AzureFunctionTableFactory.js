@@ -43,13 +43,22 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
     });
   };
 
-  const _downloadDatasetContentFromAzureFunction = async (parameterDescriptor, setparameterDescriptor) => {
+  const _checkForLock = () => {
     if (create.downloadLocked === undefined) {
-      create.downloadLocked = false;
-    } else if (create.downloadLocked) {
+      create.downloadLocked = {};
+    } else if (parameterId in create.downloadLocked === false) {
+      create.downloadLocked[parameterId] = false;
+    } else if (create.downloadLocked[parameterId]) {
+      return true;
+    }
+    return false;
+  };
+
+  const _downloadDatasetContentFromAzureFunction = async (parameterDescriptor, setparameterDescriptor) => {
+    if (_checkForLock()) {
       return;
     }
-    create.downloadLocked = true;
+    create.downloadLocked[parameterId] = true;
     setparameterDescriptor({
       ...parameterDescriptor,
       agGridRows: null,
@@ -117,16 +126,14 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
         tableDataStatus: TABLE_DATA_STATUS.ERROR,
       });
     }
-    create.downloadLocked = false;
+    create.downloadLocked[parameterId] = false;
   };
 
   const _downloadDatasetFileContentFromStorage = async (datasets, clientFileDescriptor, setClientFileDescriptor) => {
-    if (create.downloadLocked === undefined) {
-      create.downloadLocked = false;
-    } else if (create.downloadLocked) {
+    if (_checkForLock()) {
       return;
     }
-    create.downloadLocked = true;
+    create.downloadLocked[parameterId] = true;
     setClientFileDescriptor({
       ...clientFileDescriptor,
       agGridRows: null,
@@ -156,7 +163,7 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
         tableDataStatus: TABLE_DATA_STATUS.ERROR,
       });
     }
-    create.downloadLocked = false;
+    create.downloadLocked[parameterId] = false;
   };
 
   const _parseCSVFileContent = (
