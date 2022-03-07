@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Table, TABLE_DATA_STATUS, UPLOAD_FILE_STATUS_KEY } from '@cosmotech/ui';
-import { AgGridUtils } from '@cosmotech/core';
+import { AgGridUtils, Auth } from '@cosmotech/core';
 import theme from '../../../theme';
 import axios from 'axios';
 import { ORGANIZATION_ID, WORKSPACE_ID } from '../../../config/AppInstance';
@@ -71,10 +71,17 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
     const azureFunctionAddress = parameterMetadata?.azureFunction;
     const azureFunctionHeaders = parameterMetadata?.azureFunctionHeaders;
     if (azureFunctionAddress) {
+      const tokens = await Auth.acquireTokens();
+      const headers = { ...azureFunctionHeaders };
+      if (tokens?.accessToken) {
+        headers.common = {};
+        headers.common.Authorization = 'Bearer ' + tokens.accessToken;
+        console.log(headers.common.Authorization);
+      }
       const _data = await axios({
         method: 'post',
         url: azureFunctionAddress,
-        headers: azureFunctionHeaders,
+        headers: headers,
         params: {
           'organization-id': ORGANIZATION_ID,
           'scenario-id': currentScenario.data.id,

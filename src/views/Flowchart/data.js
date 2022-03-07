@@ -8,6 +8,7 @@ import {
   ORGANIZATION_ID,
   WORKSPACE_ID,
 } from '../../config/AppInstance';
+import { Auth } from '@cosmotech/core';
 
 const _formatLabelWithNewlines = (label) => label?.replace(/[_|\s]/g, '\n') || '';
 
@@ -84,10 +85,16 @@ export const processGraphElements = (elements) => {
 };
 
 export async function fetchData(scenarioId) {
+  const tokens = await Auth.acquireTokens();
+  const headers = { ...AZURE_FUNCTION_FLOWCHART_HEADERS };
+  if (tokens?.accessToken) {
+    headers.common = {};
+    headers.common.Authorization = 'Bearer ' + tokens.accessToken;
+  }
   return await axios({
     method: 'post',
     url: AZURE_FUNCTION_FLOWCHART_URL,
-    headers: AZURE_FUNCTION_FLOWCHART_HEADERS,
+    headers: headers,
     params: {
       'organization-id': ORGANIZATION_ID,
       'workspace-id': WORKSPACE_ID,
