@@ -76,7 +76,6 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
       if (tokens?.accessToken) {
         headers.common = {};
         headers.common.Authorization = 'Bearer ' + tokens.accessToken;
-        console.log(headers.common.Authorization);
       }
       const _data = await axios({
         method: 'post',
