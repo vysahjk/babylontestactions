@@ -11,7 +11,10 @@ import { fetchData, processGraphElements } from './data';
 import useStyles from './style';
 import cytoscapeStylesheet from './styleCytoViz';
 
-const EXTRA_LAYOUTS = { klay: klay };
+const EXTRA_LAYOUTS = {
+  klay: klay,
+  breadthfirst: null,
+};
 const appInsights = AppInsights.getInstance();
 
 const Flowchart = (props) => {
@@ -78,6 +81,14 @@ const Flowchart = (props) => {
     },
   };
 
+  const defaultSettings = {
+    layout: 'breadthfirst',
+    minZoom: 0.1,
+    maxZoom: 1,
+    useCompactMode: true,
+    spacingFactor: 1,
+  };
+
   return (
     <>
       <Backdrop className={classes.backdrop} open={showBackdrop}>
@@ -100,6 +111,7 @@ const Flowchart = (props) => {
             labels={cytoVizLabels}
             loading={isLoadingData}
             extraLayouts={EXTRA_LAYOUTS}
+            defaultSettings={defaultSettings}
           />
         </div>
       </div>
