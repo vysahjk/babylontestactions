@@ -68,8 +68,8 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'KPIs',
-      fr: 'ICP',
+      en: 'Detailed indicators',
+      fr: 'Indicateurs détaillés',
     },
     reportId: 'e064b3b0-32d5-4a54-923c-434aba6c0f21',
     settings: {
@@ -84,6 +84,26 @@ export const DASHBOARDS_LIST_CONFIG = [
     pageName: {
       en: 'ReportSection',
       fr: 'ReportSection',
+    },
+  },
+  {
+    title: {
+      en: 'S&OP',
+      fr: 'S&OP',
+    },
+    reportId: '094bae60-7384-4aee-bb05-8e983f55eba3',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSectioncabed0cbfbdf3ab3eeef',
+      fr: 'ReportSectioncabed0cbfbdf3ab3eeef',
     },
   },
   {
