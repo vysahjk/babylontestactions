@@ -75,6 +75,11 @@ const FlowManagementPoliciesConfiguration = ({
       value: t(baseTranslation + '.' + 'stock.op_variable.value', 'stock.op_variable.value'),
       tooltip: t(baseTranslation + '.' + 'stock.op_variable.tooltip', 'stock.op_variable.tooltip'),
     },
+    {
+      key: 'MakeToForecast',
+      value: t(baseTranslation + '.' + 'stock.make_to_forecast.value', 'stock.make_to_forecast.value'),
+      tooltip: t(baseTranslation + '.' + 'stock.make_to_forecast.tooltip', 'stock.make_to_forecast.tooltip'),
+    },
   ];
 
   const sourcingEnumValues = [

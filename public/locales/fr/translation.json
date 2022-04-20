@@ -403,6 +403,10 @@
               "op_variable": {
                 "value": "Point de commande, quantité variable",
                 "tooltip": "Politique de stock sur point de commande visant à recompléter le stock jusqu'à un niveau défini par l'utilisateur (s,S)."
+              },
+              "make_to_forecast": {
+                "value": "Production sur prévision",
+                "tooltip": "Politique de stock visant à recompléter le stock suffisamment pour les prévisions de ventes et le niveau de sécurité."
               }
             },
             "sourcing": {
