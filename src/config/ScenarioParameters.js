@@ -52,7 +52,7 @@ const PARAMETERS = {
     defaultValue: 'Equidistribution',
   },
   stock_dispatch_policy: {
-    defaultValue: 'Equidistribution',
+    defaultValue: 'None',
   },
   production_policy: {
     defaultValue: 'Equidistribution',

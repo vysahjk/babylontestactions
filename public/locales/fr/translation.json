@@ -445,8 +445,8 @@
                 "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
               },
               "none": {
-                "value": "Aucune",
-                "tooltip": "Pas de politique de distribution des stocks"
+                "value": "Standard",
+                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval."
               }
             },
             "production": {

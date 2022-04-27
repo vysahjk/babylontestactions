@@ -445,8 +445,8 @@
                 "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
               },
               "none": {
-                "value": "None",
-                "tooltip": "No stock dispatch policy."
+                "value": "Standard",
+                "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports."
               }
             },
             "production": {

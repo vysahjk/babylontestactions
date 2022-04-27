@@ -101,14 +101,11 @@ const FlowManagementPoliciesConfiguration = ({
   ];
 
   const stockDispatchEnumValues = [
-    /* {
+    {
       key: 'None',
-      value:
-        t(baseTranslation + '.' + 'stockDispatch.none.value', 'stockDispatch.none.value'),
-      tooltip:
-        t(baseTranslation + '.' + 'stockDispatch.none.tooltip', 'stockDispatch.none.tooltip')
+      value: t(baseTranslation + '.' + 'stockDispatch.none.value', 'stockDispatch.none.value'),
+      tooltip: t(baseTranslation + '.' + 'stockDispatch.none.tooltip', 'stockDispatch.none.tooltip'),
     },
-    */
     {
       key: 'Equidistribution',
       value: t(baseTranslation + '.' + 'stockDispatch.equi.value', 'stockDispatch.equi.value'),
