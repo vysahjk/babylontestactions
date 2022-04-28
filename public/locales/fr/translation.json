@@ -348,8 +348,8 @@
         }
       },
       "about": {
-        "title": "Exemple d'Application Web Azure",
-        "content": "La solution d'exemple de jumeaux numériques est fournie par Cosmo Tech. Vous pouvez utiliser cet example pour créer votre propre solution de jumeaux numériques",
+        "title": "Cosmo Tech Supply Chain",
+        "content": "Cosmo Tech Supply Chain digital twin solution",
         "button": {
           "close": "Fermer"
         }
