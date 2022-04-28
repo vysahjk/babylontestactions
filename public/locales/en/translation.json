@@ -402,11 +402,11 @@
               },
               "op_variable": {
                 "value": "Order point, variable quantity",
-                "tooltip": "Stock policy on order point aiming to replenish the stock up to an user-defined level (s,S)."
+                "tooltip": "Stock policy on order point aiming at replenishing the stock up to an user-defined level (s,S)."
               },
               "make_to_forecast": {
                 "value": "Make to forecast",
-                "tooltip": "Stock policy aiming to replenish the stock sufficiently for the sales forecasts and the safety level."
+                "tooltip": "Stock policy aiming at replenishing the stock to have enough quantities available to serve the forecasted demand and maintaining the defined safety stock."
               }
             },
             "sourcing": {
