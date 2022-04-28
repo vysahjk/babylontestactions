@@ -7,13 +7,10 @@ import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
 // From scenario View
 // Get elements
 function getScenarioViewTab() {
-  return cy.get(GENERIC_SELECTORS.scenario.view);
+  return cy.get(GENERIC_SELECTORS.scenario.tabName);
 }
 function getScenarioView() {
   return cy.get(GENERIC_SELECTORS.scenario.view);
-}
-function getScenarioParametersTab() {
-  return cy.get(GENERIC_SELECTORS.scenario.parameters.tabs);
 }
 function getScenarioSelector() {
   return cy.get(GENERIC_SELECTORS.scenario.selectInput);
@@ -139,7 +136,6 @@ function createScenario(scenarioName, isMaster, datasetOrMasterName, runTemplate
 
 export const Scenarios = {
   getScenarioView,
-  getScenarioParametersTab,
   getScenarioSelector,
   getScenarioSelectorInput,
   getScenarioCreationButton,

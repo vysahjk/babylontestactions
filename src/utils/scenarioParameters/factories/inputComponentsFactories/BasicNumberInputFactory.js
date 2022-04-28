@@ -32,10 +32,15 @@ const create = (t, parameterData, parametersState, setParametersState, editMode)
   };
 
   function setValue(newValue) {
-    setParametersState({
-      ...parametersState,
+    setParametersState((currentParametersState) => ({
+      ...currentParametersState,
       [parameterData.id]: newValue,
-    });
+    }));
+  }
+
+  let value = parametersState[parameterData.id];
+  if (value == null) {
+    value = NaN;
   }
 
   return (
@@ -43,7 +48,7 @@ const create = (t, parameterData, parametersState, setParametersState, editMode)
       key={parameterData.id}
       data-cy={parameterData.dataCy}
       label={t(`solution.parameters.${parameterData.id}`, parameterData.id)}
-      value={parametersState[parameterData.id] || NaN}
+      value={value}
       changeNumberField={setValue}
       textFieldProps={textFieldProps}
       inputProps={inputProps}

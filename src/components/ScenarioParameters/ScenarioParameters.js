@@ -3,12 +3,13 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { SCENARIO_PARAMETERS_CONFIG } from '../../config/ScenarioParameters';
 import { DATASET_ID_VARTYPE, SCENARIO_RUN_STATE } from '../../services/config/ApiConstants';
 import { EditModeButton, NormalModeButton, ScenarioParametersTabs } from './components';
 import { useTranslation } from 'react-i18next';
-import { SimpleTwoActionsDialog } from '@cosmotech/ui';
+import { SimpleTwoActionsDialog, DontAskAgainDialog } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
 // eslint-disable-next-line
@@ -30,6 +31,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     margin: `0 ${theme.spacing(3)}px`,
   },
+  accordion: {
+    backgroundColor: theme.palette.background.card,
+  },
+  accordionSummary: {
+    flexDirection: 'row-reverse',
+    marginLeft: '-10px',
+  },
+  accordionDetailsContent: {
+    width: '100%',
+  },
+  gridContainerSummary: {
+    direction: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  gridSummary: {
+    marginLeft: '10px',
+  },
 }));
 
 const getRunTemplateParametersIds = (runTemplatesParametersIdsDict, runTemplateId) => {
@@ -42,6 +61,8 @@ const ScenarioParameters = ({
   addDatasetToStore,
   updateAndLaunchScenario,
   launchScenario,
+  onChangeAccordionSummaryExpanded,
+  accordionSummaryExpanded,
   workspaceId,
   scenarioList,
   currentScenario,
@@ -216,21 +237,46 @@ const ScenarioParameters = ({
     return parametersData.concat(keptAdditionalParameters);
   };
 
-  const startParametersEdition = () => changeEditMode(true);
-  const askDiscardConfirmation = () => setShowDiscardConfirmationPopup(true);
-  const cancelDiscard = () => setShowDiscardConfirmationPopup(false);
+  const startParametersEdition = (event) => {
+    if (accordionSummaryExpanded) {
+      event.stopPropagation();
+    }
+    changeEditMode(true);
+  };
+
+  const [showWarningBeforeLaunchPopup, setShowWarningBeforeLaunchPopup] = useState(false);
+  const closeConfirmLaunchDialog = () => {
+    setShowWarningBeforeLaunchPopup(false);
+  };
+
+  const updateBeforeLaunch = useRef(null);
+
+  const confirmAndLaunch = (event, updateBeforeLaunch_) => {
+    event.stopPropagation();
+    updateBeforeLaunch.current = updateBeforeLaunch_;
+    if (localStorage.getItem('dontAskAgainToConfirmLaunch') === 'true') {
+      startScenarioLaunch();
+    } else {
+      setShowWarningBeforeLaunchPopup(true);
+    }
+  };
+
+  const startScenarioLaunch = async () => {
+    const forceUpdate = ScenarioParametersUtils.shouldForceUpdateScenarioParameters();
+    await processScenarioLaunch(forceUpdate || updateBeforeLaunch.current);
+  };
+
+  const askDiscardConfirmation = (event) => {
+    event.stopPropagation();
+    setShowDiscardConfirmationPopup(true);
+  };
+  const cancelDiscard = () => {
+    setShowDiscardConfirmationPopup(false);
+  };
   const confirmDiscard = () => {
     setShowDiscardConfirmationPopup(false);
     changeEditMode(false);
     discardLocalChanges();
-  };
-
-  const startScenarioLaunch = async () => {
-    await processScenarioLaunch(ScenarioParametersUtils.shouldForceUpdateScenarioParameters());
-  };
-
-  const startScenarioUpdateAndLaunch = async () => {
-    await processScenarioLaunch(true);
   };
 
   const processScenarioLaunch = async (forceUpdate) => {
@@ -255,50 +301,58 @@ const ScenarioParameters = ({
   const noTabsShown = parametersGroupsMetadata.length === 0;
   const isCurrentScenarioRunning = currentScenario.data.state === SCENARIO_RUN_STATE.RUNNING;
 
+  const handleSummaryClick = () => {
+    const expandedNewState = !accordionSummaryExpanded;
+    localStorage.setItem('scenarioParametersAccordionExpanded', expandedNewState);
+    onChangeAccordionSummaryExpanded(expandedNewState);
+  };
+
   return (
     <div>
-      <Grid container direction="column" justifyContent="center" alignContent="flex-start">
-        <Grid
-          container
-          className={classes.root}
-          direction="row"
-          justifyContent="space-between"
-          alignContent="flex-start"
-          spacing={5}
+      <Accordion className={classes.accordion} expanded={accordionSummaryExpanded}>
+        <AccordionSummary
+          data-cy="scenario-params-accordion-summary"
+          className={classes.accordionSummary}
+          expandIcon={<ExpandMoreIcon />}
+          onClick={handleSummaryClick}
         >
-          <Grid item>
-            <Typography variant="subtitle1">
-              {t('genericcomponent.text.scenario.parameters.title', 'Scenario parameters')}
-            </Typography>
-          </Grid>
-          <PermissionsGate authorizedPermissions={[PERMISSIONS.canEditOrLaunchScenario]}>
-            <Grid item>
-              {editMode ? (
-                <EditModeButton
-                  classes={classes}
-                  handleClickOnDiscardChange={askDiscardConfirmation}
-                  handleClickOnUpdateAndLaunchScenario={startScenarioUpdateAndLaunch}
-                />
-              ) : (
-                <NormalModeButton
-                  classes={classes}
-                  handleClickOnEdit={startParametersEdition}
-                  handleClickOnLaunchScenario={startScenarioLaunch}
-                  editDisabled={noTabsShown || isCurrentScenarioRunning}
-                  runDisabled={isCurrentScenarioRunning}
-                />
-              )}
+          <Grid container className={classes.gridContainerSummary}>
+            <Grid className={classes.gridSummary}>
+              <Typography variant="subtitle1">
+                {t('genericcomponent.text.scenario.parameters.title', 'Scenario parameters')}
+              </Typography>
             </Grid>
-          </PermissionsGate>
-        </Grid>
-      </Grid>
-      <Grid item className={classes.tabs}>
-        {
-          <form onSubmit={preventSubmit}>
-            <ScenarioParametersTabs parametersGroupsMetadata={parametersGroupsMetadata} userRoles={userRoles} />
-          </form>
-        }
-      </Grid>
+            <Grid item>
+              <PermissionsGate authorizedPermissions={[PERMISSIONS.canEditOrLaunchScenario]}>
+                {editMode ? (
+                  <EditModeButton
+                    classes={classes}
+                    handleClickOnDiscardChange={(event) => askDiscardConfirmation(event)}
+                    handleClickOnUpdateAndLaunchScenario={(event) => confirmAndLaunch(event, true)}
+                  />
+                ) : (
+                  <NormalModeButton
+                    classes={classes}
+                    handleClickOnEdit={(event) => startParametersEdition(event)}
+                    handleClickOnLaunchScenario={(event) => confirmAndLaunch(event, false)}
+                    editDisabled={noTabsShown || isCurrentScenarioRunning}
+                    runDisabled={isCurrentScenarioRunning}
+                  />
+                )}
+              </PermissionsGate>
+            </Grid>
+          </Grid>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div className={classes.accordionDetailsContent}>
+            {
+              <form onSubmit={preventSubmit}>
+                <ScenarioParametersTabs parametersGroupsMetadata={parametersGroupsMetadata} userRoles={userRoles} />
+              </form>
+            }
+          </div>
+        </AccordionDetails>
+      </Accordion>
       <SimpleTwoActionsDialog
         id={'discard-changes'}
         open={showDiscardConfirmationPopup}
@@ -307,10 +361,25 @@ const ScenarioParameters = ({
           body: t('genericcomponent.dialog.scenario.parameters.body'),
           button1: t('genericcomponent.dialog.scenario.parameters.button.cancel'),
           button2: t('genericcomponent.dialog.scenario.parameters.button.validate'),
-          ariaLabelledby: 'discard-changes-dialog',
         }}
         handleClickOnButton1={cancelDiscard}
         handleClickOnButton2={confirmDiscard}
+      />
+      <DontAskAgainDialog
+        id={'launch'}
+        open={showWarningBeforeLaunchPopup}
+        labels={{
+          title: t('genericcomponent.dialog.scenario.parameters.confirmLaunchDialog.title'),
+          body: t('genericcomponent.dialog.scenario.parameters.confirmLaunchDialog.body'),
+          cancel: t('genericcomponent.dialog.scenario.parameters.button.cancel'),
+          confirm: t('genericcomponent.dialog.scenario.parameters.button.launch'),
+          checkbox: t('genericcomponent.dialog.scenario.parameters.confirmLaunchDialog.checkbox'),
+        }}
+        onClose={closeConfirmLaunchDialog}
+        onConfirm={(dontAskAgain) => {
+          localStorage.setItem('dontAskAgainToConfirmLaunch', dontAskAgain);
+          startScenarioLaunch();
+        }}
       />
     </div>
   );
@@ -321,7 +390,9 @@ ScenarioParameters.propTypes = {
   changeEditMode: PropTypes.func.isRequired,
   addDatasetToStore: PropTypes.func.isRequired,
   updateAndLaunchScenario: PropTypes.func.isRequired,
+  onChangeAccordionSummaryExpanded: PropTypes.func.isRequired,
   launchScenario: PropTypes.func.isRequired,
+  accordionSummaryExpanded: PropTypes.bool.isRequired,
   workspaceId: PropTypes.string.isRequired,
   scenarioId: PropTypes.string.isRequired,
   scenarioList: PropTypes.array.isRequired,

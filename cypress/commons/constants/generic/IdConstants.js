@@ -17,18 +17,31 @@ export const GENERIC_SELECTORS = {
   },
   helpMenu: {
     menu: '[data-cy=help-menu]',
+    aboutButton: '[data-cy=about-button]',
+    aboutDialog: '[data-cy=about-dialog]',
+    aboutDialogCloseButton: '[data-cy=about-dialog-close-button]',
+    support: '[data-cy=support-link]',
+    documentation: '[data-cy=documentation-link]',
   },
   scenario: {
     view: '[data-cy=scenario-view]',
-    tabName: '[data-cy="tabs.scenariomanager.key"]',
+    tabName: '[data-cy="tabs.scenario.key"]',
     dashboard: {
       placeholder: '[data-cy=dashboard-placeholder]',
     },
     selectInput: '[data-cy=scenario-select-input]',
     parameters: {
       tabs: '[data-cy=scenario-parameters-tabs]',
+      accordionSummary: '[data-cy=scenario-params-accordion-summary]',
       editButton: '[data-cy=edit-parameters-button]',
+      launchButton: '[data-cy=launch-scenario-button]',
       updateAndLaunchButton: '[data-cy=update-and-launch-scenario]',
+      dialogLaunch: {
+        dialogTitle: '[data-cy=launch-confirm-dialog-title]',
+        confirmButton: '[data-cy=launch-confirm-button]',
+        cancelButton: '[data-cy=launch-cancel-button]',
+        dontAskAgainCheckbox: '[data-cy=launch-dontAskAgain-checkbox]',
+      },
       discardButton: '[data-cy=discard-button]',
       dialogDiscardButton: '[data-cy=discard-changes-button2]',
     },

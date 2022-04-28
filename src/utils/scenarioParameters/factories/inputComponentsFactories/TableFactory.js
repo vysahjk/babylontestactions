@@ -35,28 +35,40 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
   const dateFormat = parameterMetadata.dateFormat || DEFAULT_DATE_FORMAT;
   const options = { dateFormat: dateFormat };
 
-  const setParameterInState = (newValue) => {
-    setParametersState({
-      ...parametersState,
+  function setParameterInState(newValue) {
+    setParametersState((currentParametersState) => ({
+      ...currentParametersState,
       [parameterId]: newValue,
-    });
-  };
+    }));
+  }
 
-  const setClientFileDescriptorStatuses = (newFileStatus, newTableDataStatus) => {
-    setParameterInState({
-      ...parameter,
-      status: newFileStatus,
-      tableDataStatus: newTableDataStatus,
-    });
+  function setClientFileDescriptorStatuses(newFileStatus, newTableDataStatus) {
+    setParametersState((currentParametersState) => ({
+      ...currentParametersState,
+      [parameterId]: {
+        ...currentParametersState[parameterId],
+        status: newFileStatus,
+        tableDataStatus: newTableDataStatus,
+      },
+    }));
+  }
+
+  const _checkForLock = () => {
+    if (create.downloadLocked === undefined) {
+      create.downloadLocked = {};
+    } else if (parameterId in create.downloadLocked === false) {
+      create.downloadLocked[parameterId] = false;
+    } else if (create.downloadLocked[parameterId]) {
+      return true;
+    }
+    return false;
   };
 
   const _downloadDatasetFileContentFromStorage = async (datasets, clientFileDescriptor, setClientFileDescriptor) => {
-    if (create.downloadLocked === undefined) {
-      create.downloadLocked = false;
-    } else if (create.downloadLocked) {
+    if (_checkForLock()) {
       return;
     }
-    create.downloadLocked = true;
+    create.downloadLocked[parameterId] = true;
     setClientFileDescriptor({
       ...clientFileDescriptor,
       agGridRows: null,
@@ -86,7 +98,7 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
         tableDataStatus: TABLE_DATA_STATUS.ERROR,
       });
     }
-    create.downloadLocked = false;
+    create.downloadLocked[parameterId] = false;
   };
 
   const _parseCSVFileContent = (
@@ -132,6 +144,7 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
         errors: agGridData.error,
         status: finalStatus,
         tableDataStatus: TABLE_DATA_STATUS.READY,
+        uploadPreprocess: null,
       });
     }
   };
@@ -219,6 +232,7 @@ const create = (t, datasets, parameterMetadata, parametersState, setParametersSt
         errors: agGridData.error,
         status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
         tableDataStatus: TABLE_DATA_STATUS.READY,
+        uploadPreprocess: null,
       });
     }
   };

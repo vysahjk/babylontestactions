@@ -8,6 +8,9 @@ import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
 function getParametersTabs() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.tabs);
 }
+function getParametersAccordionSummary() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.accordionSummary);
+}
 //  - timeout: max time to wait before throwing an error (seconds)
 function getParametersEditButton(timeout = 5) {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.editButton, { timeout: timeout * 1000 });
@@ -18,11 +21,47 @@ function getParametersDiscardButton() {
 function getParametersConfirmDiscardButton() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogDiscardButton);
 }
+function getLaunchButton() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.launchButton);
+}
 function getParametersUpdateAndLaunchButton() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.updateAndLaunchButton);
 }
+function getLaunchConfirmDialog() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogLaunch.dialogTitle);
+}
+function getLaunchConfirmButton() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogLaunch.confirmButton);
+}
+function getLaunchCancelButton() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogLaunch.cancelButton);
+}
+function getDontAskAgainCheckbox() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogLaunch.dontAskAgainCheckbox).find('input');
+}
+function checkDontAskAgain() {
+  getDontAskAgainCheckbox().check();
+}
 
 // Actions around scenario parameters
+function expandParametersAccordion() {
+  getParametersAccordionSummary()
+    .invoke('attr', 'aria-expanded')
+    .then(($val) => {
+      if ($val === 'false') {
+        getParametersAccordionSummary().click();
+      }
+    });
+}
+function collapseParametersAccordion() {
+  getParametersAccordionSummary()
+    .invoke('attr', 'aria-expanded')
+    .then(($val) => {
+      if ($val === 'true') {
+        getParametersAccordionSummary().click();
+      }
+    });
+}
 function edit(timeout = 5) {
   getParametersEditButton(timeout).should('not.be.disabled').click();
 }
@@ -30,9 +69,15 @@ function discard() {
   getParametersDiscardButton().click();
   getParametersConfirmDiscardButton().click();
 }
-function updateAndLaunch() {
+function updateAndLaunch(dontAskAgain = false) {
   cy.intercept('POST', URL_REGEX.SCENARIO_PAGE_RUN_WITH_ID).as('requestRunScenario');
   getParametersUpdateAndLaunchButton().click();
+  if (localStorage.getItem('dontAskAgainToConfirmLaunch') !== 'true') {
+    if (dontAskAgain) {
+      checkDontAskAgain();
+    }
+    getLaunchConfirmButton().click();
+  }
   cy.wait('@requestRunScenario');
 }
 
@@ -43,9 +88,19 @@ function getInputValue(inputElement) {
 
 export const ScenarioParameters = {
   getParametersTabs,
+  getParametersAccordionSummary,
   getParametersEditButton,
   getParametersDiscardButton,
+  getParametersConfirmDiscardButton,
+  getLaunchButton,
   getParametersUpdateAndLaunchButton,
+  getLaunchConfirmDialog,
+  getLaunchConfirmButton,
+  getLaunchCancelButton,
+  getDontAskAgainCheckbox,
+  checkDontAskAgain,
+  expandParametersAccordion,
+  collapseParametersAccordion,
   edit,
   discard,
   updateAndLaunch,

@@ -11,6 +11,7 @@ import { USE_POWER_BI_WITH_USER_CREDENTIALS } from '../../config/AppConfiguratio
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    position: 'fixed',
     margin: 'auto',
     width: '100%',
     height: '100%',
@@ -141,6 +142,7 @@ function TabPanel(props) {
         reports={reports}
         reportConfiguration={DASHBOARDS_LIST_CONFIG}
         scenario={scenario}
+        alwaysShowReports={true}
         scenarioList={scenarioList}
         lang={lang}
         labels={labels}

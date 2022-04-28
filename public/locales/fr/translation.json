@@ -129,7 +129,7 @@
         },
         "noscenario": {
           "title": "Aucun scénario n'a encore été créé",
-          "label": "Vous pouvez créer un scénario en cliquant sur"
+          "label": "Vous pouvez créer un scénario en cliquant sur \"Créer un scénario\""
         },
         "error": {
           "unknown": {
@@ -142,26 +142,28 @@
     "scenariomanager": {
       "treelist": {
         "node": {
-          "dataset": "Dataset",
-          "dataset_plural": "Datasets",
+          "dataset_one": "Dataset",
+          "dataset_other": "Datasets",
           "status": {
-            "label": "Statut",
+            "label": "Statut :",
             "successful": "Succès",
+            "running": "En cours",
             "failed": "Erreur",
             "created": "Créé"
           },
-          "text": {
-            "search": "Rechercher"
+          "action": {
+            "delete": "Supprimer ce scénario",
+            "redirect": "Ouvrir dans la vue scénario"
           },
-          "dataset_one": "Dataset",
-          "dataset_other": "Datasets"
-        },
-        "search": {
-          "info": "{{count}} scénario trouvé",
-          "info_plural": "{{count}} scénarios trouvés",
-          "info_one": "{{count}} scénario trouvé",
-          "info_other": "{{count}} scénarios trouvés"
+          "text": {
+            "search": "Filtrer..."
+          }
         }
+      },
+      "toolbar": {
+        "expandAll": "Tout déplier",
+        "collapseAll": "Tout replier",
+        "expandTree": "Déplier l'arborescence"
       }
     },
     "tab": {
@@ -247,6 +249,13 @@
     }
   },
   "genericcomponent": {
+    "dateInput": {
+      "error": {
+        "minDateMessage": "La date minimale n'est pas respectée",
+        "maxDateMessage": "La date maximale n'est pas respectée",
+        "invalidDateMessage": "Format de date incorrect"
+      }
+    },
     "uploadfile": {
       "button": {
         "browse": "Parcourir",
@@ -316,24 +325,39 @@
         "logout": "Se déconnecter"
       }
     },
+    "helpmenu": {
+      "documentation": "Documentation",
+      "support": "Contacter le support",
+      "about": "A propos"
+    },
     "dialog": {
       "scenario": {
         "parameters": {
           "button": {
             "cancel": "Annuler",
-            "validate": "Abandonner"
+            "validate": "Abandonner",
+            "launch": "Lancer"
           },
           "title": "Abandonner les modifications ?",
-          "body": "Vous allez perdre toutes les modifications que vous avez faites sur les paramètres de scénario."
+          "body": "Vous allez perdre toutes les modifications que vous avez faites sur les paramètres de scénario.",
+          "confirmLaunchDialog": {
+            "title": "Lancer le scenario ?",
+            "body": "Lancer un scénario peut prendre du temps. Tous les résultats existants pour ce scénario seront écrasés.",
+            "checkbox": "Ne pas demander la prochaine fois."
+          }
+        }
+      },
+      "about": {
+        "title": "Exemple d'Application Web Azure",
+        "content": "La solution d'exemple de jumeaux numériques est fournie par Cosmo Tech. Vous pouvez utiliser cet example pour créer votre propre solution de jumeaux numériques",
+        "button": {
+          "close": "Fermer"
         }
       }
     },
     "text": {
       "scenario": {
-        "parameters": {
-          "placeholder": "Aucun paramètre à éditer.",
-          "title": "Paramètres de scénario",
-          "time_configuration": {
+        "parameters": { "time_configuration": {
             "start_date": "Date de début",
             "end_date": "Date de fin",
             "date_boundaries_error": "La date de début de la simulation doit être avant la date de fin de la simulation",
@@ -479,17 +503,6 @@
           }
         }
       }
-    },
-    "dateInput": {
-      "error": {
-        "minDateMessage": "La date minimale n'est pas respectée",
-        "maxDateMessage": "La date maximale n'est pas respectée",
-        "invalidDateMessage": "Format de date incorrect"
-      }
-    },
-    "helpmenu": {
-      "documentation": "Documentation",
-      "support": "Contacter le support"
     },
     "table": {
       "button": {

@@ -21,10 +21,18 @@ export function* updateAndLaunchScenario(action) {
   try {
     appInsights.trackScenarioLaunch();
     // Update scenario parameters
+    const runStartTime = new Date().getTime();
     yield put({
       type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
       status: STATUSES.SAVING,
-      scenario: { state: SCENARIO_RUN_STATE.RUNNING, parametersValues: scenarioParameters },
+      scenario: {
+        state: SCENARIO_RUN_STATE.RUNNING,
+        parametersValues: scenarioParameters,
+      },
+    });
+    yield put({
+      type: SCENARIO_ACTIONS_KEY.UPDATE_SCENARIO,
+      data: { scenarioState: SCENARIO_RUN_STATE.RUNNING, scenarioId: scenarioId, lastRun: null },
     });
     const { data: updateData } = yield call(
       Api.Scenarios.updateScenario,
@@ -49,6 +57,7 @@ export function* updateAndLaunchScenario(action) {
       type: SCENARIO_ACTIONS_KEY.START_SCENARIO_STATUS_POLLING,
       workspaceId: workspaceId,
       scenarioId: scenarioId,
+      startTime: runStartTime,
     });
   } catch (e) {
     console.error(e);

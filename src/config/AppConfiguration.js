@@ -1,6 +1,9 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
+// App version
+export const APP_VERSION = process.env.REACT_APP_VERSION;
+
 // App translation configuration
 export const LANGUAGES = {
   en: 'English',
@@ -21,10 +24,13 @@ export const SCENARIO_RUN_LOG_TYPE = 'CUMULATED_LOGS';
 export const ENABLE_APPLICATION_INSIGHTS = true;
 
 // Support page url
-export const SUPPORT_URL = 'http://support.cosmotech.com';
+export const SUPPORT_URL = 'https://support.cosmotech.com';
+
+// Cosmotech website url
+export const COSMOTECH_URL = 'https://cosmotech.com';
 
 // Documentation url
-export const DOCUMENTATION_URL = 'doc.pdf';
+export const DOCUMENTATION_URL = 'https://portal.cosmotech.com/resources/platform-resources/platform-help';
 
 // Additional parameters to put in scenario parameters
 export const ADD_SCENARIO_NAME_PARAMETER = true;
@@ -38,3 +44,4 @@ export const ADD_SCENARIO_RUN_TEMPLATE_NAME_PARAMETER = false;
 
 // Power BI
 export const USE_POWER_BI_WITH_USER_CREDENTIALS = false;
+export const SCENARIO_VIEW_IFRAME_DISPLAY_RATIO = 1580 / 350;

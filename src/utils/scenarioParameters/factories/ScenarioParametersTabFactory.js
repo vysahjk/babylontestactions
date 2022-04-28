@@ -8,6 +8,11 @@ import { PermissionsGate } from '../../../components';
 const noPermissionsPlaceHolder = (t) => {
   return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
 };
+const groupContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+};
 
 const create = (t, datasets, parametersGroupData, parametersState, setParametersState, editMode, currentScenario) => {
   return (
@@ -15,7 +20,7 @@ const create = (t, datasets, parametersGroupData, parametersState, setParameters
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
       authorizedRoles={parametersGroupData.authorizedRoles}
     >
-      <div key={parametersGroupData.id}>
+      <div key={parametersGroupData.id} style={groupContainerStyle}>
         {parametersGroupData.parameters.map((parameterData) =>
           ScenarioParameterInputFactory.create(
             t,

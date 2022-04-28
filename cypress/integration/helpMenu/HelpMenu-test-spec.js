@@ -13,14 +13,22 @@ describe('UserInfo features', () => {
     Login.relogin();
   });
 
-  it('can download the documentation PDF', () => {
+  it('can go to documentation page', () => {
     AppBar.openHelpMenu();
-    // Check that the link to the documentation PDF file exists
     AppBar.getDocumentationLink().should('have.attr', 'target', '_blank');
   });
 
   it('can go support page', () => {
     AppBar.openHelpMenu();
     AppBar.getSupportPageLink().should('have.attr', 'target', '_blank');
+  });
+
+  it('can display About dialog', () => {
+    AppBar.getAboutDialog().should('not.exist');
+    AppBar.openHelpMenu();
+    AppBar.openAboutDialog();
+    AppBar.getAboutDialog().should('be.visible');
+    AppBar.closeAboutDialog();
+    AppBar.getAboutDialog().should('not.exist');
   });
 });

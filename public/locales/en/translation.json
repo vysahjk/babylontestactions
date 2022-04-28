@@ -129,7 +129,7 @@
         },
         "noscenario": {
           "title": "No scenario yet",
-          "label": "You can create a scenario by clicking on"
+          "label": "You can create a scenario by clicking on \"Create new scenario\""
         },
         "error": {
           "unknown": {
@@ -142,26 +142,28 @@
     "scenariomanager": {
       "treelist": {
         "node": {
-          "dataset": "Dataset",
-          "dataset_plural": "Datasets",
+          "dataset_one": "Dataset",
+          "dataset_other": "Datasets",
           "status": {
-            "label": "Run status",
+            "label": "Run status:",
             "successful": "Successful",
+            "running": "Running",
             "failed": "Failed",
             "created": "Created"
           },
-          "text": {
-            "search": "Search"
+          "action": {
+            "delete": "Delete this scenario",
+            "redirect": "Open in scenario view"
           },
-          "dataset_one": "Dataset",
-          "dataset_other": "Datasets"
-        },
-        "search": {
-          "info": "{{count}} scenario found",
-          "info_plural": "{{count}} scenarios found",
-          "info_one": "{{count}} scenario found",
-          "info_other": "{{count}} scenarios found"
+          "text": {
+            "search": "Filter..."
+          }
         }
+      },
+      "toolbar": {
+        "expandAll": "Expand all",
+        "collapseAll": "Collapse all",
+        "expandTree": "Expand tree"
       }
     },
     "tab": {
@@ -247,6 +249,13 @@
     }
   },
   "genericcomponent": {
+    "dateInput": {
+      "error": {
+        "minDateMessage": "Minimum date is not respected",
+        "maxDateMessage": "Maximum date is not respected",
+        "invalidDateMessage": "Date is invalid"
+      }
+    },
     "uploadfile": {
       "button": {
         "browse": "Browse",
@@ -316,15 +325,33 @@
         "logout": "Sign out"
       }
     },
+    "helpmenu": {
+      "documentation": "Documentation",
+      "support": "Contact support",
+      "about": "About"
+    },
     "dialog": {
       "scenario": {
         "parameters": {
           "button": {
             "cancel": "Cancel",
-            "validate": "Discard"
+            "validate": "Discard",
+            "launch": "Launch"
           },
           "title": "Discard current modifications ?",
-          "body": "You will lose all your current changes made on the scenario parameters."
+          "body": "You will lose all your current changes made on the scenario parameters.",
+          "confirmLaunchDialog": {
+            "title": "Launch scenario ?",
+            "body": "Running a scenario can take time. Any existing results for this scenario will be overwriten.",
+            "checkbox": "Don't ask again"
+          }
+        }
+      },
+      "about": {
+        "title": "Azure Sample Web Application",
+        "content": "The digital twin example solution is provided by Cosmo Tech. You can use this example to create your own digital twin solution",
+        "button": {
+          "close": "Close"
         }
       }
     },
@@ -479,17 +506,6 @@
           }
         }
       }
-    },
-    "dateInput": {
-      "error": {
-        "minDateMessage": "Minimum date is not respected",
-        "maxDateMessage": "Maximum date is not respected",
-        "invalidDateMessage": "Date is invalid"
-      }
-    },
-    "helpmenu": {
-      "documentation": "Documentation",
-      "support": "Contact support"
     },
     "table": {
       "button": {
