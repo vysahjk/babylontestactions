@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 // App version
-export const APP_VERSION = process.env.REACT_APP_VERSION;
+export const APP_VERSION = 'Web-App version ' + process.env.REACT_APP_VERSION;
 
 // App translation configuration
 export const LANGUAGES = {
