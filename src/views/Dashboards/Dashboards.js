@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   dashboard: {
-    height: '100%',
+    height: 'calc(100% - 18px)',
   },
 }));
 
