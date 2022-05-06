@@ -431,6 +431,10 @@
               "make_to_forecast": {
                 "value": "Production sur prévision",
                 "tooltip": "Politique de stock visant à réapprovisionner le stock afin d'avoir suffisamment de quantités disponibles pour répondre à la demande prévue et maintenir le stock de sécurité défini."
+              },
+              "from_dataset": {
+                "value": "Mixte",
+                "tooltip": "Permet d'utiliser différentes politiques de stock (à définir pour chaque stock dans le jeu de données)."
               }
             },
             "sourcing": {
