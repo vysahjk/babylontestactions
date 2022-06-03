@@ -33,7 +33,7 @@ const _forgeCytoscapeNodeData = (nodeData, classes, parent = undefined) => {
 };
 
 export const processGraphElements = (elements) => {
-  if ('Stock' in elements === false) {
+  if (!('Stock' in elements)) {
     return [];
   }
   let graphElements = [];
@@ -43,34 +43,37 @@ export const processGraphElements = (elements) => {
   graphElements = graphElements.concat(stocks);
 
   // ProductionOperation elements
-  const resourcesChildrenCount = {};
-  for (const prodOperation of elements.ProductionOperation) {
-    const resourceName = _getResourceForOperation(elements, prodOperation.id);
-    if (resourceName && resourcesChildrenCount[resourceName] === undefined) {
-      resourcesChildrenCount[resourceName] = 1;
-    } else {
-      resourcesChildrenCount[resourceName]++;
+  if ('ProductionOperation' in elements) {
+    const resourcesChildrenCount = {};
+    for (const prodOperation of elements.ProductionOperation) {
+      const resourceName = _getResourceForOperation(elements, prodOperation.id);
+      if (resourceName && resourcesChildrenCount[resourceName] === undefined) {
+        resourcesChildrenCount[resourceName] = 1;
+      } else {
+        resourcesChildrenCount[resourceName]++;
+      }
+      const nodeClasses = ['ProductionOperation', prodOperation.PlantName, resourceName];
+      graphElements.push(_forgeCytoscapeNodeData(prodOperation, nodeClasses, resourceName));
     }
-    const nodeClasses = ['ProductionOperation', prodOperation.PlantName, resourceName];
-    graphElements.push(_forgeCytoscapeNodeData(prodOperation, nodeClasses, resourceName));
-  }
-
-  // Resources compounds
-  for (const resource of elements.ProductionResource) {
-    graphElements.push({
-      group: 'nodes',
-      data: resource,
-      pannable: true,
-      locked: true,
-      selectable: true,
-      grabbable: false,
-      classes: ['Resource'],
-    });
+    // Resources compounds
+    if ('ProductionResource' in elements) {
+      for (const resource of elements.ProductionResource) {
+        graphElements.push({
+          group: 'nodes',
+          data: resource,
+          pannable: true,
+          locked: true,
+          selectable: true,
+          grabbable: false,
+          classes: ['Resource'],
+        });
+      }
+    }
   }
 
   const edgesTypes = ['input', 'output', 'Transport'];
   for (const edgeType of edgesTypes) {
-    if (edgeType in elements === false) {
+    if (!(edgeType in elements)) {
       console.warn(`Unknown edge type "${edgeType}" in graph elements`);
       continue;
     }
