@@ -13,7 +13,7 @@ import { Auth } from '@cosmotech/core';
 const _formatLabelWithNewlines = (label) => label?.replace(/[_|\s]/g, '\n') || '';
 
 const _getResourceForOperation = (elements, operationId) => {
-  if (operationId && elements.contains.length > 0) {
+  if (operationId && 'contains' in elements && elements.contains.length > 0) {
     for (const contains of elements.contains) {
       if (contains.target === operationId) {
         return contains.source;
