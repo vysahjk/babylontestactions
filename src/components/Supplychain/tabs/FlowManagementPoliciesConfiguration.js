@@ -103,6 +103,11 @@ const FlowManagementPoliciesConfiguration = ({
       value: t(baseTranslation + '.' + 'sourcing.priority.value', 'sourcing.priority.value'),
       tooltip: t(baseTranslation + '.' + 'sourcing.priority.tooltip', 'sourcing.priority.tooltip'),
     },
+    {
+      key: 'FromDataset',
+      value: t(baseTranslation + '.' + 'sourcing.from_dataset.value', 'sourcing.from_dataset.value'),
+      tooltip: t(baseTranslation + '.' + 'sourcing.from_dataset.tooltip', 'sourcing.from_dataset.tooltip'),
+    },
   ];
 
   const stockDispatchEnumValues = [
@@ -130,6 +135,11 @@ const FlowManagementPoliciesConfiguration = ({
       key: 'HighestPriority',
       value: t(baseTranslation + '.' + 'stockDispatch.priority.value', 'stockDispatch.priority.value'),
       tooltip: t(baseTranslation + '.' + 'stockDispatch.priority.tooltip', 'stockDispatch.priority.tooltip'),
+    },
+    {
+      key: 'FromDataset',
+      value: t(baseTranslation + '.' + 'stockDispatch.from_dataset.value', 'stockDispatch.from_dataset.value'),
+      tooltip: t(baseTranslation + '.' + 'stockDispatch.from_dataset.tooltip', 'stockDispatch.from_dataset.tooltip'),
     },
   ];
 
@@ -161,6 +171,11 @@ const FlowManagementPoliciesConfiguration = ({
       key: 'HighestPriority',
       value: t(baseTranslation + '.' + 'production.priority.value', 'production.priority.value'),
       tooltip: t(baseTranslation + '.' + 'production.priority.tooltip', 'production.priority.tooltip'),
+    },
+    {
+      key: 'FromDataset',
+      value: t(baseTranslation + '.' + 'production.from_dataset.value', 'production.from_dataset.value'),
+      tooltip: t(baseTranslation + '.' + 'production.from_dataset.tooltip', 'production.from_dataset.tooltip'),
     },
   ];
 

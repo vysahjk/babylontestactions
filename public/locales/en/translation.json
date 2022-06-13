@@ -454,6 +454,10 @@
               "priority": {
                 "value": "The highest priority first",
                 "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned to the first."
+              },
+              "from_dataset": {
+                "value": "Mixed",
+                "tooltip": "Enables to use different sourcing policies (to be defined for each stock in the dataset)."
               }
             },
             "stockDispatch": {
@@ -478,6 +482,10 @@
               "none": {
                 "value": "Standard",
                 "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports."
+              },
+              "from_dataset": {
+                "value": "Mixed",
+                "tooltip": "Enables to use different stock dispatch policies (to be defined for each stock in the dataset)."
               }
             },
             "production": {
@@ -502,6 +510,10 @@
               "none": {
                 "value": "None",
                 "tooltip": "No production policy."
+              },
+              "from_dataset": {
+                "value": "Mixed",
+                "tooltip": "Enables to use different production policies (to be defined for each production resource in the dataset)."
               }
             }
           },

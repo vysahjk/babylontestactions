@@ -451,6 +451,10 @@
               "priority": {
                 "value": "La plus haute priorité en premier",
                 "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée au premier."
+              },
+              "from_dataset": {
+                "value": "Mixte",
+                "tooltip": "Permet d'utiliser différentes politiques d'approvisionnement (à définir pour chaque stock dans le jeu de données)."
               }
             },
             "stockDispatch": {
@@ -475,6 +479,10 @@
               "none": {
                 "value": "Standard",
                 "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval."
+              },
+              "from_dataset": {
+                "value": "Mixte",
+                "tooltip": "Permet d'utiliser différentes politiques de distribution des stock (à définir pour chaque stock dans le jeu de données)."
               }
             },
             "production": {
@@ -499,6 +507,10 @@
               "none": {
                 "value": "Aucune",
                 "tooltip": "Pas de politique de production"
+              },
+              "from_dataset": {
+                "value": "Mixte",
+                "tooltip": "Permet d'utiliser différentes politiques de production (à définir pour chaque ressource de production dans le jeu de données)."
               }
             }
           },
