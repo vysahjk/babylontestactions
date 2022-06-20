@@ -168,10 +168,10 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Test Import Mode',
-      fr: 'Test Import Mode',
+      en: 'Sensitivity Analysis (demo)',
+      fr: 'Analyses de sensibilité (démo)',
     },
-    reportId: 'd1cafc46-4ae0-4d5a-8451-271f261f4e14',
+    reportId: 'e46f78f8-3581-4ee1-b0d2-1b47a826feec',
     settings: {
       navContentPaneEnabled: true,
       panes: {
