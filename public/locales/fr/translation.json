@@ -357,7 +357,8 @@
     },
     "text": {
       "scenario": {
-        "parameters": { "time_configuration": {
+        "parameters": {
+          "time_configuration": {
             "start_date": "Date de début",
             "end_date": "Date de fin",
             "date_boundaries_error": "La date de début de la simulation doit être avant la date de fin de la simulation",
@@ -574,9 +575,9 @@
       "title": {
         "Lever": "Simulation d'une tactique de production prédéterminée",
         "UncertaintyAnalysis": "Analyse d'incertitude",
-        "MILPOptimization": "Optimisation par programmation linéaire",
+        "MILPOptimization": "Optimisation du plan d'approvisionnement et de production",
         "ClientSpecificLever": "Simulation d'une tactique de production prédéterminée",
-        "MILPOptimization_ParameterHandlerCloud": "Optimisation par programmation linéaire"
+        "MILPOptimization_ParameterHandlerCloud": "Optimisation du plan d'approvisionnement et de production"
       }
     }
   },

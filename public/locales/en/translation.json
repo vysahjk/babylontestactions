@@ -577,9 +577,9 @@
       "title": {
         "Lever": "Predetermined production tactic simulation",
         "UncertaintyAnalysis": "Uncertainty analysis",
-        "MILPOptimization": "Optimization using linear programming",
+        "MILPOptimization": "Supply and production plan optimization",
         "ClientSpecificLever": "Predetermined production tactic simulation",
-        "MILPOptimization_ParameterHandlerCloud": "Optimization using linear programming"
+        "MILPOptimization_ParameterHandlerCloud": "Supply and production plan optimization"
       }
     }
   },
