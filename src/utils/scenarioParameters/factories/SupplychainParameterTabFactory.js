@@ -11,6 +11,7 @@ import {
   OptimizationConfiguration,
   TimeConfiguration,
   UncertaintyConfiguration,
+  TransportUncertaintyConfiguration,
 } from '../../../components/Supplychain/tabs';
 import { getDateAtMidnight } from '../../DateUtils';
 
@@ -138,6 +139,14 @@ const UncertaintyAnalysisParameterTab = (
     });
   };
 
+  const transportUncertaintiesDistribution = parametersState.transport_uncertainty_distribution;
+  const setTransportUncertaintiesDistribution = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      transport_uncertainty_distribution: newValue,
+    });
+  };
+
   return (
     <PermissionsGate
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
@@ -146,6 +155,12 @@ const UncertaintyAnalysisParameterTab = (
       <UncertaintyConfiguration
         uncertaintiesDistribution={uncertaintiesDistribution}
         setUncertaintiesDistribution={setUncertaintiesDistribution}
+        editMode={editMode}
+      />
+
+      <TransportUncertaintyConfiguration
+        transportUncertaintiesDistribution={transportUncertaintiesDistribution}
+        setTransportUncertaintiesDistribution={setTransportUncertaintiesDistribution}
         editMode={editMode}
       />
     </PermissionsGate>

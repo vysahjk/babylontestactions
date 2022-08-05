@@ -387,8 +387,28 @@
             "distribution": {
               "gaussian": "Gaussian",
               "uniform": "Uniform",
-              "title": "Uncertainties probability distribution law",
-              "tooltip": "Select the type of probability distribution used for uncertainties"
+              "title": "Probability distribution used for the demands and operational performances",
+              "tooltip": "Select the type of probability distribution used for the demand and operational performance"
+            }
+          },
+          "transportUncertainty": {
+            "distribution": {
+              "discreteuniform": "Discrete uniform",
+              "gamma": "Gamma",
+              "beta": "Beta",
+              "truncnorm": "Truncated Normal",
+              "truncexpon": "Truncated exponential",
+              "weibull": "Weibull",
+              "triangular": "Triangular",
+              "normal": "Normal",
+              "exponential": "Exponential",
+              "poisson": "Poisson",
+              "binomial": "Binomial",
+              "betabinom": "Beta binomial",
+              "geometric": "Geometric",
+              "lognormal": "Lognormal",
+              "title": "Probability distribution used for the transport durations",
+              "tooltip": "Select the type of distribution used for the transport durations"
             }
           },
           "behavior": {

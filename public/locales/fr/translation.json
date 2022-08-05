@@ -385,8 +385,28 @@
             "distribution": {
               "gaussian": "Gaussienne",
               "uniform": "Uniforme",
-              "title": "Loi de probabilité pour les incertitudes",
-              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les incertitudes"
+              "title": "Loi de probabilité  pour les demandes et performances opérationnelles",
+              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les demandes et performances opérationnelles"
+            }
+          },
+          "transportUncertainty": {
+            "distribution": {
+              "discreteuniform": "Uniforme discrète",
+              "gamma": "Gamma",
+              "beta": "Bêta",
+              "truncnorm": "Normale Tronquée",
+              "truncexpon": "Exponentielle Tronquée",
+              "weibull": "Weibull",
+              "triangular": "Triangulaire",
+              "normal": "Normale",
+              "exponential": "Exponentielle",
+              "poisson": "Poisson",
+              "binomial": "Binomiale",
+              "betabinom": "Bêta-Binomiale",
+              "geometric": "Géométrique",
+              "lognormal": "Log-Normale",
+              "title": "Loi de probabilité utilisée pour les temps de transport",
+              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les temps de transports"
             }
           },
           "behavior": {

@@ -38,6 +38,9 @@ const PARAMETERS = {
   uncertainties_probability_distribution: {
     defaultValue: 'Gaussian',
   },
+  transport_uncertainty_distribution: {
+    defaultValue: 'discreteuniform',
+  },
   intermediary_stock_dispatch: {
     defaultValue: 'DispatchAll',
   },
