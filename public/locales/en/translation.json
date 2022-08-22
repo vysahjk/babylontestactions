@@ -411,6 +411,26 @@
               "tooltip": "Select the type of distribution used for the transport durations"
             }
           },
+          "sensitivity_analysis": {
+            "sensitive_parameter": {
+              "machine_opening_time": "Machine Opening Time",
+              "transport_duration": "Transport Duration",
+              "transport_cost": "Transport Cost",
+              "title": "Variable",
+              "tooltip": "Variable"
+            },
+            "change": {
+              "relative": "Relative",
+              "absolute": "Absolute",
+              "replacement": "Replacement",
+              "title": "Change",
+              "tooltip": "Change"
+            },
+            "variation": {
+              "title": "Variation",
+              "tooltip": "Variation"
+            }
+          },
           "behavior": {
             "stock_dispatch": {
               "title": "Intermediary stock dispatch policy",
@@ -599,7 +619,8 @@
         "UncertaintyAnalysis": "Uncertainty analysis",
         "MILPOptimization": "Supply and production plan optimization",
         "ClientSpecificLever": "Predetermined production tactic simulation",
-        "MILPOptimization_ParameterHandlerCloud": "Supply and production plan optimization"
+        "MILPOptimization_ParameterHandlerCloud": "Supply and production plan optimization",
+        "SensitivityAnalysis" : "Sensitivity analysis"
       }
     }
   },

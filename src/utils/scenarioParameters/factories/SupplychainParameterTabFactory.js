@@ -11,7 +11,8 @@ import {
   OptimizationConfiguration,
   TimeConfiguration,
   UncertaintyConfiguration,
-  TransportUncertaintyConfiguration,
+  TransportUncertaintyConfiguration, // to be merged in UncertaintyConfiguration
+  SensitivityAnalysisConfiguration,
 } from '../../../components/Supplychain/tabs';
 import { getDateAtMidnight } from '../../DateUtils';
 
@@ -167,6 +168,55 @@ const UncertaintyAnalysisParameterTab = (
   );
 };
 
+const SensitivityAnalysisParameterTab = (
+  t,
+  datasets,
+  parametersGroupData,
+  parametersState,
+  setParametersState,
+  editMode
+) => {
+  const sensitivityAnalysisSensitiveParameter = parametersState.sensitive_parameter;
+  const setSensitivityAnalysisSensitiveParameter = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      sensitive_parameter: newValue,
+    });
+  };
+
+  const sensitivityAnalysisChange = parametersState.change;
+  const setSensitivityAnalysisChange = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      change: newValue,
+    });
+  };
+
+  const sensitivityAnalysisVariation = parametersState.variation;
+  const setSensitivityAnalysisVariation = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      variation: newValue,
+    });
+  };
+
+  return (
+    <PermissionsGate
+      RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
+      authorizedRoles={parametersGroupData.authorizedRoles}
+    >
+      <SensitivityAnalysisConfiguration
+        sensitivityAnalysisSensitiveParameter={sensitivityAnalysisSensitiveParameter}
+        setSensitivityAnalysisSensitiveParameter={setSensitivityAnalysisSensitiveParameter}
+        sensitivityAnalysisChange={sensitivityAnalysisChange}
+        setSensitivityAnalysisChange={setSensitivityAnalysisChange}
+        sensitivityAnalysisVariation={sensitivityAnalysisVariation}
+        setSensitivityAnalysisVariation={setSensitivityAnalysisVariation}
+        editMode={editMode}
+      />
+    </PermissionsGate>
+  );
+};
 const ModelBehaviorParameterTab = (t, datasets, parametersGroupData, parametersState, setParametersState, editMode) => {
   const manageBacklog = parametersState.manage_backlog_quantities;
   const setManageBacklog = (newValue) => {
@@ -326,6 +376,15 @@ const create = (
     return ModelBehaviorParameterTab(t, datasets, parametersGroupData, parametersState, setParametersState, editMode);
   } else if (parametersGroupData.id === 'flow_management_policies') {
     return FlowManagementPoliciesParameterTab(
+      t,
+      datasets,
+      parametersGroupData,
+      parametersState,
+      setParametersState,
+      editMode
+    );
+  } else if (parametersGroupData.id === 'sensitivity_analysis') {
+    return SensitivityAnalysisParameterTab(
       t,
       datasets,
       parametersGroupData,

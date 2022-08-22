@@ -81,6 +81,15 @@ const PARAMETERS = {
     azureFunction: 'https://supplychain-dataset-download.azurewebsites.net/api/ResourceOpeningTime',
     azureFunctionHeaders: { 'x-functions-key': 'eWwFDboF385Nmgica4OJHmHRrrC2UOa7c4Zq4BhhRnyoapZl0aBRng==' },
   },
+  sensitive_parameter: {
+    defaultValue: 'Machine Opening Time',
+  },
+  change: {
+    defaultValue: 'Relative',
+  },
+  variation: {
+    defaultValue: 0.0,
+  },
 };
 
 // Use the PARAMETERS_GROUPS dict below to override or add information to the parameters groups defined in your solution
