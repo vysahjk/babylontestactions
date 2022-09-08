@@ -403,7 +403,7 @@
               "poisson": "Poisson",
               "binomial": "Binomiale",
               "betabinom": "Bêta-Binomiale",
-              "geometric": "Géométrique",
+              "geom": "Géométrique",
               "lognormal": "Log-Normale",
               "title": "Loi de probabilité utilisée pour les temps de transport",
               "tooltip": "Sélectionnez la loi de probabilité utilisée pour les temps de transports"
@@ -618,7 +618,7 @@
         "MILPOptimization": "Optimisation du plan d'approvisionnement et de production",
         "ClientSpecificLever": "Simulation d'une tactique de production prédéterminée",
         "MILPOptimization_ParameterHandlerCloud": "Optimisation du plan d'approvisionnement et de production",
-        "SensitivityAnalysis" : "Analyse de sensibilité"
+        "SensitivityAnalysis": "Analyse de sensibilité"
       }
     }
   },

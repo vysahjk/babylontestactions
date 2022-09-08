@@ -405,7 +405,7 @@
               "poisson": "Poisson",
               "binomial": "Binomial",
               "betabinom": "Beta binomial",
-              "geometric": "Geometric",
+              "geom": "Geometric",
               "lognormal": "Lognormal",
               "title": "Probability distribution used for the transport durations",
               "tooltip": "Select the type of distribution used for the transport durations"
@@ -620,7 +620,7 @@
         "MILPOptimization": "Supply and production plan optimization",
         "ClientSpecificLever": "Predetermined production tactic simulation",
         "MILPOptimization_ParameterHandlerCloud": "Supply and production plan optimization",
-        "SensitivityAnalysis" : "Sensitivity analysis"
+        "SensitivityAnalysis": "Sensitivity analysis"
       }
     }
   },

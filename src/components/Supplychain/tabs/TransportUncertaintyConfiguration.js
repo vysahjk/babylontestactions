@@ -80,8 +80,8 @@ const TransportUncertaintyConfiguration = ({
       ),
     },
     {
-      key: 'geometric',
-      value: t('genericcomponent.text.scenario.parameters.transportUncertainty.distribution.geometric', 'Geometric'),
+      key: 'geom',
+      value: t('genericcomponent.text.scenario.parameters.transportUncertainty.distribution.geom', 'Geometric'),
     },
     {
       key: 'lognormal',
