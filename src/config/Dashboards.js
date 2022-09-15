@@ -168,10 +168,10 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
-      en: 'Sensitivity Analysis (demo)',
-      fr: 'Analyses de sensibilité (démo)',
+      en: 'Sensitivity Analysis',
+      fr: 'Analyse de sensibilité',
     },
-    reportId: 'e46f78f8-3581-4ee1-b0d2-1b47a826feec',
+    reportId: '6630c31f-3446-4cf3-a1dc-71845a9041b9',
     settings: {
       navContentPaneEnabled: true,
       panes: {
