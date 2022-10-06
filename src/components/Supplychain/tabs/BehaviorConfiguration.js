@@ -13,6 +13,8 @@ const BehaviorConfiguration = ({
   setManageBacklog,
   emptyObsoleteStock,
   setEmptyObsoleteStock,
+  actualizeShipments,
+  setActualizeShipments,
   batchSize,
   setBatchSize,
   financialCost,
@@ -41,6 +43,11 @@ const BehaviorConfiguration = ({
   const emptyObsoleteStockProps = {
     disabled: !editMode,
     id: 'empty-obsolete-stock-input-id',
+  };
+
+  const actualizeShipmentsProps = {
+    disabled: !editMode,
+    id: 'actualize-shipments-input-id',
   };
 
   const batchSizeProps = {
@@ -189,6 +196,34 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>
+            {t(
+              'genericcomponent.text.scenario.parameters.behavior.actualize_shipments.title',
+              'actualize_shipments.title'
+            )}
+          </Typography>
+          <Tooltip
+            title={t(
+              'genericcomponent.text.scenario.parameters.behavior.actualize_shipments.tooltip',
+              'actualize_shipments.tooltip'
+            )}
+            placement="top-end"
+            TransitionComponent={Zoom}
+          >
+            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
+          </Tooltip>
+        </Grid>
+        <Grid item xs={4}>
+          <BasicToggleInput
+            label=""
+            changeSwitchType={setActualizeShipments}
+            switchProps={actualizeShipmentsProps}
+            value={isTrue(actualizeShipments)}
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid container item xs={4}>
+          <Typography>
             {t('genericcomponent.text.scenario.parameters.behavior.stock_dispatch.title', 'flow_mode.title')}
           </Typography>
           <Tooltip
@@ -218,6 +253,8 @@ BehaviorConfiguration.propTypes = {
   setManageBacklog: PropTypes.func.isRequired,
   emptyObsoleteStock: PropTypes.bool.isRequired,
   setEmptyObsoleteStock: PropTypes.func.isRequired,
+  actualizeShipments: PropTypes.bool.isRequired,
+  setActualizeShipments: PropTypes.func.isRequired,
   batchSize: PropTypes.number.isRequired,
   setBatchSize: PropTypes.func.isRequired,
   financialCost: PropTypes.number.isRequired,

@@ -446,6 +446,10 @@
               "title": "Automatic obsolete stock deletion",
               "tooltip": "If activated: model will automatically delete stocks during simulation when no further demand exists"
             },
+            "actualize_shipments": {
+              "title": "Ongoing transports update",
+              "tooltip": "Consider actual durations of transports instead of theoretical durations for stock levels projections."
+            },
             "batch_size": {
               "title": "Batch size",
               "tooltip": "Multiple to be observed at the end of production operation before being able to move on to the next operation (default value is 0 which means no batch size constraint) - Is applied to all production operations."

@@ -234,6 +234,14 @@ const ModelBehaviorParameterTab = (t, datasets, parametersGroupData, parametersS
     });
   };
 
+  const actualizeShipments = parametersState.actualize_shipments;
+  const setActualizeShipments = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      actualize_shipments: newValue,
+    });
+  };
+
   const batchSize = parametersState.batch_size;
   const setBatchSize = (newValue) => {
     setParametersState({
@@ -267,6 +275,8 @@ const ModelBehaviorParameterTab = (t, datasets, parametersGroupData, parametersS
         setManageBacklog={setManageBacklog}
         emptyObsoleteStock={emptyObsoleteStock}
         setEmptyObsoleteStock={setEmptyObsoleteStock}
+        actualizeShipments={actualizeShipments}
+        setActualizeShipments={setActualizeShipments}
         batchSize={batchSize}
         setBatchSize={setBatchSize}
         financialCost={financialCost}

@@ -444,6 +444,10 @@
               "title": "Suppression automatique des stocks obsolètes",
               "tooltip": "Si activé : le modèle supprimera automatiquement les stocks pendant la simulation lorsqu'il n'y aura plus de demande"
             },
+            "actualize_shipments": {
+              "title": "Actualisation des transports en cours",
+              "tooltip": "Considérer les durées effectives des transports au lieu des durées théoriques pour les projections des niveaux de stock."
+            },
             "batch_size": {
               "title": "Taille de lot",
               "tooltip": "Multiple à observer en fin d'opération de production avant de pouvoir passer à l'opération suivante (la valeur par défaut est 0 ce qui signifie aucune contrainte de taille de lot) - S'applique à toutes les opérations de production."

@@ -29,6 +29,9 @@ const PARAMETERS = {
   empty_obsolete_stocks: {
     defaultValue: false,
   },
+  actualize_shipments: {
+    defaultValue: false,
+  },
   batch_size: {
     defaultValue: 0.0,
   },
