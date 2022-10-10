@@ -434,9 +434,15 @@
           "behavior": {
             "stock_dispatch": {
               "title": "Intermediary stock dispatch policy",
-              "tooltip": "By default, at each time step, intermediate stocks dispatch their available quantity to downstream operations. This parameter is used to add a share to this dispatch. This part corresponds to a quantity that the stock can reserve to retain it.",
-              "dispatch_all": "Dispatch all quantities downstream",
-              "allow_retention": "Can retain quantities"
+              "tooltip": "Option to adjust the flows behavior at intermediate stocks",
+              "dispatch_all": {
+                "value": "Dispatch all quantities downstream",
+                "tooltip": "Default behavior"
+              },
+              "allow_retention": {
+                "value": "Can retain quantities",
+                "tooltip": "For an optimization run type, it removes a constraint which forces having all intermediary stocks, with only transport operations downstream, empty at the end of each timestep. For a simulation run type, it enables to take into account demands on intermediary stocks in the stock dispatch policy, except for the \"Standard\" stock dispatch policy. (If there is no demand on intermediary stocks, then it will have no impact on the simulation.)"
+              }
             },
             "manage_backlog": {
               "title": "Track and serve backlog orders",
@@ -525,7 +531,7 @@
               },
               "none": {
                 "value": "Standard",
-                "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports."
+                "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports (even if the quantity available is greater than the quantities ordered; therefore no quantity will be kept in stock, unless a downstream production operation reaches its capacity limit and therefore returns excess quantities to inventory)."
               },
               "from_dataset": {
                 "value": "Mixed",

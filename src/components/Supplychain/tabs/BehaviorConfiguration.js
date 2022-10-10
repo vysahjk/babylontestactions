@@ -70,20 +70,54 @@ const BehaviorConfiguration = ({
     max: 1.0,
   };
 
+  const enumDisplay = (
+    labelKey,
+    labelPlaceholder,
+    tooltipKey,
+    tooltipPlaceholder,
+    changeFunction,
+    textProp,
+    currentValue,
+    enumValues
+  ) => {
+    const enumTooltipValue = enumValues.find((elem) => elem.key === currentValue).tooltip;
+    return (
+      <Grid container>
+        <Grid container item xs={4}>
+          <Typography>{t(labelKey, labelPlaceholder)}</Typography>
+          <Tooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
+            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
+          </Tooltip>
+        </Grid>
+        <Grid container item xs={4}>
+          <Tooltip title={enumTooltipValue} placement="right" TransitionComponent={Zoom} arrow>
+            <Grid>
+              <BasicEnumInput
+                label=""
+                changeEnumField={changeFunction}
+                textFieldProps={textProp}
+                value={currentValue}
+                enumValues={enumValues}
+              />
+            </Grid>
+          </Tooltip>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const baseTranslation = 'genericcomponent.text.scenario.parameters.behavior.';
+
   const stockDispatchEnumValues = [
     {
       key: 'AllowRetention',
-      value: t(
-        'genericcomponent.text.scenario.parameters.behavior.stock_dispatch.allow_retention',
-        'flow_mode.allow_retention'
-      ),
+      value: t(baseTranslation + 'stock_dispatch.allow_retention.value', 'stock_dispatch.allow_retention.value'),
+      tooltip: t(baseTranslation + 'stock_dispatch.allow_retention.tooltip', 'stock_dispatch.allow_retention.tooltip'),
     },
     {
       key: 'DispatchAll',
-      value: t(
-        'genericcomponent.text.scenario.parameters.behavior.stock_dispatch.dispatch_all',
-        'flow_mode.dispatch_all'
-      ),
+      value: t(baseTranslation + 'stock_dispatch.dispatch_all.value', 'stock_dispatch.dispatch_all.value'),
+      tooltip: t(baseTranslation + 'stock_dispatch.dispatch_all.tooltip', 'stock_dispatch.dispatch_all.tooltip'),
     },
   ];
 
@@ -96,11 +130,9 @@ const BehaviorConfiguration = ({
     <Grid container>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.behavior.batch_size.title', 'batch_size.title')}
-          </Typography>
+          <Typography>{t(baseTranslation + 'batch_size.title', 'batch_size.title')}</Typography>
           <Tooltip
-            title={t('genericcomponent.text.scenario.parameters.behavior.batch_size.tooltip', 'batch_size.tooltip')}
+            title={t(baseTranslation + 'batch_size.tooltip', 'batch_size.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -119,14 +151,9 @@ const BehaviorConfiguration = ({
       </Grid>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.behavior.financial_cost.title', 'financial_cost.title')}
-          </Typography>
+          <Typography>{t(baseTranslation + 'financial_cost.title', 'financial_cost.title')}</Typography>
           <Tooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.behavior.financial_cost.tooltip',
-              'financial_cost.tooltip'
-            )}
+            title={t(baseTranslation + 'financial_cost.tooltip', 'financial_cost.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -145,14 +172,9 @@ const BehaviorConfiguration = ({
       </Grid>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.behavior.manage_backlog.title', 'manage_backlog.title')}
-          </Typography>
+          <Typography>{t(baseTranslation + 'manage_backlog.title', 'manage_backlog.title')}</Typography>
           <Tooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.behavior.manage_backlog.tooltip',
-              'manage_backlog.tooltip'
-            )}
+            title={t(baseTranslation + 'manage_backlog.tooltip', 'manage_backlog.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -170,14 +192,9 @@ const BehaviorConfiguration = ({
       </Grid>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.behavior.obsolete_stock.title', 'obsolete_stock.title')}
-          </Typography>
+          <Typography>{t(baseTranslation + 'obsolete_stock.title', 'obsolete_stock.title')}</Typography>
           <Tooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.behavior.obsolete_stock.tooltip',
-              'obsolete_stock.tooltip'
-            )}
+            title={t(baseTranslation + 'obsolete_stock.tooltip', 'obsolete_stock.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -195,17 +212,9 @@ const BehaviorConfiguration = ({
       </Grid>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t(
-              'genericcomponent.text.scenario.parameters.behavior.actualize_shipments.title',
-              'actualize_shipments.title'
-            )}
-          </Typography>
+          <Typography>{t(baseTranslation + 'actualize_shipments.title', 'actualize_shipments.title')}</Typography>
           <Tooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.behavior.actualize_shipments.tooltip',
-              'actualize_shipments.tooltip'
-            )}
+            title={t(baseTranslation + 'actualize_shipments.tooltip', 'actualize_shipments.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -221,29 +230,16 @@ const BehaviorConfiguration = ({
           />
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.behavior.stock_dispatch.title', 'flow_mode.title')}
-          </Typography>
-          <Tooltip
-            title={t('genericcomponent.text.scenario.parameters.behavior.stock_dispatch.tooltip', 'flow_mode.tooltip')}
-            placement="top-end"
-            TransitionComponent={Zoom}
-          >
-            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
-        </Grid>
-        <Grid item xs={4}>
-          <BasicEnumInput
-            label=""
-            changeEnumField={setStockDispatch}
-            textFieldProps={stockDispatchProps}
-            value={stockDispatch}
-            enumValues={stockDispatchEnumValues}
-          />
-        </Grid>
-      </Grid>
+      {enumDisplay(
+        baseTranslation + 'stock_dispatch.title',
+        'stock_dispatch.label',
+        baseTranslation + 'stock_dispatch.tooltip',
+        'stock_dispatch.tooltip',
+        setStockDispatch,
+        stockDispatchProps,
+        stockDispatch,
+        stockDispatchEnumValues
+      )}
     </Grid>
   );
 };

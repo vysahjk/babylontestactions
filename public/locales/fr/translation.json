@@ -432,9 +432,15 @@
           "behavior": {
             "stock_dispatch": {
               "title": "Politique de distribution des stocks intermédiaires",
-              "tooltip": "Par défaut, à chaque pas de temps, les stocks intermédiaires répartissent leur quantité disponible vers les opérations en aval. Ce paramètre permet d'ajouter une part à cette répartition. Cette part correspond à une quantité que le stock peut réserver pour la retenir.",
-              "dispatch_all": "Distribue toutes les quantités vers l'aval",
-              "allow_retention": "Peut retenir des quantités"
+              "tooltip": "Option pour ajuster le comportement d'écoulement des flux au niveau des stocks intermédiaires",
+              "dispatch_all": {
+                "value": "Distribue toutes les quantités vers l'aval",
+                "tooltip": "Comportement par défaut"
+              },
+              "allow_retention": {
+                "value": "Peut retenir des quantités",
+                "tooltip": "Pour un scénario de type optimisation, cela supprime une contrainte qui oblige à avoir tous les stocks intermédiaires, avec uniquement des opérations de transport en aval, vides à la fin de chaque pas de temps. Pour un scénario de type simulation, cela permet de prendre en compte les demandes sur les stocks intermédiaires dans la politique de distribution des stocks, sauf pour la politique de distribution des stocks \"Standard\". (S'il n'y a pas de demande sur les stocks intermédiaires, alors cela n'aura aucun impact sur la simulation.)"
+              }
             },
             "manage_backlog": {
               "title": "Prise en compte des retards de service de la demande",
@@ -523,7 +529,7 @@
               },
               "none": {
                 "value": "Standard",
-                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval."
+                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval (même si la quantité disponible est supérieure aux quantités commandées ; donc aucune quantité ne sera conservée dans le stock, sauf si une opération de production en aval atteint sa limite de capacité et renvoie donc les quantités en excès dans le stock)."
               },
               "from_dataset": {
                 "value": "Mixte",
