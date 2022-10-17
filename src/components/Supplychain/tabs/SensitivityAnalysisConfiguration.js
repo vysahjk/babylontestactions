@@ -69,7 +69,7 @@ const SensitivityAnalysisConfiguration = ({
 
   const sensitivityAnalysisVariationProps = {
     disabled: !editMode,
-    id: 'sensitivity-analysis-change-id',
+    id: 'sensitivity-analysis-variation-id',
   };
 
   const sensitivityAnalysisVariationLimitsProps = {

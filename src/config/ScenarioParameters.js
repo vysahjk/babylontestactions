@@ -88,7 +88,7 @@ const PARAMETERS = {
     defaultValue: 'Machine Opening Time',
   },
   change: {
-    defaultValue: 'Relative',
+    defaultValue: 'relative',
   },
   variation: {
     defaultValue: 0.0,
