@@ -186,4 +186,24 @@ export const DASHBOARDS_LIST_CONFIG = [
       fr: 'ReportSection',
     },
   },
+  {
+    title: {
+      en: 'Network Design',
+      fr: 'Carte',
+    },
+    reportId: 'f923d18d-dfde-40c3-a8a6-04cc757d3fa2',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSection',
+      fr: 'ReportSection',
+    },
+  },
 ];
