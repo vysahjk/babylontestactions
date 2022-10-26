@@ -88,6 +88,66 @@ export const DASHBOARDS_LIST_CONFIG = [
   },
   {
     title: {
+      en: 'Network Design',
+      fr: 'Carte',
+    },
+    reportId: 'f923d18d-dfde-40c3-a8a6-04cc757d3fa2',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSection',
+      fr: 'ReportSection',
+    },
+  },
+  {
+    title: {
+      en: 'Uncertainty analysis',
+      fr: "Analyse d'incertitude",
+    },
+    reportId: 'dd25f002-2685-4a16-8d7a-bf76f28623c7',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSectionf4029cb5f314a5f3a6c3',
+      fr: 'ReportSectionf4029cb5f314a5f3a6c3',
+    },
+  },
+  {
+    title: {
+      en: 'Sensitivity Analysis',
+      fr: 'Analyse de sensibilité',
+    },
+    reportId: '6630c31f-3446-4cf3-a1dc-71845a9041b9',
+    settings: {
+      navContentPaneEnabled: true,
+      panes: {
+        filters: {
+          expanded: true,
+          visible: true,
+        },
+      },
+    },
+    pageName: {
+      en: 'ReportSection',
+      fr: 'ReportSection',
+    },
+  },
+  {
+    title: {
       en: 'S&OP',
       fr: 'S&OP',
     },
@@ -144,66 +204,6 @@ export const DASHBOARDS_LIST_CONFIG = [
     pageName: {
       en: 'ReportSection3fe7d3fa163e8d89c07f',
       fr: 'ReportSection3fe7d3fa163e8d89c07f',
-    },
-  },
-  {
-    title: {
-      en: 'Uncertainty analysis',
-      fr: "Analyse d'incertitude",
-    },
-    reportId: 'dd25f002-2685-4a16-8d7a-bf76f28623c7',
-    settings: {
-      navContentPaneEnabled: true,
-      panes: {
-        filters: {
-          expanded: true,
-          visible: true,
-        },
-      },
-    },
-    pageName: {
-      en: 'ReportSectionf4029cb5f314a5f3a6c3',
-      fr: 'ReportSectionf4029cb5f314a5f3a6c3',
-    },
-  },
-  {
-    title: {
-      en: 'Sensitivity Analysis',
-      fr: 'Analyse de sensibilité',
-    },
-    reportId: '6630c31f-3446-4cf3-a1dc-71845a9041b9',
-    settings: {
-      navContentPaneEnabled: true,
-      panes: {
-        filters: {
-          expanded: true,
-          visible: true,
-        },
-      },
-    },
-    pageName: {
-      en: 'ReportSection',
-      fr: 'ReportSection',
-    },
-  },
-  {
-    title: {
-      en: 'Network Design',
-      fr: 'Carte',
-    },
-    reportId: 'f923d18d-dfde-40c3-a8a6-04cc757d3fa2',
-    settings: {
-      navContentPaneEnabled: true,
-      panes: {
-        filters: {
-          expanded: true,
-          visible: true,
-        },
-      },
-    },
-    pageName: {
-      en: 'ReportSection',
-      fr: 'ReportSection',
     },
   },
 ];
