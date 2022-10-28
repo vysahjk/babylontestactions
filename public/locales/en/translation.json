@@ -417,18 +417,18 @@
               "transport_duration": "Transport Duration",
               "transport_cost": "Transport Cost",
               "title": "Variable",
-              "tooltip": "Variable"
+              "tooltip": "Type of parameter on which the study will be performed."
             },
             "change": {
               "relative": "Relative",
               "absolute": "Absolute",
               "replacement": "Replacement",
               "title": "Change",
-              "tooltip": "Change"
+              "tooltip": "Mode used by the one-at-a-time method to vary each variable one by one [Relative: variable = reference * (1 + variation) | Absolute: variable = reference + variation | Replacement: variable = variation]."
             },
             "variation": {
               "title": "Variation",
-              "tooltip": "Variation"
+              "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one [Relative: variation >= -1 | Absolute: variation >= -reference | Replacement: variation >= 0]."
             }
           },
           "behavior": {
