@@ -411,7 +411,7 @@
           },
           "sensitivity_analysis": {
             "sensitive_parameter": {
-              "machine_opening_time": "Temps d'ouverture machine",
+              "machine_opening_time": "Temps d'ouverture de ressource de production",
               "transport_duration": "Durée de transport",
               "transport_cost": "Coût de transport",
               "title": "Variable",
