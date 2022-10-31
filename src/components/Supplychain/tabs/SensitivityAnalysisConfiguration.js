@@ -73,7 +73,7 @@ const SensitivityAnalysisConfiguration = ({
   };
 
   const sensitivityAnalysisVariationLimitsProps = {
-    min: 0.0,
+    min: -100000000.0,
     max: 100000000.0, // TODO possible to variabilise based on sensitive parameter ?
   };
 
