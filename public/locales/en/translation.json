@@ -420,15 +420,24 @@
               "tooltip": "Type of parameter on which the study will be performed."
             },
             "change": {
-              "relative": "Relative",
-              "absolute": "Absolute",
-              "replacement": "Replacement",
+              "relative": {
+                "value": "Relative",
+                "tooltip": "variable = reference * (1 + variation)"
+              },
+              "absolute": {
+                "value": "Absolute",
+                "tooltip": "variable = reference + variation"
+              },
+              "replacement": {
+                "value": "Replacement",
+                "tooltip": "variable = variation"
+              },
               "title": "Change",
-              "tooltip": "Mode used by the one-at-a-time method to vary each variable one by one [Relative: variable = reference * (1 + variation) | Absolute: variable = reference + variation | Replacement: variable = variation]."
+              "tooltip": "Mode used by the one-at-a-time method to vary each variable one by one."
             },
             "variation": {
               "title": "Variation",
-              "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one [Relative: variation >= -1 | Absolute: variation >= -reference | Replacement: variation >= 0]."
+              "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one. Validity depends on selected change:\n• Relative: variation ≥ -1\n• Absolute: variation ≥ -reference\n• Replacement: variation ≥ 0"
             }
           },
           "behavior": {

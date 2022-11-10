@@ -25,25 +25,57 @@ const SensitivityAnalysisConfiguration = ({
 }) => {
   const { t } = useTranslation();
 
+  const enumDisplay = (
+    labelKey,
+    labelPlaceholder,
+    tooltipKey,
+    tooltipPlaceholder,
+    changeFunction,
+    textProp,
+    currentValue,
+    enumValues
+  ) => {
+    const enumTooltipValue = enumValues.find((elem) => elem.key === currentValue).tooltip;
+    return (
+      <Grid container>
+        <Grid container item xs={4}>
+          <Typography>{t(labelKey, labelPlaceholder)}</Typography>
+          <StyledTooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
+            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
+          </StyledTooltip>
+        </Grid>
+        <Grid container item xs={4}>
+          <Tooltip title={enumTooltipValue} placement="right" TransitionComponent={Zoom} arrow>
+            <Grid>
+              <BasicEnumInput
+                label=""
+                changeEnumField={changeFunction}
+                textFieldProps={textProp}
+                value={currentValue}
+                enumValues={enumValues}
+              />
+            </Grid>
+          </Tooltip>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const baseTranslation = 'genericcomponent.text.scenario.parameters.sensitivity_analysis.';
+
   const sensitivityAnalysisSensitiveParameterEnumValues = [
     {
       key: 'Machine Opening Time',
-      value: t(
-        'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.machine_opening_time',
-        'Machine Opening Time'
-      ),
+      value: t(baseTranslation + 'sensitive_parameter.machine_opening_time', 'Machine Opening Time'),
     },
     {
       key: 'Transport Duration',
-      value: t(
-        'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.transport_duration',
-        'Transport Duration'
-      ),
+      value: t(baseTranslation + 'sensitive_parameter.transport_duration', 'Transport Duration'),
     },
     // {
     //   key: 'Transport cost',
     //   value: t(
-    //       'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.transport_cost',
+    //       baseTranslation + 'sensitive_parameter.transport_cost',
     //       'Transport cost'),
     // },
   ];
@@ -51,15 +83,18 @@ const SensitivityAnalysisConfiguration = ({
   const sensitivityAnalysisChangeEnumValues = [
     {
       key: 'relative',
-      value: t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.relative', 'Relative'),
+      value: t(baseTranslation + 'change.relative.value', 'change.relative.value'),
+      tooltip: t(baseTranslation + 'change.relative.tooltip', 'change.relative.tooltip'),
     },
     {
       key: 'absolute',
-      value: t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.absolute', 'Absolute'),
+      value: t(baseTranslation + 'change.absolute.value', 'change.absolute.value'),
+      tooltip: t(baseTranslation + 'change.absolute.tooltip', 'change.absolute.tooltip'),
     },
     {
       key: 'replacement',
-      value: t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.replacement', 'Replacement'),
+      value: t(baseTranslation + 'change.replacement.value', 'change.replacement.value'),
+      tooltip: t(baseTranslation + 'change.replacement.tooltip', 'change.replacement.tooltip'),
     },
   ];
 
@@ -87,17 +122,9 @@ const SensitivityAnalysisConfiguration = ({
     <Grid container>
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t(
-              'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.title',
-              'sensitive_parameter.title'
-            )}
-          </Typography>
+          <Typography>{t(baseTranslation + 'sensitive_parameter.title', 'sensitive_parameter.title')}</Typography>
           <StyledTooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.tooltip',
-              'sensitive_parameter.tooltip'
-            )}
+            title={t(baseTranslation + 'sensitive_parameter.tooltip', 'sensitive_parameter.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
@@ -114,39 +141,21 @@ const SensitivityAnalysisConfiguration = ({
           />
         </Grid>
       </Grid>
+      {enumDisplay(
+        baseTranslation + 'change.title',
+        'change.title',
+        baseTranslation + 'change.tooltip',
+        'change.tooltip',
+        setSensitivityAnalysisChange,
+        sensitivityAnalysisChangeProps,
+        sensitivityAnalysisChange,
+        sensitivityAnalysisChangeEnumValues
+      )}
       <Grid container>
         <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.title', 'change.title')}
-          </Typography>
+          <Typography>{t(baseTranslation + 'variation.title', 'variation.title')}</Typography>
           <StyledTooltip
-            title={t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.tooltip', 'change.tooltip')}
-            placement="top-end"
-            TransitionComponent={Zoom}
-          >
-            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </StyledTooltip>
-        </Grid>
-        <Grid item xs={4}>
-          <BasicEnumInput
-            label=""
-            changeEnumField={setSensitivityAnalysisChange}
-            textFieldProps={sensitivityAnalysisChangeProps}
-            value={sensitivityAnalysisChange}
-            enumValues={sensitivityAnalysisChangeEnumValues}
-          />
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid container item xs={4}>
-          <Typography>
-            {t('genericcomponent.text.scenario.parameters.sensitivity_analysis.variation.title', 'variation.title')}
-          </Typography>
-          <StyledTooltip
-            title={t(
-              'genericcomponent.text.scenario.parameters.sensitivity_analysis.variation.tooltip',
-              'variation.tooltip'
-            )}
+            title={t(baseTranslation + 'variation.tooltip', 'variation.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
