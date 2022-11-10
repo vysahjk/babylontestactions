@@ -3,10 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tooltip, Typography, Zoom } from '@material-ui/core';
+import { Grid, Tooltip, Typography, Zoom, withStyles } from '@material-ui/core';
 import { BasicEnumInput, BasicNumberInput, BasicToggleInput } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
 import InfoIcon from '@material-ui/icons/Info';
+
+const StyledTooltip = withStyles((theme) => ({
+  tooltip: {
+    whiteSpace: 'pre-wrap',
+  },
+}))(Tooltip);
 
 const BehaviorConfiguration = ({
   manageBacklog,
@@ -85,12 +91,12 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(labelKey, labelPlaceholder)}</Typography>
-          <Tooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
+          <StyledTooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid container item xs={4}>
-          <Tooltip title={enumTooltipValue} placement="right" TransitionComponent={Zoom} arrow>
+          <StyledTooltip title={enumTooltipValue} placement="right" TransitionComponent={Zoom} arrow>
             <Grid>
               <BasicEnumInput
                 label=""
@@ -100,7 +106,7 @@ const BehaviorConfiguration = ({
                 enumValues={enumValues}
               />
             </Grid>
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
       </Grid>
     );
@@ -131,13 +137,13 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'batch_size.title', 'batch_size.title')}</Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(baseTranslation + 'batch_size.tooltip', 'batch_size.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicNumberInput
@@ -152,13 +158,13 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'financial_cost.title', 'financial_cost.title')}</Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(baseTranslation + 'financial_cost.tooltip', 'financial_cost.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicNumberInput
@@ -173,13 +179,13 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'manage_backlog.title', 'manage_backlog.title')}</Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(baseTranslation + 'manage_backlog.tooltip', 'manage_backlog.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicToggleInput
@@ -193,13 +199,13 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'obsolete_stock.title', 'obsolete_stock.title')}</Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(baseTranslation + 'obsolete_stock.tooltip', 'obsolete_stock.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicToggleInput
@@ -213,13 +219,13 @@ const BehaviorConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'actualize_shipments.title', 'actualize_shipments.title')}</Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(baseTranslation + 'actualize_shipments.tooltip', 'actualize_shipments.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicToggleInput

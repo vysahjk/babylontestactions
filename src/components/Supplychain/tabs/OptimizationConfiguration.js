@@ -3,10 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, Tooltip, Zoom } from '@material-ui/core';
+import { Grid, Typography, Tooltip, Zoom, withStyles } from '@material-ui/core';
 import { BasicEnumInput } from '@cosmotech/ui';
 import InfoIcon from '@material-ui/icons/Info';
 import { useTranslation } from 'react-i18next';
+
+const StyledTooltip = withStyles((theme) => ({
+  tooltip: {
+    whiteSpace: 'pre-wrap',
+  },
+}))(Tooltip);
 
 const OptimizationConfiguration = ({ optimizationObjective, setOptimizationObjective, editMode }) => {
   const { t } = useTranslation();
@@ -45,7 +51,7 @@ const OptimizationConfiguration = ({ optimizationObjective, setOptimizationObjec
               'Optimization objective'
             )}
           </Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(
               'genericcomponent.text.scenario.parameters.optimization_configuration.' +
                 'optimization_objective.tooltip',
@@ -55,7 +61,7 @@ const OptimizationConfiguration = ({ optimizationObjective, setOptimizationObjec
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicEnumInput

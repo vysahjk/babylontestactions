@@ -3,10 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tooltip, Typography, Zoom } from '@material-ui/core';
+import { Grid, Tooltip, Typography, Zoom, withStyles } from '@material-ui/core';
 import { BasicEnumInput, BasicNumberInput } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
 import InfoIcon from '@material-ui/icons/Info';
+
+const StyledTooltip = withStyles((theme) => ({
+  tooltip: {
+    whiteSpace: 'pre-wrap',
+  },
+}))(Tooltip);
 
 const SensitivityAnalysisConfiguration = ({
   sensitivityAnalysisSensitiveParameter,
@@ -87,7 +93,7 @@ const SensitivityAnalysisConfiguration = ({
               'sensitive_parameter.title'
             )}
           </Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(
               'genericcomponent.text.scenario.parameters.sensitivity_analysis.sensitive_parameter.tooltip',
               'sensitive_parameter.tooltip'
@@ -96,7 +102,7 @@ const SensitivityAnalysisConfiguration = ({
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicEnumInput
@@ -113,13 +119,13 @@ const SensitivityAnalysisConfiguration = ({
           <Typography>
             {t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.title', 'change.title')}
           </Typography>
-          <Tooltip
+          <StyledTooltip
             title={t('genericcomponent.text.scenario.parameters.sensitivity_analysis.change.tooltip', 'change.tooltip')}
             placement="top-end"
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicEnumInput
@@ -136,7 +142,7 @@ const SensitivityAnalysisConfiguration = ({
           <Typography>
             {t('genericcomponent.text.scenario.parameters.sensitivity_analysis.variation.title', 'variation.title')}
           </Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(
               'genericcomponent.text.scenario.parameters.sensitivity_analysis.variation.tooltip',
               'variation.tooltip'
@@ -145,7 +151,7 @@ const SensitivityAnalysisConfiguration = ({
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicNumberInput

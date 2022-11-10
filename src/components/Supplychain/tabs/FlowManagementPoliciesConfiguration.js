@@ -3,10 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, Tooltip, Zoom } from '@material-ui/core';
+import { Grid, Typography, Tooltip, Zoom, withStyles } from '@material-ui/core';
 import { BasicEnumInput } from '@cosmotech/ui';
 import InfoIcon from '@material-ui/icons/Info';
 import { useTranslation } from 'react-i18next';
+
+const StyledTooltip = withStyles((theme) => ({
+  tooltip: {
+    whiteSpace: 'pre-wrap',
+  },
+}))(Tooltip);
 
 const FlowManagementPoliciesConfiguration = ({
   stockPolicy,
@@ -36,9 +42,9 @@ const FlowManagementPoliciesConfiguration = ({
       <Grid container>
         <Grid container item xs={4}>
           <Typography>{t(labelKey, labelPlaceholder)}</Typography>
-          <Tooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
+          <StyledTooltip title={t(tooltipKey, tooltipPlaceholder)} placement="top-end" TransitionComponent={Zoom}>
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid container item xs={4}>
           <Tooltip title={enumTooltipValue} placement="right" TransitionComponent={Zoom} arrow>

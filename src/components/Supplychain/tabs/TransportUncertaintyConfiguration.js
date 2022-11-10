@@ -3,10 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tooltip, Typography, Zoom } from '@material-ui/core';
+import { Grid, Tooltip, Typography, Zoom, withStyles } from '@material-ui/core';
 import { BasicEnumInput } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
 import InfoIcon from '@material-ui/icons/Info';
+
+const StyledTooltip = withStyles((theme) => ({
+  tooltip: {
+    whiteSpace: 'pre-wrap',
+  },
+}))(Tooltip);
 
 const TransportUncertaintyConfiguration = ({
   transportUncertaintiesDistribution,
@@ -104,7 +110,7 @@ const TransportUncertaintyConfiguration = ({
               'distribution.title'
             )}
           </Typography>
-          <Tooltip
+          <StyledTooltip
             title={t(
               'genericcomponent.text.scenario.parameters.transportUncertainty.distribution.tooltip',
               'distribution.tooltip'
@@ -113,7 +119,7 @@ const TransportUncertaintyConfiguration = ({
             TransitionComponent={Zoom}
           >
             <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
-          </Tooltip>
+          </StyledTooltip>
         </Grid>
         <Grid item xs={4}>
           <BasicEnumInput
