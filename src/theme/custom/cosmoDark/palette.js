@@ -1,71 +1,57 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-// Baseline color theme
-const themeColors = {
-  primary: '#FFAD38',
-  primaryVariant: '#A16612',
-  secondary: '#466180',
-  background: '#191919',
-  backgroundVariant: '#1F1F1F',
-  surface: '#2E2E2E',
-  error: '#D1440C',
-  warning: '#FB8C00',
-  success: '#87B84E',
-  info: '#ffe6c2',
-  white: '#FFFFFF',
-  black: '#000000',
-  grey: '#999A9D',
-  backgroundSignInPage: '#2f363b',
-  backgroundSignInButton: '#2F2F2F',
-};
-
 export default {
   type: 'dark',
-  white: themeColors.white,
-  black: themeColors.black,
   primary: {
-    contrastText: themeColors.white,
-    main: themeColors.primary,
-    dark: themeColors.primaryVariant,
+    main: '#a4bfe4',
+    light: '#d6f2ff',
+    dark: '#748fb2',
+    contrastText: '#000000',
   },
   secondary: {
-    contrastText: themeColors.white,
-    main: themeColors.secondary,
-  },
-  success: {
-    contrastText: themeColors.white,
-    main: themeColors.success,
-  },
-  info: {
-    contrastText: themeColors.white,
-    main: themeColors.info,
-  },
-  warning: {
-    contrastText: themeColors.white,
-    main: themeColors.warning,
+    main: '#ffe26b',
+    dark: '#c9b03a',
+    light: '#ffff9c',
+    contrastText: '#000000',
   },
   error: {
-    contrastText: themeColors.white,
-    main: themeColors.error,
+    main: '#e57373',
+    dark: '#A05050',
+    light: '#EA8F8F',
+    contrastText: '#000000',
   },
-  text: {
-    primary: themeColors.white,
-    secondary: themeColors.white,
-    link: themeColors.primary,
-    shaded: themeColors.grey,
-    success: themeColors.success,
-    warning: themeColors.warning,
-    error: themeColors.error,
-    info: themeColors.info,
+  warning: {
+    main: '#ffa726',
+    dark: '#f57c00',
+    light: '#ffb74d',
+    contrastText: '#000000',
+  },
+  info: {
+    main: '#67B8E3',
+    dark: '#48809E',
+    light: '#85C6E8',
+    contrastText: '#000000',
+  },
+  success: {
+    main: '#66bb6a',
+    dark: '#388e3c',
+    light: '#81c784',
+    contrastText: '#000000',
   },
   background: {
-    default: themeColors.background,
-    paper: themeColors.background,
-    secondary: themeColors.backgroundVariant,
-    card: themeColors.surface,
-    dialogPaper: themeColors.surface,
-    signInPage: themeColors.backgroundSignInPage,
-    signInButton: themeColors.backgroundSignInButton,
+    default: '#131618',
+    paper: '#242628',
+  },
+  microsoft: {
+    main: '#2F2F2F',
+    contrastText: '#FFFFFF',
+  },
+  appbar: {
+    main: '#242628',
+    contrastText: '#FFFFFF',
+  },
+  login: {
+    main: '#2F363B',
   },
 };

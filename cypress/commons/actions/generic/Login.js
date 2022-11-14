@@ -3,9 +3,10 @@
 
 import 'cypress-localstorage-commands';
 import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
-import { PAGE_NAME, URL_REGEX, URL_POWERBI } from '../../constants/generic/TestConstants';
+import { URL_REGEX, URL_POWERBI } from '../../constants/generic/TestConstants';
 import { Scenarios, ScenarioParameters } from './..';
 
+const BASE_URL = Cypress.config().baseUrl;
 function getMicrosoftLoginButton() {
   return cy.get(GENERIC_SELECTORS.login.microsoftLoginButton);
 }
@@ -13,7 +14,14 @@ function getMicrosoftLoginButton() {
 function login() {
   login.reqIndex = login.reqIndex || 1;
   cy.clearLocalStorageSnapshot();
-  cy.visit(PAGE_NAME.SCENARIO);
+  cy.visit(BASE_URL, {
+    // next line defines English as default language for tests
+    onBeforeLoad(win) {
+      Object.defineProperty(win.navigator, 'languages', {
+        value: ['en-US'],
+      });
+    },
+  });
 
   // Stub PowerBi request
   cy.intercept('GET', URL_POWERBI, {
@@ -24,9 +32,9 @@ function login() {
   cy.intercept('GET', URL_REGEX.SCENARIO_PAGE_WITH_ID).as(reqName);
   ++login.reqIndex;
   Login.getMicrosoftLoginButton().click();
-  cy.wait('@' + reqName);
+  cy.wait('@' + reqName, { timeout: 60 * 1000 });
 
-  Scenarios.getScenarioView().should('be.visible');
+  Scenarios.getScenarioViewTab(60).should('be.visible');
   ScenarioParameters.getParametersAccordionSummary().should('be.visible');
   cy.saveLocalStorage();
 }
@@ -34,7 +42,15 @@ function login() {
 function relogin() {
   Cypress.Cookies.preserveOnce('ai_session', 'ai_user');
   cy.restoreLocalStorage();
-  cy.visit(PAGE_NAME.SCENARIO);
+  cy.visit(BASE_URL, {
+    // next line defines English as default language for tests
+    onBeforeLoad(win) {
+      Object.defineProperty(win.navigator, 'languages', {
+        value: ['en-US'],
+      });
+    },
+  });
+  Scenarios.getScenarioViewTab(60).should('be.visible');
 }
 
 export const Login = {

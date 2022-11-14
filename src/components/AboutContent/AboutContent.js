@@ -2,10 +2,11 @@
 // Licensed under the MIT license.
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, makeStyles, ButtonBase, Link } from '@material-ui/core';
-import theme from '../../theme';
+import { pictureLight, pictureDark } from '../../theme';
 import { useTranslation } from 'react-i18next';
-import { SUPPORT_URL, COSMOTECH_URL, APP_VERSION } from '../../config/AppConfiguration';
+import { SUPPORT_URL, COSMOTECH_URL, APP_VERSION } from '../../config/HelpMenuConfiguration';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,15 +29,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AboutContent = () => {
+export const AboutContent = ({ isDarkTheme }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const logo = isDarkTheme ? pictureDark.darkLogo : pictureLight.lightLogo;
 
   return (
     <Grid container spacing={2} className={classes.root}>
       <Grid item className={classes.picture}>
         <ButtonBase>
-          <img alt="Cosmo Tech" src={theme.picture.logo} />
+          <img height="75" alt="Cosmo Tech" src={logo} />
         </ButtonBase>
       </Grid>
       <Grid item container xs>
@@ -66,4 +68,10 @@ export const AboutContent = () => {
   );
 };
 
-AboutContent.propTypes = {};
+AboutContent.propTypes = {
+  isDarkTheme: PropTypes.bool,
+};
+
+AboutContent.defaultProps = {
+  isDarkTheme: false,
+};

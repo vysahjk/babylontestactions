@@ -3,18 +3,22 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Grid, makeStyles, Tab, Tabs } from '@material-ui/core';
+import { Card, CardContent, Grid, makeStyles, Tab, Tabs } from '@material-ui/core';
 import { SimplePowerBIReportEmbed } from '@cosmotech/ui';
-import { DASHBOARDS_LIST_CONFIG } from '../../config/Dashboards';
+import {
+  DASHBOARDS_LIST_CONFIG,
+  USE_POWER_BI_WITH_USER_CREDENTIALS,
+  DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO,
+} from '../../config/PowerBI';
+import { getReportLabels } from '../Scenario/labels';
 import { useTranslation } from 'react-i18next';
-import { USE_POWER_BI_WITH_USER_CREDENTIALS } from '../../config/AppConfiguration';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  dashboardsRoot: {
+    height: 'calc(100% - 36px)',
     position: 'fixed',
     margin: 'auto',
     width: '100%',
-    height: '100%',
   },
   tabs: {
     width: '100%',
@@ -30,8 +34,18 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'flex-end',
     },
   },
+  dashboardsTabsContainer: {
+    height: '100%',
+  },
+  dashboardsMainContainer: {
+    height: '100%',
+  },
+  dashboardsTabCard: {
+    height: '100%',
+  },
   dashboard: {
-    height: 'calc(100% - 18px)',
+    overflow: 'auto',
+    height: '100%',
   },
 }));
 
@@ -58,40 +72,12 @@ const Dashboards = ({ currentScenario, scenarioList, reports }) => {
       ? DEFAULT_MISSING_TITLE
       : DASHBOARDS_LIST_CONFIG[value].title[i18n.language];
 
-  const labels = {
-    noScenario: {
-      title: t('commoncomponents.iframe.scenario.noscenario.title', 'No scenario yet'),
-      label: t(
-        'commoncomponents.iframe.scenario.noscenario.label',
-        'You can create a scenario by clicking on Create new Scenario'
-      ),
-    },
-    noRun: {
-      label: t('commoncomponents.iframe.scenario.results.label.uninitialized', 'The scenario has not been run yet'),
-    },
-    inProgress: {
-      label: t('commoncomponents.iframe.scenario.results.label.running', 'Scenario run in progress...'),
-    },
-    hasErrors: {
-      label: t('commoncomponents.iframe.scenario.results.text.error', 'An error occured during the scenario run'),
-    },
-    downloadButton: t('commoncomponents.iframe.scenario.results.button.downloadLogs', 'Download logs'),
-    refreshTooltip: t('commoncomponents.iframe.scenario.results.button.refresh', 'Refresh'),
-    errors: {
-      unknown: t('commoncomponents.iframe.scenario.error.unknown.label', 'Unknown error'),
-      details: t(
-        'commoncomponents.iframe.scenario.error.unknown.details',
-        'Something went wrong when fetching PowerBI reports info'
-      ),
-    },
-  };
+  const reportLabels = getReportLabels(t);
 
   return (
-    <Grid container className={classes.root} direction="row">
-      <Grid item sm={2}>
-        {/* TODO: I don't know yet how to make a specific style for this card,
-        other than using style attribute. Update this whenever knowledge has been acquired. */}
-        <Card style={{ padding: '0px', height: '100%', paddingTop: '8px' }}>
+    <Grid container className={classes.dashboardsRoot} direction="row">
+      <Grid item sm={2} className={classes.dashboardsTabsContainer}>
+        <Card className={classes.dashboardsTabCard}>
           <Tabs
             orientation="vertical"
             variant="scrollable"
@@ -104,21 +90,22 @@ const Dashboards = ({ currentScenario, scenarioList, reports }) => {
           </Tabs>
         </Card>
       </Grid>
-      <Grid item sm={10}>
-        <Card className={classes.dashboard}>
-          {
-            <TabPanel
-              className={classes.dashboard}
-              index={value}
-              key={dashboardTitle}
-              title={dashboardTitle}
-              reports={reports}
-              scenario={currentScenario}
-              scenarioList={scenarioList.data}
-              lang={i18n.language}
-              labels={labels}
-            />
-          }
+      <Grid item sm={10} className={classes.dashboardsMainContainer}>
+        <Card>
+          <CardContent>
+            {
+              <TabPanel
+                index={value}
+                key={dashboardTitle}
+                title={dashboardTitle}
+                reports={reports}
+                scenario={currentScenario}
+                scenarioList={scenarioList.data}
+                lang={i18n.language}
+                labels={reportLabels}
+              />
+            }
+          </CardContent>
         </Card>
       </Grid>
     </Grid>
@@ -147,6 +134,7 @@ function TabPanel(props) {
         lang={lang}
         labels={labels}
         useAAD={USE_POWER_BI_WITH_USER_CREDENTIALS}
+        iframeRatio={DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO}
       />
     </div>
   );

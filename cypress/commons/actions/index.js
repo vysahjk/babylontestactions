@@ -4,10 +4,12 @@
 export {
   AppBar,
   Downloads,
+  InstanceVisualization,
   FileParameters,
   TableParameters,
   ScenarioManager,
   Scenarios,
   ScenarioParameters,
   Login,
+  ErrorBanner,
 } from './generic';

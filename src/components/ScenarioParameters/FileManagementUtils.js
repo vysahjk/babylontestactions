@@ -2,15 +2,17 @@
 // Licensed under the MIT license.
 
 import { TABLE_DATA_STATUS, UPLOAD_FILE_STATUS_KEY } from '@cosmotech/ui';
-import { ORGANIZATION_ID, WORKSPACE_ID } from '../../config/AppInstance';
+import { ORGANIZATION_ID, WORKSPACE_ID } from '../../config/GlobalConfiguration';
 import DatasetService from '../../services/dataset/DatasetService';
 import WorkspaceService from '../../services/workspace/WorkspaceService';
 import { AppInsights } from '../../services/AppInsights';
 import { DATASET_ID_VARTYPE } from '../../services/config/ApiConstants';
 import { DatasetsUtils, ScenarioParametersUtils } from '../../utils';
+import applicationStore from '../../state/Store.config';
+import { t } from 'i18next';
+import { dispatchSetApplicationErrorMessage } from '../../state/dispatchers/app/ApplicationDispatcher';
 
 const appInsights = AppInsights.getInstance();
-
 const _applyUploadPreprocessToContent = (clientFileDescriptor) => {
   if (clientFileDescriptor?.uploadPreprocess?.content) {
     return clientFileDescriptor.uploadPreprocess.content(clientFileDescriptor);
@@ -113,8 +115,17 @@ async function _processFileUpload(
     await _uploadFileToCloudStorage(updatedDataset, clientFileDescriptor, storageFilePath);
     setClientFileDescriptorStatus(UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD);
     return updatedDataset.id;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    applicationStore.dispatch(
+      dispatchSetApplicationErrorMessage(
+        error,
+        t(
+          'commoncomponents.banner.incompleteRun',
+          // eslint-disable-next-line max-len
+          "A problem occurred during dataset update; the scenario is running but your new parameters haven't been saved."
+        )
+      )
+    );
     setClientFileDescriptorStatus(UPLOAD_FILE_STATUS_KEY.EMPTY);
     return null;
   }
@@ -162,14 +173,13 @@ async function applyPendingOperationsOnFileParameters(
 ) {
   // Setter to update file descriptors status in the React component state
   function setClientFileDescriptorStatus(parameterId, newStatus) {
-    const newValue = {
-      ...parametersValuesToRender[parameterId],
-      status: newStatus,
-    };
-    setParametersValuesToRender({
-      ...parametersValuesToRender,
-      [parameterId]: newValue,
-    });
+    setParametersValuesToRender((currentParametersState) => ({
+      ...currentParametersState,
+      [parameterId]: {
+        ...currentParametersState[parameterId],
+        status: newStatus,
+      },
+    }));
   }
   // Apply pending operations on each dataset and keep track of the changes of datasets ids to patch parametersValuesRef
   const parametersValuesPatch = {};
@@ -201,9 +211,8 @@ const prepareToUpload = (event, clientFileDescriptor, setClientFileDescriptor) =
   if (file === undefined) {
     return;
   }
-
+  appInsights.trackUpload();
   setClientFileDescriptor({
-    ...clientFileDescriptor,
     name: file.name,
     file: file,
     content: null,
@@ -217,11 +226,8 @@ const prepareToDeleteFile = (setClientFileDescriptorStatus) => {
 };
 
 const downloadFile = async (datasetId, setClientFileDescriptorStatus) => {
-  const { error, data } = await DatasetService.findDatasetById(ORGANIZATION_ID, datasetId);
-  if (error) {
-    console.error(error);
-    throw new Error(`Error finding dataset ${datasetId}`);
-  } else {
+  try {
+    const { data } = await DatasetService.findDatasetById(ORGANIZATION_ID, datasetId);
     const storageFilePath = DatasetsUtils.getStorageFilePathFromDataset(data);
     if (storageFilePath !== undefined) {
       setClientFileDescriptorStatus(UPLOAD_FILE_STATUS_KEY.DOWNLOADING);
@@ -229,6 +235,10 @@ const downloadFile = async (datasetId, setClientFileDescriptorStatus) => {
       setClientFileDescriptorStatus(UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD);
     }
     appInsights.trackDownload();
+  } catch (error) {
+    applicationStore.dispatch(
+      dispatchSetApplicationErrorMessage(error, t('commoncomponents.banner.dataset', "Dataset hasn't been downloaded."))
+    );
   }
 };
 
@@ -241,7 +251,6 @@ const downloadFileData = async (datasets, datasetId, setClientFileDescriptorStat
   if (!storageFilePath) {
     return;
   }
-
   setClientFileDescriptorStatuses(UPLOAD_FILE_STATUS_KEY.DOWNLOADING, TABLE_DATA_STATUS.DOWNLOADING);
   const data = await WorkspaceService.downloadWorkspaceFileData(ORGANIZATION_ID, WORKSPACE_ID, storageFilePath);
   setClientFileDescriptorStatuses(UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD, TABLE_DATA_STATUS.PARSING);

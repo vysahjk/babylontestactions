@@ -32,6 +32,12 @@
       },
       "scenario": {
         "parameters": {
+          "disabledEditTooltip": {
+            "running": "Les paramètres ne peuvent pas être édités pendant que la simulation tourne",
+            "rejected": "Ce scénario est rejeté, vous ne pouvez pas éditer ses paramètres",
+            "validated": "Ce scénario est validé, vous ne pouvez pas éditer ses paramètres",
+            "noTabs": "Pas de paramètres à éditer"
+          },
           "discard": "Abandonner les modifications",
           "edit": "Éditer",
           "launch": "Lancer le Scénario",
@@ -103,6 +109,10 @@
         "attributes": {
           "PlantName": "Usine"
         }
+      },
+      "placeholder": {
+        "error": "Une erreur est survenue. Impossible de visualiser l'instance.",
+        "noScenario": "Aucun scénario créé. Vous pouvez créer un scénario dans la vue Scénario."
       }
     },
     "iframe": {
@@ -123,13 +133,19 @@
             "uninitialized": "Le scénario n'a pas encore été lancé"
           },
           "button": {
-            "downloadlogs": "Télécharger les logs",
+            "downloadLogs": "Télécharger les logs",
             "refresh": "Rafraîchir (sera ensuite indisponible pendant 15 secondes)"
           }
         },
         "noscenario": {
           "title": "Aucun scénario n'a encore été créé",
           "label": "Vous pouvez créer un scénario en cliquant sur \"Créer un scénario\""
+        },
+        "nodashboard": {
+          "label": "Aucun dashboard configuré pour ce type de scénario"
+        },
+        "unknownStatus": {
+          "label": "Le scénario a un statut inconnu, si le problème persiste, merci de contacter votre administrateur"
         },
         "error": {
           "unknown": {
@@ -217,7 +233,7 @@
                 "label": "Erreur",
                 "empty": "Le nom du scénario ne doit pas être vide",
                 "existing": "Le nom du scénario existe déjà",
-                "forbiddenchars": "Le nom du scenario doit commencer par une lettre, et ne peut contenir que des lettres, chiffres, espaces, underscores et tirets."
+                "forbiddenchars": "Le nom du scenario doit commencer par une lettre ou un chiffre, et ne peut contenir que des lettres, chiffres, espaces, underscores, tirets et points."
               }
             }
           },
@@ -244,6 +260,36 @@
             "create": "Créer",
             "cancel": "Annuler"
           }
+        }
+      },
+      "sessionTimeout": {
+        "body": "Aucune activité détectée. Vous allez être automatiquement déconnecté dans {{seconds}} secondes...",
+        "cancel": "Rester connecté",
+        "logOut": "Se déconnecter",
+        "loggingOut": "Déconnexion en cours...",
+        "title": "Session inactive"
+      }
+    },
+    "banner": {
+      "unknownError": "Erreur inconnue",
+      "dataset": "Le dataset n'a pas pu être téléchargé.",
+      "logs": "Le fichier des logs n'a pas pu être téléchargé.",
+      "create": "Le scénario n'a pas pu être créé.",
+      "delete": "Le scénario n'a pas pu être supprimé.",
+      "rename": "Le scénario n'a pas pu être renommé.",
+      "run": "Un problème est survenu, le scénario n'a pas pu être lancé.",
+      "update": "Un problème est survenu pendant la modification du scénario, les nouveaux paramètres n'ont pas été sauvegardés.",
+      "incompleteRun": "Un problème est survenu pendant la modification du dataset; le scénario a été lancé mais les nouveaux paramètres ne sont pas pris en compte.",
+      "network": "Problème réseau, veuillez vérifier votre connexion Internet",
+      "resetStatusValidation": "Le statut du scénario n'a pas pu être réinitialisé.",
+      "validateScenario": "Le scénario n'a pas pu être validé.",
+      "rejectScenario": "Le scénario n'a pas pu être rejeté.",
+      "tooLongErrorMessage": "Le message d'erreur détaillé est trop long pour être affiché. Pour le lire, veuiller utiliser le bouton COPIER et le coller dans votre éditeur de texte préféré.",
+      "button": {
+        "dismiss": "Fermer",
+        "copy": {
+          "label": "Copier",
+          "copied": "Copié"
         }
       }
     }
@@ -601,21 +647,21 @@
           "companyname": "Cosmo Tech",
           "poweredby": "Propulsé par Cosmo Tech"
         }
-      },
-      "text": {
-        "loading": "Chargement..."
       }
     },
     "signin": {
-      "title": "Cosmo Tech Supply chain"
-    },
-    "unauthorized": {
-      "scenario": {
-        "specialists": {
-          "title": "Spécialistes des jumeaux numériques"
-        }
+      "title": "Cosmo Tech Supply chain",
+      "error": {
+        "title": "Erreur d'authentification"
       },
-      "title": "Cosmo Tech Supply chain"
+      "info": {
+        "timeout": "Pour des raisons de sécurité, votre session a expiré, pour cause d'inactivité."
+      }
+    },
+    "accessdenied": {
+      "title": "Accès non autorisé",
+      "errormessage": "Les ressources n'existent pas ou vous n'avez pas la permission d'y accéder.",
+      "signouttimeout": "Vous allez être déconnecté automatiquement dans {{seconds}} secondes..."
     },
     "scenario": {
       "dropdown": {
@@ -628,6 +674,18 @@
       },
       "text": {
         "scenariotype": "Type de scénario"
+      },
+      "validation": {
+        "reject": "Rejeter",
+        "rejected": "Rejeté",
+        "validate": "Valider",
+        "validated": "Validé",
+        "disabledTooltip": "Veuillez sauver ou annuler les modifications en cours avant de modifier le statut de validation du scénario"
+      },
+      "redirectError": {
+        "title": "Mauvaise URL",
+        "detail": "Le scénario avec l'id {{id}} n'existe plus.",
+        "comment": "Vous avez été redirigé vers la page Scénario par défaut."
       }
     },
     "runtemplate": {
@@ -648,9 +706,9 @@
           "title": "Vue scénario"
         }
       },
-      "flowchart": {
+      "instance": {
         "tab": {
-          "title": "Schéma de flux"
+          "title": "Instance"
         }
       },
       "scenariomanager": {

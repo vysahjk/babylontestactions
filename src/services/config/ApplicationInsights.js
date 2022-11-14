@@ -2,12 +2,13 @@
 // Licensed under the MIT license.
 
 import { DistributedTracingModes } from '@microsoft/applicationinsights-web';
-import { APPLICATION_INSIGHTS_INSTRUMENTATION_KEY } from '../../config/AppInstance.js';
+import { APPLICATION_INSIGHTS_INSTRUMENTATION_KEY } from '../../config/ApplicationInsights';
 
 // Application Insight configuration
 export const APPLICATION_INSIGHTS_CONFIG = {
   name: 'Web Application Sample',
   config: {
+    disableCookiesUsage: true,
     instrumentationKey: APPLICATION_INSIGHTS_INSTRUMENTATION_KEY,
     disableFetchTracking: false,
     enableCorsCorrelation: true,
