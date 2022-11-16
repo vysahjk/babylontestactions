@@ -1,7 +1,7 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BasicEnumInput } from '@cosmotech/ui';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -23,18 +23,24 @@ export const GenericEnumInput = ({ parameterData, parametersState, setParameters
   }
 
   function setValue(newValue) {
-    setParametersState((currentParametersState) => ({
-      ...currentParametersState,
-      [parameterData.id]: newValue,
-    }));
+    console.log(newValue);
+    // setParametersState((currentParametersState) => ({
+    //   ...currentParametersState,
+    //   [parameterData.id]: newValue,
+    // }));
   }
+
+  useEffect(() => {
+    console.log(parametersState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <BasicEnumInput
       key={parameterData.id}
       data-cy={parameterData.dataCy} // Optional data for cypress
       label={t(`solution.parameters.${parameterData.id}`, parameterData.id)}
-      value={parametersState[parameterData.id] || enumValues?.[0]?.key || ''}
+      value={'day'}
       changeEnumField={setValue}
       textFieldProps={textFieldProps}
       enumValues={enumValues}

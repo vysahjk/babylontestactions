@@ -6,9 +6,11 @@ import { ConfigUtils } from '../../../../utils/ConfigUtils';
 import { VAR_TYPES_COMPONENTS_MAPPING } from '../../../../utils/scenarioParameters/VarTypesComponentsMapping';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const ScenarioParameterInput = ({ parameterData, parametersState, setParametersState, context }) => {
   const { t } = useTranslation();
+  const datasets = useSelector((state) => state.dataset?.list?.data);
   const parameterVarType = ConfigUtils.buildExtendedVarType(parameterData.varType, parameterData.subType);
   let varTypeFactory;
 
@@ -32,7 +34,7 @@ const ScenarioParameterInput = ({ parameterData, parametersState, setParametersS
     return React.createElement(varTypeFactory, props);
   }
   console.warn("Warning: Factories are now deprecated and won't be supported in the next major version of the webapp");
-  return varTypeFactory.create(t, parameterData, parametersState, setParametersState, context);
+  return varTypeFactory.create(t, datasets, parameterData, parametersState, setParametersState, context);
 };
 ScenarioParameterInput.propTypes = {
   parameterData: PropTypes.object.isRequired,

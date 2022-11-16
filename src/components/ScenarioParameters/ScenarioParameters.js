@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { SimpleTwoActionsDialog, DontAskAgainDialog } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
+// eslint-disable-next-line
 import { PERMISSIONS } from '../../services/config/Permissions';
 import { PermissionsGate } from '../PermissionsGate';
 
@@ -151,6 +152,20 @@ const ScenarioParameters = ({
     setParametersValuesToRender(generateParametersValuesToRenderFromParametersValuesRef());
   };
 
+  // // Generate input components for each scenario parameters tab
+  // for (const parametersGroupMetadata of parametersGroupsMetadata) {
+  //   parametersGroupMetadata.tab = SupplychainParametersTabFactory.create(
+  //     t,
+  //     datasets,
+  //     parametersGroupMetadata,
+  //     parametersValuesToRender,
+  //     setParametersValuesToRender,
+  //     editMode,
+  //     workspaceId,
+  //     currentScenario
+  //   );
+  // }
+
   const discardLocalChanges = () => {
     setParametersValuesToRenderFromParametersValuesRef();
   };
@@ -186,6 +201,8 @@ const ScenarioParameters = ({
   const context = {
     editMode: editMode,
     isDarkTheme: isDarkTheme,
+    currentScenario: currentScenario?.data, // TODO use custom hooks when migrate to V4,
+    workspaceId,
   };
 
   useEffect(() => {

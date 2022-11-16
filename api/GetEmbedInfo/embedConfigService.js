@@ -6,7 +6,7 @@ const utils = require('./utils');
 const PowerBiReportDetails = require('../utils/models/powerbi/embedReportConfig');
 const EmbedConfig = require('../utils/models/powerbi/embedConfig.js');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
+require('dotenv').config();
 /**
  * Generate embed token and embed urls for reports
  * @return Details like Embed URL, Access token and Expiry

@@ -5,7 +5,7 @@
 // https://github.com/Cosmo-Tech/azure-sample-webapp/blob/main/doc/helpMenuConfiguration.md
 
 // App version
-export const APP_VERSION = process.env.REACT_APP_VERSION;
+export const APP_VERSION = 'Web-App version ' + process.env.REACT_APP_VERSION;
 
 // Support page url
 export const SUPPORT_URL = 'https://support.cosmotech.com';
@@ -14,4 +14,4 @@ export const SUPPORT_URL = 'https://support.cosmotech.com';
 export const COSMOTECH_URL = 'https://cosmotech.com';
 
 // Documentation url
-export const DOCUMENTATION_URL = '';
+export const DOCUMENTATION_URL = 'https://portal.cosmotech.com/resources/cosmo-tech-supply-chain-resources';

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
@@ -25,7 +26,7 @@ export const GenericTextInput = ({ parameterData, parametersState, setParameters
       key={parameterData.id}
       data-cy={parameterData.dataCy} // Optional data for cypress
       label={t(`solution.parameters.${parameterData.id}`, parameterData.id)}
-      value={parametersState[parameterData.id] || ''}
+      value={parametersState[parameterData.id] || context.currentScenario.name || ''}
       changeTextField={setValue}
       textFieldProps={textFieldProps}
     />

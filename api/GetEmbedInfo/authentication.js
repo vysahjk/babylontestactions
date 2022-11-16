@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 const msal = require('@azure/msal-node');
 const msalConfig = require('./config');
+require('dotenv').config();
 
 // Create msal application object
 let cca;

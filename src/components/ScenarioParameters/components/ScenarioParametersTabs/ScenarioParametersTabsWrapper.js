@@ -19,6 +19,7 @@ const ScenarioParametersTabsWrapper = ({
 }) => {
   const { t } = useTranslation();
   const datasets = useSelector((state) => state.dataset?.list?.data);
+
   for (const parametersGroupMetadata of parametersGroupsMetadata) {
     const tabFactory = CUSTOM_PARAMETERS_GROUPS_COMPONENTS_MAPPING[parametersGroupMetadata.id] || ScenarioParametersTab;
     // name property helps distinguish React components from factories
@@ -38,14 +39,15 @@ const ScenarioParametersTabsWrapper = ({
         datasets,
         parametersGroupMetadata,
         parametersValuesToRender,
-        setParametersValuesToRender,
-        context
+        setParametersValuesToRender
       );
       console.warn(
         "Warning: Factories are now deprecated and won't be supported in the next major version of the webapp"
       );
     }
   }
+  // // eslint-disable-next-line no-debugger
+  // debugger;
   return <ScenarioParametersTabs userRoles={userRoles} parametersGroupsMetadata={parametersGroupsMetadata} />;
 };
 ScenarioParametersTabsWrapper.propTypes = {

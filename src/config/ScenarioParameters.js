@@ -19,6 +19,12 @@ const PARAMETERS = {
   },
   simulation_granularity: {
     defaultValue: 'day',
+    enumValues: [
+      {
+        key: 'day',
+        value: 'day',
+      },
+    ],
   },
   optimization_objective: {
     defaultValue: 'ServiceLevelMaximization',

@@ -1126,17 +1126,17 @@
   dependencies:
     axios "^0.21.4"
 
-"@cosmotech/azure@1.1.21":
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/@cosmotech/azure/-/azure-1.1.21.tgz#6415dcd13b5fd4683414e269a21a8c4634271c12"
-  integrity sha512-plQ0Zx45YlJHMOTUM1V8BBV2Avup47aEGsz1/q4ovvLkx4NN+hTcl1LXbMMjOYh1hqJRqFf54Ch+yX1q6+6VWw==
+"@cosmotech/azure@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@cosmotech/azure/-/azure-1.2.0.tgz#59edd85a5ef6081ed8463c8d414df2a9610fbb2e"
+  integrity sha512-+NaNEX4SwFY0qXf6Zzg2tdXjoRpnOpTjnyK89sZ9ZcENiM+zIXvKgyiCYZzx4+QVqVwkMH2CGlcDrf8ceOhRaA==
   dependencies:
     "@azure/msal-browser" "~2.23.0"
 
-"@cosmotech/core@^1.9.0":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@cosmotech/core/-/core-1.9.1.tgz#27db65517785d341505f3d50a030ac336b0a1ade"
-  integrity sha512-D3ghVlZaP1ap+UdfrXqFHZdEfWuJdqg/7mBddhkP3aVNNQRKew7Ewo5+2W2DZ9YkV9hoaCiriG3TwKDNFiUNNQ==
+"@cosmotech/core@^1.10.0":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@cosmotech/core/-/core-1.10.1.tgz#82ba9fcc1c221aeb2f1a63050c072e146a8960a3"
+  integrity sha512-dFs2D7zP7vXoImR8j3sRNHczBgXKfrfMmQCz2rT83wyuN3ApEwX6mrO7gPnEvlvgJXqU39jGPK47rai2JKdS+A==
   dependencies:
     csv-string "^4.0.1"
     date-fns "^2.25.0"
@@ -1144,16 +1144,16 @@
     validator "^13.7.0"
     xlsx "^0.18.3"
 
-"@cosmotech/ui@^4.0.0-rc1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@cosmotech/ui/-/ui-4.0.1.tgz#996a75bb009154196bd0a9d9fe12bcc66e682189"
-  integrity sha512-qFesbT0URFAZkPpYeKKFWr3uT+1im88Sq7V8AlgF+yVmnzowhf2GRXwmpB7bWH6pxN4pIE8ap02lyM4D4gTK+g==
+"@cosmotech/ui@^4.3.2":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@cosmotech/ui/-/ui-4.3.2.tgz#3eb00576042a56fc53b5359cd79837e3d3f8cca7"
+  integrity sha512-aOqfPzddH18rDPuJBxrEl2Cq3kUCIDf3ZeLbfyHfpae3wnYJzSxqbtWdvMVH7iAwDnfThPH22Be6XWtcW5qT3Q==
   dependencies:
     "@date-io/date-fns" "^1.3.13"
     "@material-ui/pickers" "^3.3.10"
     "@nosferatu500/react-sortable-tree" "^3.0.5"
-    ag-grid-community "^28.1.0"
-    ag-grid-react "^28.1.0"
+    ag-grid-community "~28.1.0"
+    ag-grid-react "~28.1.0"
     clsx "^1.1.1"
     cytoscape "^3.20.0"
     cytoscape-bubblesets "^3.1.0"
@@ -1161,7 +1161,7 @@
     cytoscape-layers "^2.2.0"
     date-fns "^2.22.1"
     powerbi-client-react "^1.3.3"
-    react-cytoscapejs "^1.2.1"
+    react-cytoscapejs "^2.0.0"
     react-lottie-player "1.4.1"
     react-number-format "^4.5.5"
 
@@ -2688,15 +2688,15 @@ adler-32@~1.3.0:
   resolved "https://registry.yarnpkg.com/adler-32/-/adler-32-1.3.1.tgz#1dbf0b36dda0012189a32b3679061932df1821e2"
   integrity sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==
 
-ag-grid-community@^28.1.0:
-  version "28.1.0"
-  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-28.1.0.tgz#a7b6f1c219d6fb7f777aaf39dd04639eb94f4bea"
-  integrity sha512-iCrdRWImvj6pOKaRQXdaPfZ0EI4fCQgTVv5PiCP9otbDPQBxyxjFVn+jEoV0umOqpqPAMoDIbG9poKyWuHl/EA==
+ag-grid-community@~28.1.0:
+  version "28.1.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-28.1.1.tgz#68b849ecf4c0849faa8e012003afb0923ee00d69"
+  integrity sha512-WqWELTVXMrFHnyLHhD8HqMzrns+rjMuaOWcnLY+uO+j2jFN9QEasXPdT8zepNbNeUaIdCt1f1Q9Ipx0U1evNvQ==
 
-ag-grid-react@^28.1.0:
-  version "28.1.0"
-  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-28.1.0.tgz#4119e236af63a0ded5f87714cfec1b6635c7d2e9"
-  integrity sha512-4Z/7T5kYKWqUhDrSY6bgseiKLiuMwjG4zHYIVtZwGwma7hb5e2CYwDdnfoWKArR6a7TzF86JiRpzd2WlLaARdQ==
+ag-grid-react@~28.1.0:
+  version "28.1.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-28.1.1.tgz#c9bc1df2d09e7b7b3e51461881eb4a938e80b1f4"
+  integrity sha512-K1RUWNCKgwxeh6Y4Wb5LD6dVYyAbduH3tAd0ketVcVij2gruLVlvZdtT2HwHjeDvyyp0oqGqZVT2oik6+rZFTQ==
   dependencies:
     prop-types "^15.8.1"
 
@@ -4813,13 +4813,6 @@ cytoscape-dagre@^2.4.0:
   dependencies:
     dagre "^0.8.5"
 
-cytoscape-klay@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/cytoscape-klay/-/cytoscape-klay-3.1.4.tgz#0e5bbb5c482b384b2ff2485150173aaecebc324b"
-  integrity sha512-VwPj0VR25GPfy6qXVQRi/MYlZM/zkdvRhHlgqbM//lSvstgM6fhp3ik/uM8Wr8nlhskfqz/M1fIDmR6UckbS2A==
-  dependencies:
-    klayjs "^0.4.1"
-
 cytoscape-layers@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cytoscape-layers/-/cytoscape-layers-2.2.0.tgz#ac0251dd06c2e1b5d5c341687d88cc6ac5032378"
@@ -4827,7 +4820,7 @@ cytoscape-layers@^2.2.0:
   dependencies:
     "@types/cytoscape" "^3.19.0"
 
-cytoscape@^3.2.19, cytoscape@^3.20.0:
+cytoscape@^3.20.0:
   version "3.22.1"
   resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.22.1.tgz#bf9374193ce1d4dda31ef26a8997311a19e6077b"
   integrity sha512-+wMWCXI+c6h7xhh0BQpttOPO7zIB7z6KyDd7D+8AkRhE9E6csXNnV5inBkdo2mxbBoll1jePVxXHqxA2J5cAog==
@@ -8576,11 +8569,6 @@ kind-of@^6.0.0, kind-of@^6.0.2, kind-of@^6.0.3:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
-klayjs@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/klayjs/-/klayjs-0.4.1.tgz#5bf9fadc7a3e44b94082bba501e7d803076dcfc2"
-  integrity sha1-W/n63Ho+RLlAgrulAefYAwdtz8I=
-
 kleur@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
@@ -11064,13 +11052,12 @@ react-countdown@^2.3.2:
   dependencies:
     prop-types "^15.7.2"
 
-react-cytoscapejs@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-cytoscapejs/-/react-cytoscapejs-1.2.1.tgz#ccce46acabf4f0c41dce9070743854f92b0dc050"
-  integrity sha512-8exVCetpzyGCAKuRjXPWGjFCnb22boZ3SXUPpPB/+wQI8Q8BwkT1URN3A7J1Czvj1qAbShh5QQ514mBUp7i7kw==
+react-cytoscapejs@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-cytoscapejs/-/react-cytoscapejs-2.0.0.tgz#fdc2547626df0678acfbb48e73a437ddc1687b01"
+  integrity sha512-t3SSl1DQy7+JQjN+8QHi1anEJlM3i3aAeydHTsJwmjo/isyKK7Rs7oCvU6kZsB9NwZidzZQR21Vm2PcBLG/Tjg==
   dependencies:
-    cytoscape "^3.2.19"
-    prop-types "^15.6.2"
+    prop-types "^15.8.1"
 
 react-dev-utils@^11.0.3:
   version "11.0.4"
@@ -12291,13 +12278,6 @@ source-map@^0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.4.tgz#a9bbe705c9d8846f4e08ff6765acf0f1b0898656"
   integrity sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==
 
-source-map@~0.8.0-beta.0:
-  version "0.8.0-beta.0"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.8.0-beta.0.tgz#d4c1bb42c3f7ee925f005927ba10709e0d1d1f11"
-  integrity sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==
-  dependencies:
-    whatwg-url "^7.0.0"
-
 sourcemap-codec@^1.4.8:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
@@ -13008,13 +12988,6 @@ tough-cookie@~2.5.0:
     psl "^1.1.28"
     punycode "^2.1.1"
 
-tr46@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/tr46/-/tr46-1.0.1.tgz#a8b13fd6bfd2489519674ccde55ba3693b706d09"
-  integrity sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=
-  dependencies:
-    punycode "^2.1.0"
-
 tr46@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-2.1.0.tgz#fa87aa81ca5d5941da8cbf1f9b749dc969a4e240"
@@ -13614,11 +13587,6 @@ webidl-conversions@^3.0.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
 
-webidl-conversions@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
-  integrity sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-
 webidl-conversions@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-5.0.0.tgz#ae59c8a00b121543a2acc65c0434f57b0fc11aff"
@@ -13772,15 +13740,6 @@ whatwg-url@^5.0.0:
   dependencies:
     tr46 "~0.0.3"
     webidl-conversions "^3.0.0"
-
-whatwg-url@^7.0.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-7.1.0.tgz#c2c492f1eca612988efd3d2266be1b9fc6170d06"
-  integrity sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==
-  dependencies:
-    lodash.sortby "^4.7.0"
-    tr46 "^1.0.1"
-    webidl-conversions "^4.0.2"
 
 whatwg-url@^8.0.0, whatwg-url@^8.5.0:
   version "8.7.0"

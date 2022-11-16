@@ -75,6 +75,9 @@ function _buildTabPanels(userRoles, tabs, classes) {
       );
     }
   }
+
+  // // eslint-disable-next-line no-debugger
+  // debugger;
   return tabPanelComponents;
 }
 
@@ -110,6 +113,8 @@ const ScenarioParametersTabs = ({ parametersGroupsMetadata, userRoles }) => {
 
   // Reset selected tab on scenario change
   useEffect(() => {
+    // // eslint-disable-next-line no-debugger
+    // debugger;
     setTabs(parametersGroupsMetadata);
     if (parametersGroupsMetadata.find((groupMetadata) => groupMetadata.id === selectedTab) === undefined) {
       setSelectedTab(firstTab);
