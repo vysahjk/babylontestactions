@@ -21,7 +21,21 @@ const useStyles = makeStyles((theme) => ({
     margin: '4px',
   },
   scenarioList: {
-    paddingRight: '20px',
+    paddingRight: '15px',
+  },
+  scenarioMetadata: {
+    alignItems: 'center',
+    alignContent: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  scenarioValidationButton: {
+    marginLeft: '5px',
+    marginRight: '5px',
+  },
+  scenarioRunTemplateLabel: {
+    paddingLeft: '15px',
   },
   mainGrid: {
     display: 'flex',
@@ -30,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '6px',
     paddingRight: '2px',
     paddingBottom: '6px',
-    backgroundColor: theme.palette.background.paper,
   },
   grid: {
     flexGrow: 1,

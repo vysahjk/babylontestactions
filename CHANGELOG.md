@@ -1,4 +1,114 @@
-## **2.5.0-dev** <sub><sup>2022-03-17 ([65864b3...f6512b7](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/65864b3...f6512b7?diff=split))</sup></sub>
+## **3.0.0** <sub><sup>2022-08-16</sup></sub>
+
+### Features
+
+- dark/light theme switch
+- scenarios ids are now included in URLs to let users share direct links to a specific scenario
+- migration script to migrate configuration folder to v3.0.0 format
+
+### Bug Fixes
+
+- after login, users are now properly redirected to the view given in the URL they tried to access
+- fix possible error after login pop-up with some browsers
+- fix error during authentication if profiles and permissions are empty in configuration files
+
+### BREAKING CHANGES
+
+_Note: a [migration guide](./doc/migrationGuides/v3.0.0.md) is available to help you migrate your solution to v3.0.0_
+
+- files in the webapp configuration folder have been reorganized
+- new theme structure:
+  - theme is dynamic and has to be imported from Redux from now on
+  - removed some material-ui overrides in palette.js
+  - removed custom theme variables in palette.js
+  - removed 'default' theme folder
+- username removed from top bar
+- react-router upgraded to v6 (PrivateRoute and PublicRoute components have been removed)
+- generic factories (for scenario parameters inputs and tabs) transformed from functions to React components: "function-shaped" factories are still supported but are now considered deprecated, please update your factories to React components (see migration guide for further instructions)
+- the redirection URL was changed from /scenario to /sign-in: you must update the accepted redirection URLs in the Azure portal page of your App Registration and replace /scenario by /sign-in (or only add /sign-in to keep supporting previous versions of your webapps)
+
+## **2.8.0** <sub><sup>2022-08-09 ([c56ce5d...f7452e2](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/c56ce5d...f7452e2?diff=split))</sup></sub>
+
+### Features
+
+- allow **run-type-based scenario reports** ([b2e3bc9](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/b2e3bc94))
+- new view for **ADT instance visualization** ([3993934](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/39939346))
+- add **scenario renaming** in scenario manager ([ab1df5c](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/ab1df5c9))
+
+### Bug Fixes
+
+- fix unnecessary state refresh of table components ([00cc9b8](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/00cc9b89))
+- fix english mistakes in labels ([5085848](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/50858482))
+- remove loading message before loading ([641d1d7](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/641d1d77))
+- add unknown state placeholder ([91feb14](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/91feb144))
+- fix crash in Dashboards view when a scenario with 'Unknown' status is selected ([193cf05](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/193cf05c))
+
+### Documentation
+
+- update dashboards documentation ([cb22cad](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/cb22cad1))
+- fix broken link in documentation ([329772f](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/329772fb))
+
+## **2.7.2** <sub><sup>2022-06-15 ([f86ac6d...f86ac6d](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/f86ac6d...f86ac6d?diff=split))</sup></sub>
+
+### Bug Fixes
+
+- fix CSP\-related issue preventing token refresh ([f86ac6d](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/f86ac6d))
+
+## **2.7.1** <sub><sup>2022-06-09 ([d98bc0f...14c95c6](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/d98bc0f...14c95c6?diff=split))</sup></sub>
+
+### Bug Fixes
+
+- fix CSP errors ([14c95c6](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/14c95c6))
+
+## **2.7.0** <sub><sup>2022-06-08 ([31d11a9...33aa147](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/31d11a9...33aa147?diff=split))</sup></sub>
+
+### Features
+
+- add session timeout ([d7e7a8a](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/d7e7a8a))
+- allow dot in scenario names ([37f4b1c](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/37f4b1c))
+- add Content Security Policy and other security-related HTTP headers ([33aa147](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/33aa147))
+
+### Bug Fixes
+
+- improve errors handling during API requests ([eedc283](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/eedc283))
+- improve errors handling on sign-in page ([99f9e83](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/99f9e83))
+- disable insecure app insights cookies 'ai_session' and 'ai_user' ([d9314ec](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/d9314ec))
+- fix warning in Azure Function ([7a7f4e2](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/7a7f4e2))
+
+## **2.6.1** <sub><sup>2022-05-16 ([5f97a59...5bc6879](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/5f97a59...5bc6879?diff=split))</sup></sub>
+
+### Bug Fixes
+
+- fix app crash when no scenarios exist ([dcf9cc5](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/dcf9cc5))
+- change PermissionGate children prop type from object to node ([01b1540](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/01b1540))
+- add & use new permission canChangeScenarioValidationStatus for validation status edition ([5bc6879](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/5bc6879))
+
+## **2.6.0** <sub><sup>2022-05-11 ([8bf8666...196e124](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/8bf8666...196e124?diff=split))</sup></sub>
+
+### Documentation
+
+- update doc ([c87bdc9](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/c87bdc9))
+- add doc for iframe ratio configuration ([cb4cbba](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/cb4cbba))
+- Documentation for Azure custom metrics ([3ccd690](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/3ccd690))
+- Fix broken link in doc for custom metrics ([cea8ad8](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/cea8ad8))
+- add note to fix possible AppInsights activation error message ([a177318](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/a177318))
+- fix formatting in doc file and remove emoji that breaks formatting ([dd5f95f](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/dd5f95f))
+- update Upload section in Custom metrics ([6eafd69](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/6eafd69))
+
+### Features
+
+- add DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO parameter in webapp config ([f264aa5](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/f264aa5))
+- add scenario validation status in scenario & scenario manager views ([91f7678](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/91f7678))
+- support empty fields in table component ([bf87591](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/bf87591))
+
+### Bug Fixes
+
+- fix AzureFunction error on missing config ([b58fa48](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/b58fa48))
+- fix Azure Function syntax error ([f0782fa](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/f0782fa))
+- change success color value in theme ([fd0feaf](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/fd0feaf))
+- trigger upload file event in app insights ([885ce50](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/885ce50))
+
+## **2.5.0** <sub><sup>2022-04-04 ([65864b3...81c4e58](https://github.com/Cosmo-Tech/azure-sample-webapp/compare/65864b3...81c4e58?diff=split))</sup></sub>
 
 ### Features
 
@@ -7,6 +117,9 @@
 - make scenario parameters collapsable and move it above dashboards ([04f971f](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/04f971f))
 - set Cosmo platform\-help URL page as documentation instead of previously used pdf file ([88db4a1](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/88db4a1))
 - add scenario launch confirmation dialog ([282d3ab](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/282d3ab))
+- add automatic expansion of the scenario parameters accordion when create scenario ([bf66e73](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/bf66e73))
+- add redirection to selected scenario view from scenario manager ([99c55d5](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/99c55d5))
+- add new webapp configuration parameter SCENARIO_VIEW_IFRAME_DISPLAY_RATIO ([920bbb8](https://github.com/Cosmo-Tech/azure-sample-webapp/commit/920bbb8))
 
 ### Bug Fixes
 

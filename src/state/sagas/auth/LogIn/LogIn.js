@@ -5,11 +5,16 @@ import { put, takeEvery } from 'redux-saga/effects';
 import { AUTH_ACTIONS_KEY, AUTH_STATUS } from '../../../commons/AuthConstants';
 import { PROFILES } from '../../../../config/Profiles';
 
+const UNKNOWN_ERROR_MESSAGE =
+  'Unknown error. Authentication failed\nIf the problem persists, please contact your administrator.';
+
 const _extractPermissionsFromRoles = (roles) => {
   let permissions = [];
   if (roles) {
     for (const role of roles) {
-      permissions = [...new Set([...permissions, ...PROFILES[role]])];
+      if (role in PROFILES) {
+        permissions = [...new Set([...permissions, ...PROFILES[role]])];
+      }
     }
   }
   return permissions;
@@ -21,7 +26,7 @@ export function* tryLogIn(action) {
     // Start by signing in if an authentication provider is defined
     if (action.provider) {
       Auth.setProvider(action.provider);
-      Auth.signIn();
+      yield Auth.signIn();
     }
     // Check if the user is authenticated
     const authenticated = yield Auth.isUserSignedIn();
@@ -30,6 +35,7 @@ export function* tryLogIn(action) {
       const userPermissions = _extractPermissionsFromRoles(userRoles);
       // If the user is authenticated, set the auth data
       yield put({
+        error: '',
         type: AUTH_ACTIONS_KEY.SET_AUTH_DATA,
         userId: Auth.getUserId(),
         userName: Auth.getUserName(),
@@ -38,19 +44,32 @@ export function* tryLogIn(action) {
         permissions: userPermissions,
         status: AUTH_STATUS.AUTHENTICATED,
       });
+      localStorage.removeItem('logoutByTimeout');
     } else {
       yield put({
+        error: '',
         type: AUTH_ACTIONS_KEY.SET_AUTH_DATA,
         userId: '',
         userName: '',
         profilePic: '',
         roles: [],
         permissions: [],
-        status: AUTH_STATUS.DENIED,
+        status: AUTH_STATUS.ANONYMOUS,
       });
     }
   } catch (error) {
-    console.log(error);
+    const errorMessage = error.errorMessage || UNKNOWN_ERROR_MESSAGE;
+    yield put({
+      error: errorMessage,
+      type: AUTH_ACTIONS_KEY.SET_AUTH_DATA,
+      userId: '',
+      userName: '',
+      profilePic: '',
+      roles: [],
+      permissions: [],
+      status: AUTH_STATUS.DENIED,
+    });
+    localStorage.removeItem('logoutByTimeout');
   }
 }
 

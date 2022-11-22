@@ -3,19 +3,25 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Backdrop, Card, CircularProgress, Grid, Typography } from '@material-ui/core';
+import { Backdrop, Button, Card, CardContent, CircularProgress, Grid, Tooltip, Typography } from '@material-ui/core';
 import { ScenarioParameters } from '../../components';
 import { useTranslation } from 'react-i18next';
-import { CreateScenarioButton, HierarchicalComboBox, SimplePowerBIReportEmbed } from '@cosmotech/ui';
-import { NAME_VALIDATOR } from '../../utils/ValidationUtils';
+import {
+  CreateScenarioButton,
+  HierarchicalComboBox,
+  ScenarioValidationStatusChip,
+  SimplePowerBIReportEmbed,
+} from '@cosmotech/ui';
 import { sortScenarioList } from '../../utils/SortScenarioListUtils';
 import { LOG_TYPES } from '../../services/scenarioRun/ScenarioRunConstants.js';
+import { SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants.js';
+import { SCENARIO_RUN_LOG_TYPE } from '../../services/config/FunctionalConstants';
 import {
-  SCENARIO_RUN_LOG_TYPE,
   USE_POWER_BI_WITH_USER_CREDENTIALS,
   SCENARIO_VIEW_IFRAME_DISPLAY_RATIO,
-} from '../../config/AppConfiguration';
-import { SCENARIO_DASHBOARD_CONFIG } from '../../config/Dashboards';
+  SCENARIO_DASHBOARD_CONFIG,
+} from '../../config/PowerBI';
+import ScenarioService from '../../services/scenario/ScenarioService';
 import ScenarioRunService from '../../services/scenarioRun/ScenarioRunService';
 import { STATUSES } from '../../state/commons/Constants';
 import { AppInsights } from '../../services/AppInsights';
@@ -23,6 +29,7 @@ import { PERMISSIONS } from '../../services/config/Permissions';
 import { PermissionsGate } from '../../components/PermissionsGate';
 import { getCreateScenarioDialogLabels, getReportLabels } from './labels';
 import useStyles from './style';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const appInsights = AppInsights.getInstance();
 
@@ -31,6 +38,7 @@ const Scenario = (props) => {
   const { t, i18n } = useTranslation();
 
   const {
+    setScenarioValidationStatus,
     currentScenario,
     scenarioList,
     findScenarioById,
@@ -43,23 +51,63 @@ const Scenario = (props) => {
     updateAndLaunchScenario,
     launchScenario,
     reports,
+    setApplicationErrorMessage,
   } = props;
 
+  const routerParameters = useParams();
+  const navigate = useNavigate();
   const workspaceId = workspace.data.id;
   const [editMode, setEditMode] = useState(false);
 
   const createScenarioDialogLabels = getCreateScenarioDialogLabels(t, editMode);
   const reportLabels = getReportLabels(t);
 
+  // Get the right report for given run template
+  const currentScenarioRunTemplateReport = Array.isArray(SCENARIO_DASHBOARD_CONFIG)
+    ? SCENARIO_DASHBOARD_CONFIG
+    : currentScenario?.data?.runTemplateId in SCENARIO_DASHBOARD_CONFIG
+    ? [SCENARIO_DASHBOARD_CONFIG[currentScenario.data.runTemplateId]]
+    : [];
   // Add accordion expand status in state
   const [accordionSummaryExpanded, setAccordionSummaryExpanded] = useState(
     localStorage.getItem('scenarioParametersAccordionExpanded') === 'true'
   );
-
+  const handleScenarioChange = (event, scenario) => {
+    findScenarioById(workspaceId, scenario.id);
+  };
   useEffect(() => {
     localStorage.setItem('scenarioParametersAccordionExpanded', accordionSummaryExpanded);
   }, [accordionSummaryExpanded]);
-
+  useEffect(() => {
+    if (sortedScenarioList.length !== 0) {
+      if (routerParameters.id === undefined) {
+        navigate(`/scenario/${currentScenario.data.id}`);
+      } else if (currentScenario.data.id !== routerParameters.id) {
+        const scenarioFromUrl = { id: routerParameters.id };
+        handleScenarioChange(event, scenarioFromUrl);
+        navigate(`/scenario/${scenarioFromUrl.id}`);
+      }
+    } else {
+      navigate('/scenario');
+    }
+    // eslint-disable-next-line
+  }, []);
+  // this function enables backwards navigation between scenario's URLs
+  window.onpopstate = (e) => {
+    const scenarioFromUrl = scenarioList.data.find((el) => el.id === routerParameters.id);
+    if (scenarioFromUrl) handleScenarioChange(event, scenarioFromUrl);
+  };
+  useEffect(() => {
+    if (sortedScenarioList.length > 0) {
+      if (currentScenario.data === null) {
+        handleScenarioChange(event, sortedScenarioList[0]);
+        navigate(`/scenario/${sortedScenarioList[0].id}`);
+      } else if (currentScenario.data.id !== routerParameters.id) {
+        navigate(`/scenario/${currentScenario.data.id}`);
+      }
+    }
+    // eslint-disable-next-line
+  }, [currentScenario]);
   const expandParametersAndCreateScenario = (workspaceId, scenarioData) => {
     createScenario(workspaceId, scenarioData);
     setAccordionSummaryExpanded(true);
@@ -71,10 +119,6 @@ const Scenario = (props) => {
         'Please save or discard current modifications before selecting another scenario'
       )
     : '';
-
-  const handleScenarioChange = (event, scenario) => {
-    findScenarioById(workspaceId, scenario.id);
-  };
 
   useEffect(() => {
     appInsights.setScenarioData(currentScenario.data);
@@ -93,6 +137,98 @@ const Scenario = (props) => {
       (runTemplate) => solutionRunTemplates.indexOf(runTemplate.id) !== -1
     );
   }
+  const downloadLogsFile = () => {
+    return ScenarioRunService.downloadLogsFile(currentScenario.data?.lastRun, LOG_TYPES[SCENARIO_RUN_LOG_TYPE]);
+  };
+  const resetScenarioValidationStatus = async () => {
+    const currentStatus = currentScenario.data.validationStatus;
+    try {
+      setScenarioValidationStatus(currentScenario.data.id, SCENARIO_VALIDATION_STATUS.LOADING);
+      await ScenarioService.resetValidationStatus(workspaceId, currentScenario.data.id);
+      findScenarioById(workspaceId, currentScenario.data.id);
+    } catch (error) {
+      setApplicationErrorMessage(
+        error,
+        t('commoncomponents.banner.resetStatusValidation', 'A problem occurred during validation status reset.')
+      );
+      setScenarioValidationStatus(currentScenario.data.id, currentStatus);
+    }
+  };
+  const validateScenario = async () => {
+    try {
+      setScenarioValidationStatus(currentScenario.data.id, SCENARIO_VALIDATION_STATUS.LOADING);
+      await ScenarioService.setScenarioValidationStatusToValidated(workspaceId, currentScenario.data.id);
+      findScenarioById(workspaceId, currentScenario.data.id);
+    } catch (error) {
+      setApplicationErrorMessage(
+        error,
+        t('commoncomponents.banner.validateScenario', 'A problem occurred during scenario validation.')
+      );
+      setScenarioValidationStatus(currentScenario.data.id, SCENARIO_VALIDATION_STATUS.DRAFT);
+    }
+  };
+  const rejectScenario = async () => {
+    try {
+      setScenarioValidationStatus(currentScenario.data.id, SCENARIO_VALIDATION_STATUS.LOADING);
+      await ScenarioService.setScenarioValidationStatusToRejected(workspaceId, currentScenario.data.id);
+      findScenarioById(workspaceId, currentScenario.data.id);
+    } catch (error) {
+      setApplicationErrorMessage(
+        error,
+        t('commoncomponents.banner.rejectScenario', 'A problem occurred during scenario rejection.')
+      );
+      setScenarioValidationStatus(currentScenario.data.id, SCENARIO_VALIDATION_STATUS.DRAFT);
+    }
+  };
+
+  const scenarioValidationStatusLabels = {
+    rejected: t('views.scenario.validation.rejected', 'Rejected'),
+    validated: t('views.scenario.validation.validated', 'Validated'),
+  };
+  const currentScenarioValidationStatus = currentScenario?.data?.validationStatus || SCENARIO_VALIDATION_STATUS.UNKNOWN;
+  const showValidationChip =
+    [SCENARIO_VALIDATION_STATUS.DRAFT, SCENARIO_VALIDATION_STATUS.UNKNOWN].includes(currentScenarioValidationStatus) ===
+    false;
+
+  const validateButton = (
+    <Button
+      className={classes.scenarioValidationButton}
+      data-cy="validate-scenario-button"
+      disabled={editMode}
+      size="small"
+      variant="contained"
+      color="primary"
+      onClick={(event) => validateScenario()}
+    >
+      {t('views.scenario.validation.validate', 'Validate')}
+    </Button>
+  );
+  const rejectButton = (
+    <Button
+      className={classes.scenarioValidationButton}
+      data-cy="reject-scenario-button"
+      disabled={editMode}
+      size="small"
+      variant="contained"
+      color="primary"
+      onClick={(event) => rejectScenario()}
+    >
+      {t('views.scenario.validation.reject', 'Reject')}
+    </Button>
+  );
+
+  const validateButtonTooltipWrapper = editMode ? (
+    <Tooltip
+      title={t(
+        'views.scenario.validation.disabledTooltip',
+        'Please save or discard current modifications before changing the scenario validation status'
+      )}
+    >
+      <span>{validateButton}</span>
+    </Tooltip>
+  ) : (
+    validateButton
+  );
 
   const filteredRunTemplates = [];
   beforeRenameTemplates.forEach((template) => {
@@ -102,6 +238,50 @@ const Scenario = (props) => {
     });
   });
 
+  const rejectButtonTooltipWrapper = editMode ? (
+    <Tooltip
+      title={t(
+        'views.scenario.validation.disabledTooltip',
+        'Please save or discard current modifications before changing the scenario validation status'
+      )}
+    >
+      <span>{rejectButton}</span>
+    </Tooltip>
+  ) : (
+    rejectButton
+  );
+
+  const validationStatusButtons = (
+    <PermissionsGate authorizedPermissions={[PERMISSIONS.canChangeScenarioValidationStatus]}>
+      {validateButtonTooltipWrapper}
+      {rejectButtonTooltipWrapper}
+    </PermissionsGate>
+  );
+
+  const scenarioValidationStatusChip = (
+    <PermissionsGate
+      authorizedPermissions={[PERMISSIONS.canChangeScenarioValidationStatus]}
+      RenderNoPermissionComponent={ScenarioValidationStatusChip}
+      noPermissionProps={{
+        status: currentScenarioValidationStatus,
+        labels: scenarioValidationStatusLabels,
+        onDelete: null,
+      }}
+    >
+      <ScenarioValidationStatusChip
+        status={currentScenarioValidationStatus}
+        onDelete={resetScenarioValidationStatus}
+        labels={scenarioValidationStatusLabels}
+      />
+    </PermissionsGate>
+  );
+
+  const scenarioValidationArea = showValidationChip ? scenarioValidationStatusChip : validationStatusButtons;
+
+  const hierarchicalComboBoxLabels = {
+    label: scenarioListLabel,
+    validationStatus: scenarioValidationStatusLabels,
+  };
   return (
     <>
       <Backdrop className={classes.backdrop} open={showBackdrop}>
@@ -116,20 +296,17 @@ const Scenario = (props) => {
                   <HierarchicalComboBox
                     value={currentScenario.data}
                     values={sortedScenarioList}
-                    label={scenarioListLabel}
+                    labels={hierarchicalComboBoxLabels}
                     handleChange={handleScenarioChange}
                     disabled={scenarioListDisabled}
                     renderInputToolType={currentScenarioRenderInputTooltip}
                   />
                 </Grid>
                 {currentScenario.data && (
-                  <Grid item xs={7}>
-                    <Typography>
-                      {t('views.scenario.text.scenariotype') + ': '}
-                      {t(
-                        'views.runtemplate.title.' + currentScenario.data.runTemplateId,
-                        currentScenario.data.runTemplateName
-                      )}
+                  <Grid item xs={7} className={classes.scenarioMetadata}>
+                    {scenarioValidationArea}
+                    <Typography data-cy="run-template-name" className={classes.scenarioRunTemplateLabel}>
+                      {t('views.scenario.text.scenariotype')}: {currentScenario.data.runTemplateName}
                     </Typography>
                   </Grid>
                 )}
@@ -149,7 +326,6 @@ const Scenario = (props) => {
                       scenarios={scenarioList.data}
                       user={user}
                       disabled={editMode}
-                      nameValidator={NAME_VALIDATOR}
                       labels={createScenarioDialogLabels}
                     />
                   </PermissionsGate>
@@ -180,24 +356,28 @@ const Scenario = (props) => {
         </Grid>
       </Grid>
       <Card>
-        <SimplePowerBIReportEmbed
-          reports={reports}
-          reportConfiguration={SCENARIO_DASHBOARD_CONFIG}
-          scenario={currentScenario.data}
-          lang={i18n.language}
-          downloadLogsFile={() => {
-            ScenarioRunService.downloadLogsFile(currentScenario.data?.lastRun, LOG_TYPES[SCENARIO_RUN_LOG_TYPE]);
-          }}
-          labels={reportLabels}
-          useAAD={USE_POWER_BI_WITH_USER_CREDENTIALS}
-          iframeRatio={SCENARIO_VIEW_IFRAME_DISPLAY_RATIO}
-        />
+        <CardContent>
+          <SimplePowerBIReportEmbed
+            // key is used here to assure the complete re-rendering of the component when scenario changes ;
+            // we need to remount it to avoid errors in powerbi-client-react which throws an error if filters change
+            key={currentScenario?.data?.id}
+            reports={reports}
+            reportConfiguration={currentScenarioRunTemplateReport}
+            scenario={currentScenario.data}
+            lang={i18n.language}
+            downloadLogsFile={currentScenario.data?.lastRun ? downloadLogsFile : null}
+            labels={reportLabels}
+            useAAD={USE_POWER_BI_WITH_USER_CREDENTIALS}
+            iframeRatio={SCENARIO_VIEW_IFRAME_DISPLAY_RATIO}
+          />
+        </CardContent>
       </Card>
     </>
   );
 };
 
 Scenario.propTypes = {
+  setScenarioValidationStatus: PropTypes.func.isRequired,
   scenarioList: PropTypes.object.isRequired,
   datasetList: PropTypes.object.isRequired,
   currentScenario: PropTypes.object.isRequired,
@@ -210,6 +390,7 @@ Scenario.propTypes = {
   updateAndLaunchScenario: PropTypes.func.isRequired,
   launchScenario: PropTypes.func.isRequired,
   reports: PropTypes.object.isRequired,
+  setApplicationErrorMessage: PropTypes.func,
 };
 
 export default Scenario;

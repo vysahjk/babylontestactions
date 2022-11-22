@@ -4,10 +4,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { SCENARIO_ACTIONS_KEY } from '../../../commons/ScenarioConstants';
 import { STATUSES } from '../../../commons/Constants';
-import { ORGANIZATION_ID } from '../../../../config/AppInstance';
+import { ORGANIZATION_ID } from '../../../../config/GlobalConfiguration';
 import { formatParametersFromApi } from '../../../../utils/ApiUtils';
 import { SCENARIO_RUN_STATE } from '../../../../services/config/ApiConstants';
 import { Api } from '../../../../services/config/Api';
+import { dispatchSetApplicationErrorMessage } from '../../../dispatchers/app/ApplicationDispatcher';
+import { t } from 'i18next';
 
 export function* fetchScenarioByIdForInitialData(workspaceId, scenarioId) {
   try {
@@ -18,13 +20,20 @@ export function* fetchScenarioByIdForInitialData(workspaceId, scenarioId) {
       status: STATUSES.SUCCESS,
       scenario: data,
     });
-  } catch (e) {
-    // TODO handle error management
+  } catch (error) {
+    yield put(
+      dispatchSetApplicationErrorMessage(
+        error,
+        t('views.scenario.redirectError.comment', 'You have been redirected to default Scenario view')
+      )
+    );
     yield put({
       type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
       status: STATUSES.ERROR,
       scenario: null,
     });
+    // Rethrow for application error management
+    throw error;
   }
 }
 
@@ -33,10 +42,17 @@ export function* fetchScenarioByIdData(action) {
     const { data } = yield call(Api.Scenarios.findScenarioById, ORGANIZATION_ID, action.workspaceId, action.scenarioId);
     data.parametersValues = formatParametersFromApi(data.parametersValues);
     yield put({
+      type: SCENARIO_ACTIONS_KEY.SET_SCENARIO_VALIDATION_STATUS,
+      status: STATUSES.SUCCESS,
+      scenarioId: data.id,
+      validationStatus: data.validationStatus,
+    });
+    yield put({
       type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
       status: STATUSES.SUCCESS,
       scenario: data,
     });
+
     // Start state polling for running scenarios
     if (data.state === SCENARIO_RUN_STATE.RUNNING) {
       yield put({
@@ -45,13 +61,13 @@ export function* fetchScenarioByIdData(action) {
         scenarioId: data.id,
       });
     }
-  } catch (e) {
-    // TODO handle error management
-    yield put({
-      type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
-      status: STATUSES.ERROR,
-      scenario: null,
-    });
+  } catch (error) {
+    yield put(
+      dispatchSetApplicationErrorMessage(
+        error,
+        t('views.scenario.redirectError.comment', 'You have been redirected to default Scenario view')
+      )
+    );
   }
 }
 

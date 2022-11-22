@@ -12,7 +12,7 @@ function getParametersAccordionSummary() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.accordionSummary);
 }
 //  - timeout: max time to wait before throwing an error (seconds)
-function getParametersEditButton(timeout = 5) {
+function getParametersEditButton(timeout = 4) {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.editButton, { timeout: timeout * 1000 });
 }
 function getParametersDiscardButton() {
@@ -42,6 +42,9 @@ function getDontAskAgainCheckbox() {
 function checkDontAskAgain() {
   getDontAskAgainCheckbox().check();
 }
+function getNoParametersPlaceholder() {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.noParametersPlaceholder);
+}
 
 // Actions around scenario parameters
 function expandParametersAccordion() {
@@ -62,28 +65,40 @@ function collapseParametersAccordion() {
       }
     });
 }
-function edit(timeout = 5) {
+function edit(timeout) {
   getParametersEditButton(timeout).should('not.be.disabled').click();
 }
 function discard() {
   getParametersDiscardButton().click();
   getParametersConfirmDiscardButton().click();
 }
-function updateAndLaunch(dontAskAgain = false) {
+
+function launch(dontAskAgain = false, withUpdate = false) {
   cy.intercept('POST', URL_REGEX.SCENARIO_PAGE_RUN_WITH_ID).as('requestRunScenario');
-  getParametersUpdateAndLaunchButton().click();
+  if (withUpdate) {
+    getParametersUpdateAndLaunchButton().click();
+  } else {
+    getLaunchButton().click();
+  }
   if (localStorage.getItem('dontAskAgainToConfirmLaunch') !== 'true') {
     if (dontAskAgain) {
       checkDontAskAgain();
     }
     getLaunchConfirmButton().click();
   }
-  cy.wait('@requestRunScenario');
+  cy.wait('@requestRunScenario', { timeout: 60 * 1000 }); // 60 seconds timeout
+}
+
+function updateAndLaunch(dontAskAgain = false) {
+  launch(dontAskAgain, true);
 }
 
 // Actions on input components
 function getInputValue(inputElement) {
   return inputElement.invoke('attr', 'value');
+}
+function getTextField(textElement) {
+  return textElement.invoke('text');
 }
 
 export const ScenarioParameters = {
@@ -99,10 +114,13 @@ export const ScenarioParameters = {
   getLaunchCancelButton,
   getDontAskAgainCheckbox,
   checkDontAskAgain,
+  getNoParametersPlaceholder,
   expandParametersAccordion,
   collapseParametersAccordion,
   edit,
   discard,
   updateAndLaunch,
+  launch,
   getInputValue,
+  getTextField,
 };

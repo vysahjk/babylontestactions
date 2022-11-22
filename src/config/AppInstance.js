@@ -16,9 +16,3 @@ export const WORKSPACE_ID = 'W-QPpQ47r2L9';
 
 // Power BI information
 export const POWER_BI_WORKSPACE_ID = 'f7587274-3bcc-4834-9fe2-27da17ba5d47';
-
-export const AZURE_FUNCTION_FLOWCHART_URL =
-  'https://supplychain-dataset-download.azurewebsites.net/api/ScenarioDownload';
-export const AZURE_FUNCTION_FLOWCHART_HEADERS = {
-  'x-functions-key': 'eWwFDboF385Nmgica4OJHmHRrrC2UOa7c4Zq4BhhRnyoapZl0aBRng==',
-};

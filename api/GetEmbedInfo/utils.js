@@ -1,6 +1,6 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
-
+require('dotenv').config();
 function getAuthHeader(accessToken) {
   // Function to append Bearer against the Access Token
   return 'Bearer '.concat(accessToken);

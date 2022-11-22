@@ -1,6 +1,7 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
+import 'cypress-file-upload'; // Required to call attachFile
 import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
 
 function getLabel(tableParameterElement) {
@@ -97,6 +98,11 @@ function editStringCell(getTableElement, colName, rowIndex, newValue) {
   return getCell(getTableElement(), colName, rowIndex).type(newValue + '{enter}');
 }
 
+function clearStringCell(getTableElement, colName, rowIndex) {
+  getCell(getTableElement(), colName, rowIndex).dblclick();
+  return getCell(getTableElement(), colName, rowIndex).type('{backspace}' + '{enter}');
+}
+
 export const TableParameters = {
   getLabel,
   getGrid,
@@ -118,4 +124,5 @@ export const TableParameters = {
   importFile,
   exportCSV,
   editStringCell,
+  clearStringCell,
 };

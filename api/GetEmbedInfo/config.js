@@ -1,6 +1,6 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
-
+require('dotenv').config();
 // system.loggerOptions.logLevel values
 // Error = 0,
 // Warning = 1,

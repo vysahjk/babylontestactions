@@ -2,9 +2,13 @@
 // Licensed under the MIT license.
 const msal = require('@azure/msal-node');
 const msalConfig = require('./config');
+require('dotenv').config();
 
 // Create msal application object
-const cca = new msal.ConfidentialClientApplication(msalConfig);
+let cca;
+if (msalConfig.auth && msalConfig.auth.clientId && msalConfig.auth.clientSecret) {
+  cca = new msal.ConfidentialClientApplication(msalConfig);
+}
 
 // With client credentials flows permissions need to be granted in the portal by a tenant administrator.
 // The scope is always in the format "<resource>/.default"

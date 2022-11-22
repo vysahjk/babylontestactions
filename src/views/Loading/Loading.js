@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Routes from '../../Routes';
+import AppRoutes from '../../AppRoutes';
 import FadeIn from 'react-fade-in';
 import { LoadingLine } from '@cosmotech/ui';
 import { STATUSES } from '../../state/commons/Constants';
@@ -15,7 +15,6 @@ import * as dataError from '../../assets/loadingLine/dataError.json';
 
 const useStyles = makeStyles((theme) => ({
   panel: {
-    backgroundColor: theme.palette.background.paper,
     position: 'absolute',
     left: '50%',
     top: '50%',
@@ -65,11 +64,9 @@ const Loading = ({
 
   const hasErrors = (entityStatus) => entityStatus.status === STATUSES.ERROR;
 
-  if (application.status === STATUSES.ERROR) {
-    logout();
-  }
+  const style = { variant: 'h6', height: '50px', width: '50px' };
 
-  return authenticated && application.status !== STATUSES.SUCCESS ? (
+  return authenticated && isLoading(application) ? (
     <div className={classes.panel} data-cy="loading-component">
       <FadeIn delay={200}>
         <LoadingLine
@@ -77,41 +74,47 @@ const Loading = ({
           hasError={hasErrors(scenarioList)}
           isLoading={isLoading(scenarioList)}
           animations={animations}
+          style={style}
         />
         <LoadingLine
           title={t('genericcomponent.loading.line.dataset.list.title', defaultTitle)}
           hasError={hasErrors(datasetList)}
           isLoading={isLoading(datasetList)}
           animations={animations}
+          style={style}
         />
         <LoadingLine
           title={t('genericcomponent.loading.line.workspace.current.title', defaultTitle)}
           hasError={hasErrors(workspace)}
           isLoading={isLoading(workspace)}
           animations={animations}
+          style={style}
         />
         <LoadingLine
           title={t('genericcomponent.loading.line.solution.current.title', defaultTitle)}
           hasError={hasErrors(solution)}
           isLoading={isLoading(solution)}
           animations={animations}
+          style={style}
         />
         <LoadingLine
           title={t('genericcomponent.loading.line.scenario.current.title', defaultTitle)}
           hasError={hasErrors(currentScenario)}
           isLoading={isLoading(currentScenario)}
           animations={animations}
+          style={style}
         />
         <LoadingLine
           title={t('genericcomponent.loading.line.powerbi.title', defaultTitle)}
           hasError={hasErrors(powerBiInfo)}
           isLoading={isLoading(powerBiInfo)}
           animations={animations}
+          style={style}
         />
       </FadeIn>
     </div>
   ) : (
-    <Routes authenticated={authenticated} authorized={authenticated} tabs={tabs} />
+    <AppRoutes authenticated={authenticated} authorized={application.status === STATUSES.SUCCESS} tabs={tabs} />
   );
 };
 

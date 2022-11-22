@@ -32,6 +32,12 @@
       },
       "scenario": {
         "parameters": {
+          "disabledEditTooltip": {
+            "running": "Parameters cannot be edited while the scenario is running",
+            "rejected": "This scenario is rejected, you cannot edit its parameters",
+            "validated": "This scenario is validated, you cannot edit its parameters",
+            "noTabs": "No parameters to edit"
+          },
           "discard": "Discard Modifications",
           "edit": "Edit",
           "launch": "Launch Scenario",
@@ -103,6 +109,10 @@
         "attributes": {
           "PlantName": "Plant"
         }
+      },
+      "placeholder": {
+        "error": "An error occured, cannot visualize data.",
+        "noScenario": "No scenario. You can create a new scenario in the Scenario view."
       }
     },
     "iframe": {
@@ -123,13 +133,19 @@
             "uninitialized": "The scenario has not been run yet"
           },
           "button": {
-            "downloadlogs": "Download logs",
+            "downloadLogs": "Download logs",
             "refresh": "Refresh (will then be disabled for 15 seconds)"
           }
         },
         "noscenario": {
           "title": "No scenario yet",
           "label": "You can create a scenario by clicking on \"Create new scenario\""
+        },
+        "nodashboard": {
+          "label": "There isn't any dashboard configured for this run template"
+        },
+        "unknownStatus": {
+          "label": "This scenario has an unknown state, if the problem persists, please, contact your administrator"
         },
         "error": {
           "unknown": {
@@ -217,7 +233,7 @@
                 "label": "Error",
                 "empty": "Scenario name cannot be empty",
                 "existing": "Scenario name already exists",
-                "forbiddenchars": "Scenario name has to start with a letter, and can only contains letters, digits, spaces, underscores and hyphens."
+                "forbiddenchars": "Scenario name has to start with a letter or a digit, and can only contain letters, digits, spaces, underscores, hyphens and dots."
               }
             }
           },
@@ -244,6 +260,36 @@
             "create": "Create",
             "cancel": "Cancel"
           }
+        }
+      },
+      "sessionTimeout": {
+        "body": "You have been idle for too long. You will be automatically signed out in {{seconds}} seconds...",
+        "cancel": "Stay connected",
+        "logOut": "Sign out",
+        "loggingOut": "Signing out...",
+        "title": "Session timeout"
+      }
+    },
+    "banner": {
+      "unknownError": "Unknown error",
+      "dataset": "Dataset hasn't been downloaded.",
+      "logs": "Log file hasn't been downloaded.",
+      "create": "Scenario hasn't been created.",
+      "delete": "Scenario hasn't been deleted.",
+      "rename": "Scenario hasn't been renamed",
+      "run": "A problem occurred during the scenario run.",
+      "update": "A problem occurred during scenario update; your new parameters haven't been saved.",
+      "incompleteRun": "A problem occurred during dataset update; the scenario is running but your new parameters haven't been saved.",
+      "network": "Network problem, please check your internet connection",
+      "resetStatusValidation": "A problem occurred during validation status reset.",
+      "validateScenario": "A problem occurred during scenario validation.",
+      "rejectScenario": "A problem occurred during scenario rejection.",
+      "tooLongErrorMessage": "Detailed error message is too long to be displayed. To read it, please use the COPY button and paste it in your favorite text editor.",
+      "button": {
+        "dismiss": "Dismiss",
+        "copy": {
+          "label": "Copy",
+          "copied": "Copied"
         }
       }
     }
@@ -603,21 +649,21 @@
           "companyname": "Cosmo Tech",
           "poweredby": "Powered by Cosmo Tech"
         }
-      },
-      "text": {
-        "loading": "Loading..."
       }
     },
     "signin": {
-      "title": "Cosmo Tech Supply chain"
-    },
-    "unauthorized": {
-      "scenario": {
-        "specialists": {
-          "title": "Scenario Specialists"
-        }
+      "title": "Cosmo Tech Supply chain",
+      "error": {
+        "title": "Authentication failed"
       },
-      "title": "Cosmo Tech Supply chain"
+      "info": {
+        "timeout": "For security reasons, your session has expired, due to inactivity."
+      }
+    },
+    "accessdenied": {
+      "title": "Access denied",
+      "errormessage": "Either the resources do not exist or you don't have permission to access them.",
+      "signouttimeout": "You will be automatically signed out in {{seconds}} seconds..."
     },
     "scenario": {
       "dropdown": {
@@ -630,6 +676,18 @@
       },
       "text": {
         "scenariotype": "Run type"
+      },
+      "validation": {
+        "reject": "Reject",
+        "rejected": "Rejected",
+        "validate": "Validate",
+        "validated": "Validated",
+        "disabledTooltip": "Please save or discard current modifications before changing the scenario validation status"
+      },
+      "redirectError": {
+        "title": "Wrong URL",
+        "detail": "The scenario with id {{id}} doesn't exist anymore.",
+        "comment": "You have been redirected to default Scenario view."
       }
     },
     "runtemplate": {
@@ -650,9 +708,9 @@
           "title": "SCENARIO VIEW"
         }
       },
-      "flowchart": {
+      "instance": {
         "tab": {
-          "title": "Flowchart"
+          "title": "Instance"
         }
       },
       "scenariomanager": {

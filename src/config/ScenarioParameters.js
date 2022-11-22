@@ -19,6 +19,12 @@ const PARAMETERS = {
   },
   simulation_granularity: {
     defaultValue: 'day',
+    enumValues: [
+      {
+        key: 'day',
+        value: 'day',
+      },
+    ],
   },
   optimization_objective: {
     defaultValue: 'ServiceLevelMaximization',
@@ -107,6 +113,16 @@ const PARAMETERS_GROUPS = {};
 // as:
 //  - list and order of the parameters group to display for this run template
 const RUN_TEMPLATES = {};
+
+// Additional parameters to put in scenario parameters
+export const ADD_SCENARIO_NAME_PARAMETER = false;
+export const ADD_SCENARIO_ID_PARAMETER = false;
+export const ADD_SCENARIO_LAST_RUN_ID_PARAMETER = false;
+export const ADD_SCENARIO_PARENT_ID_PARAMETER = false;
+export const ADD_SCENARIO_PARENT_LAST_RUN_ID_PARAMETER = false;
+export const ADD_SCENARIO_MASTER_ID_PARAMETER = false;
+export const ADD_SCENARIO_MASTER_LAST_RUN_ID_PARAMETER = false;
+export const ADD_SCENARIO_RUN_TEMPLATE_NAME_PARAMETER = false;
 
 export const SCENARIO_PARAMETERS_CONFIG = {
   parameters: PARAMETERS,

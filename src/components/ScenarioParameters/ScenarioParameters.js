@@ -6,21 +6,19 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles, Typography, Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { SCENARIO_PARAMETERS_CONFIG } from '../../config/ScenarioParameters';
-import { DATASET_ID_VARTYPE, SCENARIO_RUN_STATE } from '../../services/config/ApiConstants';
-import { EditModeButton, NormalModeButton, ScenarioParametersTabs } from './components';
+import { DATASET_ID_VARTYPE, SCENARIO_RUN_STATE, SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants';
+import { EditModeButton, NormalModeButton, ScenarioParametersTabsWrapper } from './components';
 import { useTranslation } from 'react-i18next';
 import { SimpleTwoActionsDialog, DontAskAgainDialog } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
 // eslint-disable-next-line
-import { SupplychainParametersTabFactory } from '../../utils/scenarioParameters/factories/SupplychainParameterTabFactory';
 import { PERMISSIONS } from '../../services/config/Permissions';
 import { PermissionsGate } from '../PermissionsGate';
 
 const useStyles = makeStyles((theme) => ({
   header: {
     display: 'flex',
-    background: theme.palette.background.secondary,
     marginLeft: '30px',
     height: '50px',
     paddingTop: '10px',
@@ -30,9 +28,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     margin: `0 ${theme.spacing(3)}px`,
-  },
-  accordion: {
-    backgroundColor: theme.palette.background.card,
   },
   accordionSummary: {
     flexDirection: 'row-reverse',
@@ -70,6 +65,7 @@ const ScenarioParameters = ({
   datasets,
   scenarioId,
   userRoles,
+  isDarkTheme,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -119,7 +115,7 @@ const ScenarioParameters = ({
         defaultParametersValues,
         currentScenario.data?.parametersValues
       ),
-    [datasets, runTemplateParametersIds, defaultParametersValues, currentScenario.data]
+    [datasets, runTemplateParametersIds, defaultParametersValues, currentScenario.data?.parametersValues]
   );
 
   // Store the reset values for the run template parameters, based on defaultParametersValues and scenario data.
@@ -156,19 +152,19 @@ const ScenarioParameters = ({
     setParametersValuesToRender(generateParametersValuesToRenderFromParametersValuesRef());
   };
 
-  // Generate input components for each scenario parameters tab
-  for (const parametersGroupMetadata of parametersGroupsMetadata) {
-    parametersGroupMetadata.tab = SupplychainParametersTabFactory.create(
-      t,
-      datasets,
-      parametersGroupMetadata,
-      parametersValuesToRender,
-      setParametersValuesToRender,
-      editMode,
-      workspaceId,
-      currentScenario
-    );
-  }
+  // // Generate input components for each scenario parameters tab
+  // for (const parametersGroupMetadata of parametersGroupsMetadata) {
+  //   parametersGroupMetadata.tab = SupplychainParametersTabFactory.create(
+  //     t,
+  //     datasets,
+  //     parametersGroupMetadata,
+  //     parametersValuesToRender,
+  //     setParametersValuesToRender,
+  //     editMode,
+  //     workspaceId,
+  //     currentScenario
+  //   );
+  // }
 
   const discardLocalChanges = () => {
     setParametersValuesToRenderFromParametersValuesRef();
@@ -201,11 +197,19 @@ const ScenarioParameters = ({
     // eslint-disable-next-line
   }, [parametersValuesRef]);
 
+  // You can use the context object to pass all additional information to custom tab factory
+  const context = {
+    editMode: editMode,
+    isDarkTheme: isDarkTheme,
+    currentScenario: currentScenario?.data, // TODO use custom hooks when migrate to V4,
+    workspaceId,
+  };
+
   useEffect(() => {
     parametersValuesRef.current = parametersValuesForReset;
     discardLocalChanges();
     // eslint-disable-next-line
-  }, [currentScenario]);
+  }, [currentScenario.data.id]);
 
   const getParametersForUpdate = () => {
     const parametersData = ScenarioParametersUtils.buildParametersForUpdate(
@@ -300,16 +304,42 @@ const ScenarioParameters = ({
 
   const noTabsShown = parametersGroupsMetadata.length === 0;
   const isCurrentScenarioRunning = currentScenario.data.state === SCENARIO_RUN_STATE.RUNNING;
+  const isCurrentScenarioRejected = currentScenario.data.validationStatus === SCENARIO_VALIDATION_STATUS.REJECTED;
+  const isCurrentScenarioValidated = currentScenario.data.validationStatus === SCENARIO_VALIDATION_STATUS.VALIDATED;
+  const isEditDisabled =
+    noTabsShown || isCurrentScenarioRunning || isCurrentScenarioRejected || isCurrentScenarioValidated;
+
+  let disabledEditTooltip;
+  if (isCurrentScenarioRunning) {
+    disabledEditTooltip = t(
+      'commoncomponents.button.scenario.parameters.disabledEditTooltip.running',
+      'Parameters cannot be edited while the scenario is running'
+    );
+  } else if (isCurrentScenarioRejected) {
+    disabledEditTooltip = t(
+      'commoncomponents.button.scenario.parameters.disabledEditTooltip.rejected',
+      'This scenario is rejected, you cannot edit its parameters'
+    );
+  } else if (isCurrentScenarioValidated) {
+    disabledEditTooltip = t(
+      'commoncomponents.button.scenario.parameters.disabledEditTooltip.validated',
+      'This scenario is validated, you cannot edit its parameters'
+    );
+  } else if (noTabsShown) {
+    disabledEditTooltip = t(
+      'commoncomponents.button.scenario.parameters.disabledEditTooltip.noTabs',
+      'No parameters to edit'
+    );
+  }
 
   const handleSummaryClick = () => {
     const expandedNewState = !accordionSummaryExpanded;
     localStorage.setItem('scenarioParametersAccordionExpanded', expandedNewState);
     onChangeAccordionSummaryExpanded(expandedNewState);
   };
-
   return (
     <div>
-      <Accordion className={classes.accordion} expanded={accordionSummaryExpanded}>
+      <Accordion expanded={accordionSummaryExpanded}>
         <AccordionSummary
           data-cy="scenario-params-accordion-summary"
           className={classes.accordionSummary}
@@ -335,8 +365,9 @@ const ScenarioParameters = ({
                     classes={classes}
                     handleClickOnEdit={(event) => startParametersEdition(event)}
                     handleClickOnLaunchScenario={(event) => confirmAndLaunch(event, false)}
-                    editDisabled={noTabsShown || isCurrentScenarioRunning}
+                    editDisabled={isEditDisabled}
                     runDisabled={isCurrentScenarioRunning}
+                    disabledEditTooltip={disabledEditTooltip}
                   />
                 )}
               </PermissionsGate>
@@ -347,7 +378,13 @@ const ScenarioParameters = ({
           <div className={classes.accordionDetailsContent}>
             {
               <form onSubmit={preventSubmit}>
-                <ScenarioParametersTabs parametersGroupsMetadata={parametersGroupsMetadata} userRoles={userRoles} />
+                <ScenarioParametersTabsWrapper
+                  parametersGroupsMetadata={parametersGroupsMetadata}
+                  parametersValuesToRender={parametersValuesToRender}
+                  setParametersValuesToRender={setParametersValuesToRender}
+                  userRoles={userRoles}
+                  context={context}
+                />
               </form>
             }
           </div>
@@ -400,6 +437,7 @@ ScenarioParameters.propTypes = {
   datasets: PropTypes.array.isRequired,
   currentScenario: PropTypes.object.isRequired,
   userRoles: PropTypes.array.isRequired,
+  isDarkTheme: PropTypes.bool.isRequired,
 };
 
 export default ScenarioParameters;
