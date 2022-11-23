@@ -1,8 +1,6 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-const { getDefaultNodeStyle, getDefaultEdgeStyle } = require('../views/Instance/styleCytoViz');
-
 const DATA_SOURCE = {
   type: 'adt',
   functionUrl: 'https://supplychain-dataset-download.azurewebsites.net/api/ScenarioDownload',
@@ -16,7 +14,6 @@ const NODE_PROD_OPERATION_COLOR = '#005A31';
 
 // Styles details
 const DEFAULT_PROD_OPERATION_STYLE = {
-  ...getDefaultNodeStyle,
   'background-color': NODE_PROD_OPERATION_COLOR,
   shape: 'ellipse',
 };
@@ -33,9 +30,9 @@ const DATA_CONTENT = {
     contains: {},
   },
   edges: {
-    input: { ...getDefaultEdgeStyle },
-    output: { ...getDefaultEdgeStyle },
-    Transport: { ...getDefaultEdgeStyle },
+    input: {},
+    output: {},
+    Transport: {},
   },
   nodes: {
     ProductionOperation: {

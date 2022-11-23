@@ -14,17 +14,17 @@ const EDGE_SELECTED_WIDTH = 3.5;
 const EDGE_WIDTH = 2;
 
 // Styles details
-const getDefaultEdgeStyle = (theme) => ({
+export const getDefaultEdgeStyle = (theme) => ({
   'line-color': EDGE_DEFAULT_COLOR,
   width: EDGE_WIDTH,
 });
 
-const getDefaultSelectedEdgeStyle = (theme) => ({
+export const getDefaultSelectedEdgeStyle = (theme) => ({
   ...getDefaultEdgeStyle(theme),
   width: EDGE_SELECTED_WIDTH,
 });
 
-const getDefaultNodeStyle = (theme) => ({
+export const getDefaultNodeStyle = (theme) => ({
   width: NODE_ICON_SIZE,
   height: NODE_ICON_SIZE,
   'background-blacken': NODE_SELECTED_BLACKEN_RATIO,
@@ -37,16 +37,9 @@ const getDefaultNodeStyle = (theme) => ({
   label: 'data(label)',
 });
 
-const getDefaultSelectedNodeStyle = (theme) => ({
+export const getDefaultSelectedNodeStyle = (theme) => ({
   ...getDefaultNodeStyle(theme),
   width: NODE_SELECTED_ICON_SIZE,
   height: NODE_SELECTED_ICON_SIZE,
   'background-blacken': -NODE_SELECTED_BLACKEN_RATIO,
 });
-
-module.exports = {
-  getDefaultEdgeStyle,
-  getDefaultNodeStyle,
-  getDefaultSelectedEdgeStyle,
-  getDefaultSelectedNodeStyle,
-};
