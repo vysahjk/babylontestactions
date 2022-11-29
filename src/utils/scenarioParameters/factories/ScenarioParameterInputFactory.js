@@ -24,7 +24,6 @@ export const create = (t, datasets, parameterData, parametersState, setParameter
   }
 
   if (parameterVarType.startsWith(DATASET_ID_VARTYPE)) {
-    console.log(parameterVarType);
     return varTypeFactory.create(
       t,
       datasets,

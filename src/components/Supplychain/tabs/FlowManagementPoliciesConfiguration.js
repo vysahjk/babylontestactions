@@ -263,4 +263,11 @@ FlowManagementPoliciesConfiguration.propTypes = {
   editMode: PropTypes.bool.isRequired,
 };
 
+FlowManagementPoliciesConfiguration.defaultProps = {
+  stockPolicy: '',
+  sourcingPolicy: '',
+  stockDispatchPolicy: '',
+  productionPolicy: '',
+};
+
 export default FlowManagementPoliciesConfiguration;

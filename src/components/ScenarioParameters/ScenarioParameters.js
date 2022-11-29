@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { SimpleTwoActionsDialog, DontAskAgainDialog } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
-// eslint-disable-next-line
 import { PERMISSIONS } from '../../services/config/Permissions';
 import { PermissionsGate } from '../PermissionsGate';
 
@@ -194,7 +193,7 @@ const ScenarioParameters = ({
 
   useEffect(() => {
     setParametersValuesToRenderFromParametersValuesRef();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parametersValuesRef]);
 
   // You can use the context object to pass all additional information to custom tab factory
@@ -208,7 +207,7 @@ const ScenarioParameters = ({
   useEffect(() => {
     parametersValuesRef.current = parametersValuesForReset;
     discardLocalChanges();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentScenario.data.id]);
 
   const getParametersForUpdate = () => {

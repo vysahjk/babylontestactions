@@ -1,7 +1,7 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BasicEnumInput } from '@cosmotech/ui';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -23,17 +23,11 @@ export const GenericEnumInput = ({ parameterData, parametersState, setParameters
   }
 
   function setValue(newValue) {
-    console.log(newValue);
-    // setParametersState((currentParametersState) => ({
-    //   ...currentParametersState,
-    //   [parameterData.id]: newValue,
-    // }));
+    setParametersState((currentParametersState) => ({
+      ...currentParametersState,
+      [parameterData.id]: newValue,
+    }));
   }
-
-  useEffect(() => {
-    console.log(parametersState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <BasicEnumInput

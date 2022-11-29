@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { PermissionsGate } from '../../../components';
 import { SensitivityAnalysisConfiguration } from '../../../components/Supplychain/tabs';
-
-const noPermissionsPlaceHolder = (t) => {
-  return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
-};
+import { t } from 'i18next';
 
 export const SensitivityAnalysisParameterTab = ({
   parametersGroupData,
@@ -14,8 +10,9 @@ export const SensitivityAnalysisParameterTab = ({
   setParametersState,
   context,
 }) => {
-  const { t } = useTranslation();
-  const sensitivityAnalysisSensitiveParameter = parametersState.sensitive_parameter;
+  const noPermissionsPlaceHolder = (t) => {
+    return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
+  };
   const setSensitivityAnalysisSensitiveParameter = (newValue) => {
     setParametersState({
       ...parametersState,
@@ -45,7 +42,7 @@ export const SensitivityAnalysisParameterTab = ({
       authorizedRoles={parametersGroupData.authorizedRoles}
     >
       <SensitivityAnalysisConfiguration
-        sensitivityAnalysisSensitiveParameter={sensitivityAnalysisSensitiveParameter}
+        sensitivityAnalysisSensitiveParameter={parametersState.sensitive_parameter}
         setSensitivityAnalysisSensitiveParameter={setSensitivityAnalysisSensitiveParameter}
         sensitivityAnalysisChange={sensitivityAnalysisChange}
         setSensitivityAnalysisChange={setSensitivityAnalysisChange}

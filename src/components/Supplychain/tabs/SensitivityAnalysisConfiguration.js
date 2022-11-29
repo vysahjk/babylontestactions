@@ -177,13 +177,13 @@ const SensitivityAnalysisConfiguration = ({
 };
 
 SensitivityAnalysisConfiguration.propTypes = {
-  sensitivityAnalysisSensitiveParameter: PropTypes.string.isRequired,
-  setSensitivityAnalysisSensitiveParameter: PropTypes.func.isRequired,
-  sensitivityAnalysisChange: PropTypes.string.isRequired,
-  setSensitivityAnalysisChange: PropTypes.func.isRequired,
-  sensitivityAnalysisVariation: PropTypes.number.isRequired,
-  setSensitivityAnalysisVariation: PropTypes.func.isRequired,
-  editMode: PropTypes.bool.isRequired,
+  sensitivityAnalysisSensitiveParameter: PropTypes.string,
+  setSensitivityAnalysisSensitiveParameter: PropTypes.func,
+  sensitivityAnalysisChange: PropTypes.string,
+  setSensitivityAnalysisChange: PropTypes.func,
+  sensitivityAnalysisVariation: PropTypes.number,
+  setSensitivityAnalysisVariation: PropTypes.func,
+  editMode: PropTypes.bool,
 };
 
 export default SensitivityAnalysisConfiguration;

@@ -98,7 +98,7 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
         headers.common = {};
         headers.common.Authorization = 'Bearer ' + tokens.accessToken;
       }
-      const _data = await axios({
+      const { data } = await axios({
         method: 'post',
         url: azureFunctionAddress,
         headers: headers,
@@ -108,15 +108,15 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
           'workspace-id': WORKSPACE_ID,
         },
       });
-      if (_data.data) {
-        // console.log(_data.data)
+      if (data) {
+        const fileContent = AgGridUtils.toCSV(data.rows, data.columns);
         setparameterDescriptor({
-          // ...parameterDescriptor,
+          ...parameterDescriptor,
           file: null,
           name: 'content.csv',
-          content: null,
-          agGridRows: _data.data.rows,
-          agGridColumns: _data.data.columns,
+          content: fileContent,
+          agGridRows: data.rows,
+          agGridColumns: data.columns,
           errors: null,
           status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
           tableDataStatus: TABLE_DATA_STATUS.READY,
@@ -271,23 +271,15 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     }
   };
 
-  const _uploadPreprocess = (parameterData, clientFileDescriptor, setClientFileDescriptorStatus) => {
-    const newFileContent = AgGridUtils.toCSV(parameter.agGridRows, parameter.agGridColumns, options);
-    setParameterInState({
-      content: newFileContent,
-    });
-    return newFileContent;
-  };
-
   const onCellChange = (event) => {
-    if (!parameter.uploadPreprocess) {
-      setParameterInState({
-        errors: [],
-        status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
-        tableDataStatus: TABLE_DATA_STATUS.READY,
-        uploadPreprocess: { content: _uploadPreprocess },
-      });
-    }
+    const newFileContent = AgGridUtils.toCSV(parameter.agGridRows, parameter.agGridColumns || columns, options);
+    setParameterInState({
+      ...parameter,
+      errors: [],
+      content: newFileContent,
+      status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
+      tableDataStatus: TABLE_DATA_STATUS.READY,
+    });
   };
 
   const onClearErrors = () => {

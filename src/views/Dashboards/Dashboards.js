@@ -161,4 +161,8 @@ TabPanel.propTypes = {
   labels: PropTypes.object,
 };
 
+TabPanel.defaultProps = {
+  title: '',
+};
+
 export default Dashboards;

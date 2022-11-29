@@ -83,4 +83,7 @@ OptimizationConfiguration.propTypes = {
   editMode: PropTypes.bool.isRequired,
 };
 
+OptimizationConfiguration.defaultProps = {
+  optimizationObjective: '',
+};
 export default OptimizationConfiguration;

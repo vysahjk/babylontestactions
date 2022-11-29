@@ -69,7 +69,7 @@ SessionTimeoutDialog.propTypes = {
     cancel: PropTypes.string.isRequired,
     logOut: PropTypes.string.isRequired,
     loggingOut: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
   }),
   onClose: PropTypes.func.isRequired,
   onLogOut: PropTypes.func.isRequired,

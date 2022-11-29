@@ -71,4 +71,8 @@ UncertaintyConfiguration.propTypes = {
   editMode: PropTypes.bool.isRequired,
 };
 
+UncertaintyConfiguration.defaultProps = {
+  uncertaintiesDistribution: '',
+};
+
 export default UncertaintyConfiguration;

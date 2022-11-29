@@ -46,9 +46,13 @@ const ScenarioParametersTabsWrapper = ({
       );
     }
   }
-  // // eslint-disable-next-line no-debugger
-  // debugger;
-  return <ScenarioParametersTabs userRoles={userRoles} parametersGroupsMetadata={parametersGroupsMetadata} />;
+  return (
+    <ScenarioParametersTabs
+      context={context}
+      userRoles={userRoles}
+      parametersGroupsMetadata={parametersGroupsMetadata}
+    />
+  );
 };
 ScenarioParametersTabsWrapper.propTypes = {
   parametersGroupsMetadata: PropTypes.array.isRequired,

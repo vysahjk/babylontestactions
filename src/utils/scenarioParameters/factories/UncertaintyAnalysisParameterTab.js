@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { PermissionsGate } from '../../../components';
 import { UncertaintyConfiguration, TransportUncertaintyConfiguration } from '../../../components/Supplychain/tabs';
-
-const noPermissionsPlaceHolder = (t) => {
-  return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
-};
+import { t } from 'i18next';
 
 export const UncertaintyAnalysisParameterTab = ({
   parametersGroupData,
@@ -14,16 +10,16 @@ export const UncertaintyAnalysisParameterTab = ({
   setParametersState,
   context,
 }) => {
-  const { t } = useTranslation();
-  const uncertaintiesDistribution = parametersState.uncertainties_probability_distribution;
+  const noPermissionsPlaceHolder = (t) => {
+    return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
+  };
+
   const setUncertaintiesDistribution = (newValue) => {
     setParametersState({
       ...parametersState,
       uncertainties_probability_distribution: newValue,
     });
   };
-
-  const transportUncertaintiesDistribution = parametersState.transport_uncertainty_distribution;
   const setTransportUncertaintiesDistribution = (newValue) => {
     setParametersState({
       ...parametersState,
@@ -37,13 +33,13 @@ export const UncertaintyAnalysisParameterTab = ({
       authorizedRoles={parametersGroupData.authorizedRoles}
     >
       <UncertaintyConfiguration
-        uncertaintiesDistribution={uncertaintiesDistribution}
+        uncertaintiesDistribution={parametersState.uncertainties_probability_distribution}
         setUncertaintiesDistribution={setUncertaintiesDistribution}
         editMode={context.editMode}
       />
 
       <TransportUncertaintyConfiguration
-        transportUncertaintiesDistribution={transportUncertaintiesDistribution}
+        transportUncertaintiesDistribution={parametersState.transport_uncertainty_distribution}
         setTransportUncertaintiesDistribution={setTransportUncertaintiesDistribution}
         editMode={context.editMode}
       />

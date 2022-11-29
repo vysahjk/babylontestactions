@@ -68,7 +68,7 @@ NormalModeButton.propTypes = {
 };
 
 NormalModeButton.defaultProps = {
-  disabledEditTooltip: undefined,
+  disabledEditTooltip: '',
 };
 
 export default NormalModeButton;

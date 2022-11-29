@@ -75,9 +75,6 @@ function _buildTabPanels(userRoles, tabs, classes) {
       );
     }
   }
-
-  // // eslint-disable-next-line no-debugger
-  // debugger;
   return tabPanelComponents;
 }
 
@@ -104,7 +101,7 @@ function chooseParametersTab(parametersGroupsMetadata, userRoles) {
   return selectedTabId;
 }
 
-const ScenarioParametersTabs = ({ parametersGroupsMetadata, userRoles }) => {
+const ScenarioParametersTabs = ({ parametersGroupsMetadata, userRoles, context }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [tabs, setTabs] = useState(parametersGroupsMetadata);
@@ -113,14 +110,10 @@ const ScenarioParametersTabs = ({ parametersGroupsMetadata, userRoles }) => {
 
   // Reset selected tab on scenario change
   useEffect(() => {
-    // // eslint-disable-next-line no-debugger
-    // debugger;
     setTabs(parametersGroupsMetadata);
-    if (parametersGroupsMetadata.find((groupMetadata) => groupMetadata.id === selectedTab) === undefined) {
-      setSelectedTab(firstTab);
-    }
-    // eslint-disable-next-line
-  }, [parametersGroupsMetadata]);
+    setSelectedTab(firstTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parametersGroupsMetadata, context.currentScenario.id]);
 
   return (
     <div data-cy="scenario-parameters-tabs">
@@ -152,6 +145,7 @@ const ScenarioParametersTabs = ({ parametersGroupsMetadata, userRoles }) => {
 ScenarioParametersTabs.propTypes = {
   parametersGroupsMetadata: PropTypes.array.isRequired,
   userRoles: PropTypes.array.isRequired,
+  context: PropTypes.object.isRequired,
 };
 
 export default ScenarioParametersTabs;

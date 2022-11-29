@@ -13,7 +13,6 @@ export const SimulationParameterTab = ({ parametersGroupData, parametersState, s
   const { t } = useTranslation();
   const startDate = parametersState.start_date;
   const endDate = parametersState.end_date;
-  const simulationGranularity = parametersState.simulation_granularity;
 
   const setStartDateAtMidnight = (newValue) => {
     setParametersState({
@@ -45,7 +44,7 @@ export const SimulationParameterTab = ({ parametersGroupData, parametersState, s
         <TimeConfiguration
           startDate={startDate}
           endDate={endDate}
-          simulationGranularity={simulationGranularity}
+          simulationGranularity={parametersState.simulation_granularity}
           setStartDate={setStartDateAtMidnight}
           setEndDate={setEndDateAtMidnight}
           setSimulationGranularity={setSimulationGranularity}

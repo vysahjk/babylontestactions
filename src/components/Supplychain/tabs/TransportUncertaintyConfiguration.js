@@ -141,4 +141,8 @@ TransportUncertaintyConfiguration.propTypes = {
   editMode: PropTypes.bool.isRequired,
 };
 
+TransportUncertaintyConfiguration.defaultProps = {
+  transportUncertaintiesDistribution: '',
+};
+
 export default TransportUncertaintyConfiguration;

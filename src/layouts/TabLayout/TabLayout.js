@@ -96,7 +96,7 @@ const TabLayout = (props) => {
           <HelpMenu
             documentationUrl={DOCUMENTATION_URL}
             supportUrl={SUPPORT_URL}
-            about={About ? <About /> : null}
+            about={About ? <About /> : <></>}
             labels={helpLabels}
           />
           <UserInfo
