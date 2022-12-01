@@ -28,6 +28,28 @@ const _generateGridDataFromXLSX = async (fileBlob, parameterData, options) => {
   return await AgGridUtils.fromXLSX(fileBlob, parameterData.hasHeader || true, parameterData.columns, options);
 };
 
+const checkCsvContent = (data, parameterData, parameterDescriptor, options) => {
+  const fileContent = AgGridUtils.toCSV(data.rows, data.columns);
+  const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
+  if (agGridData.error) {
+    return {
+      errors: agGridData.error,
+      tableDataStatus: TABLE_DATA_STATUS.ERROR,
+    };
+  } else {
+    return {
+      file: null,
+      name: 'content.csv',
+      content: fileContent,
+      agGridRows: data.rows,
+      agGridColumns: data.columns,
+      errors: null,
+      status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
+      tableDataStatus: TABLE_DATA_STATUS.READY,
+    };
+  }
+};
+
 export const AzureFunctionTableFactory = ({ parameterData, parametersState, setParametersState, context }) => {
   const { t } = useTranslation();
   const parameterId = parameterData.id;
@@ -80,7 +102,6 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     }
     AzureFunctionTableFactory.downloadLocked[parameterId] = true;
     setparameterDescriptor({
-      ...parameterDescriptor,
       agGridRows: null,
       name: parameterDescriptor.name,
       file: null,
@@ -109,18 +130,14 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
         },
       });
       if (data) {
-        const fileContent = AgGridUtils.toCSV(data.rows, data.columns);
-        setparameterDescriptor({
-          ...parameterDescriptor,
-          file: null,
-          name: 'content.csv',
-          content: fileContent,
-          agGridRows: data.rows,
-          agGridColumns: data.columns,
-          errors: null,
-          status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
-          tableDataStatus: TABLE_DATA_STATUS.READY,
-        });
+        const responseDescriptor = checkCsvContent(
+          data,
+          parameterData,
+          setparameterDescriptor,
+          parameterDescriptor,
+          options
+        );
+        setparameterDescriptor(responseDescriptor);
       } else {
         setparameterDescriptor({
           ...parameterDescriptor,
@@ -139,7 +156,6 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
       }
     } else {
       setparameterDescriptor({
-        ...parameterDescriptor,
         file: null,
         content: null,
         agGridRows: null,
@@ -189,6 +205,51 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     AzureFunctionTableFactory.downloadLocked[parameterId] = false;
   };
 
+  const _parseCSVFileContent = (
+    fileContent,
+    fileName,
+    clientFileDescriptor,
+    setClientFileDescriptor,
+    finalStatus,
+    clientFileDescriptorRestoreValue
+  ) => {
+    setClientFileDescriptor({
+      agGridRows: null,
+      name: fileName,
+      file: null,
+      content: fileContent,
+      errors: null,
+      status: finalStatus,
+      tableDataStatus: TABLE_DATA_STATUS.PARSING,
+    });
+    const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
+    if (agGridData.error) {
+      if (clientFileDescriptorRestoreValue) {
+        setClientFileDescriptor({
+          ...clientFileDescriptorRestoreValue,
+          errors: agGridData.error,
+        });
+      } else {
+        setClientFileDescriptor({
+          errors: agGridData.error,
+          tableDataStatus: TABLE_DATA_STATUS.ERROR,
+        });
+      }
+    } else {
+      setClientFileDescriptor({
+        agGridRows: agGridData.rows,
+        agGridColumns: agGridData.cols,
+        name: fileName,
+        file: null,
+        content: fileContent,
+        errors: agGridData.error,
+        status: finalStatus,
+        tableDataStatus: TABLE_DATA_STATUS.READY,
+        uploadPreprocess: null,
+      });
+    }
+  };
+
   const _readAndParseCSVFile = (
     file,
     clientFileDescriptor,
@@ -223,52 +284,6 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     };
 
     reader.readAsText(file);
-  };
-
-  const _parseCSVFileContent = (
-    fileContent,
-    fileName,
-    clientFileDescriptor,
-    setClientFileDescriptor,
-    finalStatus,
-    clientFileDescriptorRestoreValue
-  ) => {
-    setClientFileDescriptor({
-      agGridRows: null,
-      name: fileName,
-      file: null,
-      content: fileContent,
-      errors: null,
-      status: finalStatus,
-      tableDataStatus: TABLE_DATA_STATUS.PARSING,
-    });
-
-    const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
-    if (agGridData.error) {
-      if (clientFileDescriptorRestoreValue) {
-        setClientFileDescriptor({
-          ...clientFileDescriptorRestoreValue,
-          errors: agGridData.error,
-        });
-      } else {
-        setClientFileDescriptor({
-          errors: agGridData.error,
-          tableDataStatus: TABLE_DATA_STATUS.ERROR,
-        });
-      }
-    } else {
-      setClientFileDescriptor({
-        agGridRows: agGridData.rows,
-        agGridColumns: agGridData.cols,
-        name: fileName,
-        file: null,
-        content: fileContent,
-        errors: agGridData.error,
-        status: finalStatus,
-        tableDataStatus: TABLE_DATA_STATUS.READY,
-        uploadPreprocess: null,
-      });
-    }
   };
 
   const onCellChange = (event) => {
