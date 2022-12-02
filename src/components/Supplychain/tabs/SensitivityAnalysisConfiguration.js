@@ -11,6 +11,7 @@ import InfoIcon from '@material-ui/icons/Info';
 const StyledTooltip = withStyles((theme) => ({
   tooltip: {
     whiteSpace: 'pre-wrap',
+    maxWidth: 600,
   },
 }))(Tooltip);
 
