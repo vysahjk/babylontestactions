@@ -550,7 +550,7 @@
               "tooltip": "Rule to apply in case of multi-sources to a stock.\nWill be applied to all stocks.",
               "equi": {
                 "value": "Equidistribution",
-                "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations and transports."
+                "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations, respecting their maximum capacities. If a quantity to order remains, it is evenly distributed among all the directly upstream production operations and transports."
               },
               "highest": {
                 "value": "The highest available stock first",

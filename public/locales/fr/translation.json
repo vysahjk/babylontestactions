@@ -548,7 +548,7 @@
               "tooltip": "Règle à appliquer en cas de plusieurs sources possibles vers un même stock.\nS’appliquera à tous les stocks.",
               "equi": {
                 "value": "Equirépartition",
-                "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
+                "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production, en respectant leurs capacités maximales. Si une quantité à commander reste, elle est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
               },
               "highest": {
                 "value": "La plus grande quantité disponible en premier",
