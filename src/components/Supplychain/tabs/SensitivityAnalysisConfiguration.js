@@ -64,21 +64,35 @@ const SensitivityAnalysisConfiguration = ({
 
   const baseTranslation = 'genericcomponent.text.scenario.parameters.sensitivity_analysis.';
 
+  const SensitiveParameterEnumValue = (base, label) => ({
+    key: label,
+    value: t(base + 'sensitive_parameter.' + label.toLowerCase().replaceAll(' ', '_'), label),
+  });
+
   const sensitivityAnalysisSensitiveParameterEnumValues = [
-    {
-      key: 'Machine Opening Time',
-      value: t(baseTranslation + 'sensitive_parameter.machine_opening_time', 'Machine Opening Time'),
-    },
-    {
-      key: 'Transport Duration',
-      value: t(baseTranslation + 'sensitive_parameter.transport_duration', 'Transport Duration'),
-    },
-    // {
-    //   key: 'Transport cost',
-    //   value: t(
-    //       baseTranslation + 'sensitive_parameter.transport_cost',
-    //       'Transport cost'),
-    // },
+    SensitiveParameterEnumValue(baseTranslation, 'Fixed Production Cost'),
+    SensitiveParameterEnumValue(baseTranslation, 'Production Resource Opening Time'),
+    SensitiveParameterEnumValue(baseTranslation, 'Operating Performance'),
+    SensitiveParameterEnumValue(baseTranslation, 'Cycle Time'),
+    SensitiveParameterEnumValue(baseTranslation, 'Variable Production Cost'),
+    SensitiveParameterEnumValue(baseTranslation, 'Production CO2 Unit Emissions'),
+    SensitiveParameterEnumValue(baseTranslation, 'Production Minimum Order Quantity'),
+    SensitiveParameterEnumValue(baseTranslation, 'Production Multiple Order Quantity'),
+    SensitiveParameterEnumValue(baseTranslation, 'Production Plan'),
+    SensitiveParameterEnumValue(baseTranslation, 'Initial Stock'),
+    SensitiveParameterEnumValue(baseTranslation, 'Purchasing Unit Cost'),
+    SensitiveParameterEnumValue(baseTranslation, 'Unit Income'),
+    SensitiveParameterEnumValue(baseTranslation, 'Storage Unit Cost'),
+    SensitiveParameterEnumValue(baseTranslation, 'Order Point'),
+    SensitiveParameterEnumValue(baseTranslation, 'Order Quantities'),
+    SensitiveParameterEnumValue(baseTranslation, 'Order Up To Levels'),
+    SensitiveParameterEnumValue(baseTranslation, 'Safety Quantities'),
+    SensitiveParameterEnumValue(baseTranslation, 'Transport Unit Cost'),
+    SensitiveParameterEnumValue(baseTranslation, 'Custom Fees'),
+    SensitiveParameterEnumValue(baseTranslation, 'Transport Duration'),
+    SensitiveParameterEnumValue(baseTranslation, 'Transport CO2 Unit Emission'),
+    SensitiveParameterEnumValue(baseTranslation, 'Transport Minimum Order Quantity'),
+    SensitiveParameterEnumValue(baseTranslation, 'Transport Multiple Order Quantity'),
   ];
 
   const sensitivityAnalysisChangeEnumValues = [

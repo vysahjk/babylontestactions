@@ -91,7 +91,7 @@ const PARAMETERS = {
     azureFunctionHeaders: { 'x-functions-key': 'eWwFDboF385Nmgica4OJHmHRrrC2UOa7c4Zq4BhhRnyoapZl0aBRng==' },
   },
   sensitive_parameter: {
-    defaultValue: 'Machine Opening Time',
+    defaultValue: 'Production Resource Opening Time',
   },
   change: {
     defaultValue: 'relative',
