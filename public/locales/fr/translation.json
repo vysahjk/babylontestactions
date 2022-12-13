@@ -502,6 +502,18 @@
             "variation": {
               "title": "Variation",
               "tooltip": "Valeur décimale utilisée par la méthode un à la fois pour faire varier chaque variable une par une. La validité dépend du changement sélectionné :\n• Relatif : variation ≥ -1\n• Absolu : variation ≥ - référence\n• Remplacement : variation ≥ 0"
+            },
+            "timeinterval": {
+              "title": "Intervalle de temps",
+              "tooltip": "Option pour définir si le changement se produit pendant un intervalle de temps spécifique (sinon, il est appliqué pendant toute la durée de la simulation)."
+            },
+            "initialtimestep": {
+              "title": "Premier pas de temps",
+              "tooltip": "Pas de temps auquel le changement commence à avoir lieu (inclus)."
+            },
+            "finaltimestep": {
+              "title": "Dernier pas de temps",
+              "tooltip": "Pas de temps après lequel le changement se termine (inclus)."
             }
           },
           "behavior": {

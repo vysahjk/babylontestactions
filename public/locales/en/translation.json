@@ -504,6 +504,18 @@
             "variation": {
               "title": "Variation",
               "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one. Validity depends on selected change:\n• Relative: variation ≥ -1\n• Absolute: variation ≥ - reference\n• Replacement: variation ≥ 0"
+            },
+            "timeinterval": {
+              "title": "Time interval",
+              "tooltip": "Option to specify whether the change happens during a specific interval (otherwise it is applied for the complete duration of the simulation)."
+            },
+            "initialtimestep": {
+              "title": "Initial time step",
+              "tooltip": "Time step at which the change starts to take place (included)."
+            },
+            "finaltimestep": {
+              "title": "Final time step",
+              "tooltip": "Time step after which the change ends (included)."
             }
           },
           "behavior": {

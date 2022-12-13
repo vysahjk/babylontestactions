@@ -36,6 +36,30 @@ export const SensitivityAnalysisParameterTab = ({
     });
   };
 
+  const sensitivityAnalysisTimeInterval = parametersState.timeinterval;
+  const setSensitivityAnalysisTimeInterval = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      timeinterval: newValue,
+    });
+  };
+
+  const sensitivityAnalysisInitialTimeStep = parametersState.initialtimestep;
+  const setSensitivityAnalysisInitialTimeStep = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      initialtimestep: newValue,
+    });
+  };
+
+  const sensitivityAnalysisFinalTimeStep = parametersState.finaltimestep;
+  const setSensitivityAnalysisFinalTimeStep = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      finaltimestep: newValue,
+    });
+  };
+
   return (
     <PermissionsGate
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
@@ -48,6 +72,12 @@ export const SensitivityAnalysisParameterTab = ({
         setSensitivityAnalysisChange={setSensitivityAnalysisChange}
         sensitivityAnalysisVariation={sensitivityAnalysisVariation}
         setSensitivityAnalysisVariation={setSensitivityAnalysisVariation}
+        sensitivityAnalysisTimeInterval={sensitivityAnalysisTimeInterval}
+        setSensitivityAnalysisTimeInterval={setSensitivityAnalysisTimeInterval}
+        sensitivityAnalysisInitialTimeStep={sensitivityAnalysisInitialTimeStep}
+        setSensitivityAnalysisInitialTimeStep={setSensitivityAnalysisInitialTimeStep}
+        sensitivityAnalysisFinalTimeStep={sensitivityAnalysisFinalTimeStep}
+        setSensitivityAnalysisFinalTimeStep={setSensitivityAnalysisFinalTimeStep}
         editMode={context.editMode}
       />
     </PermissionsGate>

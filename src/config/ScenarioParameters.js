@@ -99,6 +99,15 @@ const PARAMETERS = {
   variation: {
     defaultValue: 0.0,
   },
+  timeinterval: {
+    defaultValue: false,
+  },
+  initialtimestep: {
+    defaultValue: 0,
+  },
+  finaltimestep: {
+    defaultValue: 0,
+  },
 };
 
 // Use the PARAMETERS_GROUPS dict below to override or add information to the parameters groups defined in your solution
