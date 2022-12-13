@@ -457,9 +457,29 @@
           },
           "sensitivity_analysis": {
             "sensitive_parameter": {
-              "machine_opening_time": "Temps d'ouverture de ressource de production",
+              "fixed_production_cost": "Coût de production fixe",
+              "production_resource_opening_time": "Temps d'ouverture de ressource de production",
+              "operating_performance": "Performance opérationnelle",
+              "cycle_time": "Temps de cycle",
+              "variable_production_cost": "Coût de production variable",
+              "production_co2_unit_emissions": "Émissions de CO2 liées à la production",
+              "production_minimum_order_quantity": "Quantité minimum de commande",
+              "production_multiple_order_quantity": "Multiple de commande",
+              "production_plan": "Plan de production",
+              "initial_stock": "Quantité initiale",
+              "purchasing_unit_cost": "Coût d'achat",
+              "unit_income": "Revenu",
+              "storage_unit_cost": "Coût de stockage",
+              "order_point": "Seuil de commande",
+              "order_quantities": "Quantité commandée",
+              "order_up_to_levels": "Quantité cible",
+              "safety_quantities": "Quantité de sûreté",
+              "transport_unit_cost": "Coût de transport",
+              "custom_fees": "Frais de douane",
               "transport_duration": "Durée de transport",
-              "transport_cost": "Coût de transport",
+              "transport_co2_unit_emission": "Émissions de CO2 liées au transport",
+              "transport_minimum_order_quantity": "Quantité minimum de commande au transport",
+              "transport_multiple_order_quantity": "Multiple de commande au transport",
               "title": "Variable",
               "tooltip": "Type de paramètre sur lequel l'étude portera."
             },
@@ -482,6 +502,18 @@
             "variation": {
               "title": "Variation",
               "tooltip": "Valeur décimale utilisée par la méthode un à la fois pour faire varier chaque variable une par une. La validité dépend du changement sélectionné :\n• Relatif : variation ≥ -1\n• Absolu : variation ≥ - référence\n• Remplacement : variation ≥ 0"
+            },
+            "timeinterval": {
+              "title": "Intervalle de temps",
+              "tooltip": "Option pour définir si le changement se produit pendant un intervalle de temps spécifique (sinon, il est appliqué pendant toute la durée de la simulation)."
+            },
+            "initialtimestep": {
+              "title": "Premier pas de temps",
+              "tooltip": "Pas de temps auquel le changement commence à avoir lieu (inclus)."
+            },
+            "finaltimestep": {
+              "title": "Dernier pas de temps",
+              "tooltip": "Pas de temps après lequel le changement se termine (inclus)."
             }
           },
           "behavior": {

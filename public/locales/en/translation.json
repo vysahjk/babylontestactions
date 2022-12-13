@@ -459,9 +459,29 @@
           },
           "sensitivity_analysis": {
             "sensitive_parameter": {
-              "machine_opening_time": "Production Resource Opening Time",
+              "fixed_production_cost": "Fixed Production Cost",
+              "production_resource_opening_time": "Production Resource Opening Time",
+              "operating_performance": "Operating Performance",
+              "cycle_time": "Cycle Time",
+              "variable_production_cost": "Variable Production Cost",
+              "production_co2_unit_emissions": "Production CO2 Unit Emissions",
+              "production_minimum_order_quantity": "Production Minimum Order Quantity",
+              "production_multiple_order_quantity": "Production Multiple Order Quantity",
+              "production_plan": "Production Plan",
+              "initial_stock": "Initial Stock",
+              "purchasing_unit_cost": "Purchasing Unit Cost",
+              "unit_income": "Unit Income",
+              "storage_unit_cost": "Storage Unit Cost",
+              "order_point": "Order Point",
+              "order_quantities": "Order Quantities",
+              "order_up_to_levels": "Order Up To Levels",
+              "safety_quantities": "Safety Quantities",
+              "transport_unit_cost": "Transport Unit Cost",
+              "custom_fees": "Custom Fees",
               "transport_duration": "Transport Duration",
-              "transport_cost": "Transport Cost",
+              "transport_co2_unit_emission": "Transport CO2 Unit Emission",
+              "transport_minimum_order_quantity": "Transport Minimum Order Quantity",
+              "transport_multiple_order_quantity": "Transport Multiple Order Quantity",
               "title": "Variable",
               "tooltip": "Type of parameter on which the study will be performed."
             },
@@ -484,6 +504,18 @@
             "variation": {
               "title": "Variation",
               "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one. Validity depends on selected change:\n• Relative: variation ≥ -1\n• Absolute: variation ≥ - reference\n• Replacement: variation ≥ 0"
+            },
+            "timeinterval": {
+              "title": "Time interval",
+              "tooltip": "Option to specify whether the change happens during a specific interval (otherwise it is applied for the complete duration of the simulation)."
+            },
+            "initialtimestep": {
+              "title": "Initial time step",
+              "tooltip": "Time step at which the change starts to take place (included)."
+            },
+            "finaltimestep": {
+              "title": "Final time step",
+              "tooltip": "Time step after which the change ends (included)."
             }
           },
           "behavior": {
