@@ -3,7 +3,17 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Backdrop, Button, Card, CardContent, CircularProgress, Grid, Tooltip, Typography } from '@material-ui/core';
+import {
+  Backdrop,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Tooltip,
+  Typography,
+  Box,
+} from '@material-ui/core';
 import { ScenarioParameters } from '../../components';
 import { useTranslation } from 'react-i18next';
 import {
@@ -306,7 +316,15 @@ const Scenario = (props) => {
                   <Grid item xs={7} className={classes.scenarioMetadata}>
                     {scenarioValidationArea}
                     <Typography data-cy="run-template-name" className={classes.scenarioRunTemplateLabel}>
-                      {t('views.scenario.text.scenariotype')}: {currentScenario.data.runTemplateName}
+                      <Box className={classes.scenarioRunTemplateBox}>
+                        <Typography>{t('views.scenario.text.scenariotype')}</Typography>:
+                        <Box className={classes.scenarioRunTemplateId}>
+                          {t(
+                            `views.runtemplate.title.${currentScenario.data.runTemplateId}`,
+                            currentScenario.data.runTemplateName
+                          )}
+                        </Box>
+                      </Box>
                     </Typography>
                   </Grid>
                 )}

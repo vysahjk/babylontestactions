@@ -49,6 +49,12 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: '100%',
   },
+  scenarioRunTemplateId: {
+    marginLeft: '15px',
+  },
+  scenarioRunTemplateBox: {
+    display: 'flex',
+  },
 }));
 
 export default useStyles;

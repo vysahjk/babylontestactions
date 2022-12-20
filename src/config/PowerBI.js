@@ -9,7 +9,8 @@ import { POWER_BI_FIELD_ENUM, PowerBIReportEmbedSimpleFilter } from '@cosmotech/
 export const POWER_BI_WORKSPACE_ID = 'f7587274-3bcc-4834-9fe2-27da17ba5d47';
 
 // Power BI embedding mode
-export const USE_POWER_BI_WITH_USER_CREDENTIALS = true;     // set the mode to user credential to avoid 503 error with the power bi api function
+// set the mode to user credential to avoid 503 error with the power bi api function
+export const USE_POWER_BI_WITH_USER_CREDENTIALS = true;
 export const SCENARIO_VIEW_IFRAME_DISPLAY_RATIO = 1580 / 350;
 export const DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO = 1280 / 700;
 
