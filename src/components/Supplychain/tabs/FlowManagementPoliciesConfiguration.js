@@ -100,6 +100,11 @@ const FlowManagementPoliciesConfiguration = ({
       tooltip: t(baseTranslation + '.' + 'sourcing.equi.tooltip', 'sourcing.equi.tooltip'),
     },
     {
+      key: 'SourcingProportions',
+      value: t(baseTranslation + '.' + 'sourcing.proportions.value', 'sourcing.proportions.value'),
+      tooltip: t(baseTranslation + '.' + 'sourcing.proportions.tooltip', 'sourcing.proportions.tooltip'),
+    },
+    {
       key: 'HighestStock',
       value: t(baseTranslation + '.' + 'sourcing.highest.value', 'sourcing.highest.value'),
       tooltip: t(baseTranslation + '.' + 'sourcing.highest.tooltip', 'sourcing.highest.tooltip'),

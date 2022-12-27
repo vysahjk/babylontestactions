@@ -582,6 +582,10 @@
                 "value": "Equirépartition",
                 "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production, en respectant leurs capacités maximales. Si une quantité à commander reste, elle est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
               },
+              "proportions": {
+                "value": "Proportions de sourçage",
+                "tooltip": "La quantité à commander est répartie entre les opérations de production et les transports suivant les proportions de sourçage définies, en respectant leurs capacités maximales. S'il reste une quantité à allouer à cause d'une contrainte de capacité, alors cette quantité est encore répartie entre les opérations de production et les transports suivant les proportions de sourçage définies."
+              },
               "highest": {
                 "value": "La plus grande quantité disponible en premier",
                 "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs quantités disponibles, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée en suivant une équirépartition."

@@ -584,6 +584,10 @@
                 "value": "Equidistribution",
                 "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations, respecting their maximum capacities. If a quantity to order remains, it is evenly distributed among all the directly upstream production operations and transports."
               },
+              "proportions": {
+                "value": "Sourcing proportions",
+                "tooltip": "The quantity ordered from the stock is distributed among the directly upstream production operations and transports following the defined sourcing proportions, respecting their maximum capacities. If there is a remaining quantity to allocate due to a capacity constraint, then this quantity is again distributed among the directly upstream production operations and transports following the defined sourcing proportions."
+              },
               "highest": {
                 "value": "The highest available stock first",
                 "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their available quantities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned following an equidistribution."
