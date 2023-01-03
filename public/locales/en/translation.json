@@ -394,7 +394,7 @@
         }
       },
       "about": {
-        "title": "Supply Chain version 3.0.0",
+        "title": "Supply Chain version 3.1.0",
         "content": "Cosmo Tech Supply Chain digital twin solution",
         "button": {
           "close": "Close"
