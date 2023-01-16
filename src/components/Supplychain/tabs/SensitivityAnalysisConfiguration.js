@@ -88,7 +88,6 @@ const SensitivityAnalysisConfiguration = ({
   const sensitivityAnalysisSensitiveParameterEnumValues = [
     SensitiveParameterEnumValue(baseTranslation, 'Production Resource Opening Time'),
     SensitiveParameterEnumValue(baseTranslation, 'Transport Duration'),
-    /*
     SensitiveParameterEnumValue(baseTranslation, 'Fixed Production Cost'),
     SensitiveParameterEnumValue(baseTranslation, 'Operating Performance'),
     SensitiveParameterEnumValue(baseTranslation, 'Cycle Time'),
@@ -110,7 +109,6 @@ const SensitivityAnalysisConfiguration = ({
     SensitiveParameterEnumValue(baseTranslation, 'Transport CO2 Unit Emission'),
     SensitiveParameterEnumValue(baseTranslation, 'Transport Minimum Order Quantity'),
     SensitiveParameterEnumValue(baseTranslation, 'Transport Multiple Order Quantity'),
-    */
   ];
 
   const sensitivityAnalysisChangeEnumValues = [
