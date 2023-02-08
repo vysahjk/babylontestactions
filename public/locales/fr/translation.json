@@ -671,8 +671,8 @@
                 "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production, en respectant leurs capacités maximales. Si une quantité à commander reste, elle est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
               },
               "proportions": {
-                "value": "Proportions de sourçage",
-                "tooltip": "La quantité à commander est répartie entre les opérations de production et les transports suivant les proportions de sourçage définies, en respectant leurs capacités maximales. S'il reste une quantité à allouer à cause d'une contrainte de capacité, alors cette quantité est encore répartie entre les opérations de production et les transports suivant les proportions de sourçage définies."
+                "value": "Proportions d'approvisionnement",
+                "tooltip": "La quantité à commander est répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies, en respectant leurs capacités maximales. S'il reste une quantité à allouer à cause d'une contrainte de capacité, alors cette quantité est encore répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies."
               },
               "highest": {
                 "value": "La plus grande quantité disponible en premier",
