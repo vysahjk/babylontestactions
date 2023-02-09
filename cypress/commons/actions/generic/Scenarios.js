@@ -1,9 +1,9 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import { PAGE_NAME, URL_ROOT, URL_REGEX } from '../../constants/generic/TestConstants';
 import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
 import { ScenarioParameters } from './ScenarioParameters';
+import { apiUtils as api } from '../../utils';
 
 // From scenario View
 // Get elements
@@ -12,6 +12,9 @@ function getScenarioViewTab(timeout = 5) {
 }
 function getScenarioView() {
   return cy.get(GENERIC_SELECTORS.scenario.view);
+}
+function getScenarioLoadingSpinner(timeout = 5) {
+  return cy.get(GENERIC_SELECTORS.scenario.loadingSpinner, { timeout: timeout * 1000 });
 }
 function getScenarioSelector(timeout = 5) {
   return cy.get(GENERIC_SELECTORS.scenario.selectInput, { timeout: timeout * 1000 });
@@ -113,6 +116,9 @@ function getScenarioCreationDialogRunTypeSelectorOptions() {
 function getScenarioCreationDialogSubmitButton() {
   return cy.get(GENERIC_SELECTORS.scenario.createDialog.submitButton);
 }
+function getScenarioCreationDialogCancelButton() {
+  return cy.get(GENERIC_SELECTORS.scenario.createDialog.cancelButton);
+}
 function getDashboardPlaceholder() {
   return cy.get(GENERIC_SELECTORS.scenario.dashboard.placeholder);
 }
@@ -123,13 +129,13 @@ function switchToScenarioView() {
 
 // Select the scenario with the provided name and id
 function selectScenario(scenarioName, scenarioId) {
-  const reqName = `requestSelectScenario_${scenarioName}`.replaceAll(' ', '');
-  const scenarioUrlRegex = new RegExp(`^${URL_ROOT}/.*${PAGE_NAME.SCENARIOS}/${scenarioId}`);
-  cy.intercept('GET', scenarioUrlRegex).as(reqName);
-  getScenarioSelector()
-    .click()
-    .type('{selectAll}{backspace}' + scenarioName + '{downarrow}{enter}');
-  cy.wait(`@${reqName}`)
+  const getScenarioAlias = api.interceptGetScenario(scenarioId);
+  writeInScenarioSelectorInput(scenarioName);
+  getScenarioSelectorOption(scenarioId).should('be.visible').should('not.be.disabled');
+  getScenarioSelectorOption(scenarioId).click();
+
+  api
+    .waitAlias(getScenarioAlias)
     .its('response')
     .its('body')
     .then((req) => {
@@ -140,11 +146,13 @@ function selectScenario(scenarioName, scenarioId) {
         ScenarioParameters.getParametersEditButton().should('not.be.disabled');
       }
     });
+  getScenarioLoadingSpinner(15).should('exist').should('not.be.visible');
 }
 
 function writeInScenarioSelectorInput(searchStr) {
   return getScenarioSelector()
     .click()
+    .should('not.be.disabled')
     .type('{selectAll}{backspace}' + searchStr); // clear() does not always work, use "{selectAll}{backspace}" instead
 }
 
@@ -157,7 +165,11 @@ function openScenarioCreationDialog() {
 // Select a parent scenario
 function selectParentScenario(scenarioName) {
   getScenarioCreationDialogMasterCheckbox().uncheck();
-  getScenarioCreationDialogParentScenarioSelector().clear().type(scenarioName);
+  getScenarioCreationDialogParentScenarioSelector().click();
+  getScenarioCreationDialogParentScenarioSelector().should('not.be.disabled');
+  // clear() does not always work, use "{selectAll}{backspace}" instead
+  getScenarioCreationDialogParentScenarioSelector().type('{selectAll}{backspace}' + scenarioName);
+
   // Try to prevent "detached from DOM" cypress error with these 2 instructions
   getScenarioCreationDialogParentScenarioSelectorOptions().contains(scenarioName).should('be.visible');
   getScenarioCreationDialogParentScenarioSelectorOptions().contains(scenarioName).click();
@@ -166,7 +178,11 @@ function selectParentScenario(scenarioName) {
 // Select a dataset
 function selectDataset(dataset) {
   getScenarioCreationDialogMasterCheckbox().check();
-  getScenarioCreationDialogDatasetSelector().clear().type(dataset);
+  getScenarioCreationDialogDatasetSelector().click();
+  getScenarioCreationDialogDatasetSelector().should('not.be.disabled');
+  // clear() does not always work, use "{selectAll}{backspace}" instead
+  getScenarioCreationDialogDatasetSelector().type('{selectAll}{backspace}' + dataset);
+
   // Try to prevent "detached from DOM" cypress error with these 2 instructions
   getScenarioCreationDialogDatasetSelectorOptions().contains(dataset).should('be.visible');
   getScenarioCreationDialogDatasetSelectorOptions().contains(dataset).click();
@@ -174,42 +190,46 @@ function selectDataset(dataset) {
 
 // Select a run template
 function selectRunTemplate(runTemplate) {
-  getScenarioCreationDialogRunTypeSelector().clear().type(runTemplate);
+  getScenarioCreationDialogRunTypeSelector().click();
+  getScenarioCreationDialogRunTypeSelector().should('not.be.disabled');
+  // clear() does not always work, use "{selectAll}{backspace}" instead
+  getScenarioCreationDialogRunTypeSelector().type('{selectAll}{backspace}' + runTemplate);
+
   // Try to prevent "detached from DOM" cypress error with these 2 instructions
   getScenarioCreationDialogRunTypeSelectorOptions().contains(runTemplate).should('be.visible');
   getScenarioCreationDialogRunTypeSelectorOptions().contains(runTemplate).click();
 }
 
+function cancelCreateScenario() {
+  getScenarioCreationDialogCancelButton().click();
+}
+
 function createScenario(scenarioName, isMaster, datasetOrMasterName, runTemplate) {
+  const createScenarioAlias = api.interceptCreateScenario();
+  const getScenariosAlias = api.interceptGetScenarios();
+
   openScenarioCreationDialog();
   getScenarioCreationDialog().should('be.visible');
-
   getScenarioCreationDialogNameField().type(scenarioName);
-
   if (isMaster === true) {
     selectDataset(datasetOrMasterName);
   } else {
     selectParentScenario(datasetOrMasterName);
   }
-
   selectRunTemplate(runTemplate);
 
-  const scenarioCreationAlias = 'requestCreateScenario_' + scenarioName.replaceAll(' ', '');
-  const scenarioListUpdateAlias = 'requestUpdateScenarioList_' + scenarioName.replaceAll(' ', '');
-  cy.intercept('POST', URL_REGEX.SCENARIO_PAGE).as(scenarioCreationAlias);
-  cy.intercept('GET', URL_REGEX.SCENARIOS_LIST).as(scenarioListUpdateAlias);
-
   getScenarioCreationDialogSubmitButton().click();
+  getScenarioCreationDialog().should('not.exist');
 
   let scenarioCreated;
-  cy.wait('@' + scenarioCreationAlias).then((req) => {
+  api.waitAlias(createScenarioAlias).then((req) => {
     scenarioCreated = req.response.body;
     expect(scenarioCreated.name.toLowerCase()).to.equal(scenarioName.toLowerCase());
     expect(scenarioCreated.runTemplateName.toLowerCase()).to.equal(runTemplate.toLowerCase());
   });
 
-  return cy.wait('@' + scenarioListUpdateAlias).then((req) => {
-    const nameGet = req.response.body.find((obj) => obj.id === scenarioCreated.id).name;
+  return api.waitAlias(getScenariosAlias).then((interception) => {
+    const nameGet = interception.response.body.find((obj) => obj.id === scenarioCreated.id).name;
     expect(nameGet).to.equal(scenarioCreated.name);
 
     return {
@@ -223,19 +243,41 @@ function createScenario(scenarioName, isMaster, datasetOrMasterName, runTemplate
   });
 }
 
-function validateScenario() {
-  return getScenarioValidateButton().click();
+function validateScenario(scenarioId) {
+  const validateScenarioAlias = api.interceptUpdateScenario(scenarioId);
+  const getScenarioAlias = api.interceptGetScenario(scenarioId);
+
+  getScenarioValidateButton().click();
+  Scenarios.getScenarioValidationStatusLoadingSpinner().should('be.visible');
+
+  api.waitAlias(validateScenarioAlias);
+  api.waitAlias(getScenarioAlias);
 }
-function rejectScenario() {
-  return getScenarioRejectButton().click();
+function rejectScenario(scenarioId) {
+  const rejectScenarioAlias = api.interceptUpdateScenario(scenarioId);
+  const getScenarioAlias = api.interceptGetScenario(scenarioId);
+
+  getScenarioRejectButton().click();
+  Scenarios.getScenarioValidationStatusLoadingSpinner().should('be.visible');
+
+  api.waitAlias(rejectScenarioAlias);
+  api.waitAlias(getScenarioAlias);
 }
-function resetScenarioValidationStatus() {
-  return getScenarioValidationStatusChipDeleteIcon().click();
+function resetScenarioValidationStatus(scenarioId) {
+  const resetScenarioAlias = api.interceptUpdateScenario(scenarioId);
+  const getScenarioAlias = api.interceptGetScenario(scenarioId);
+
+  getScenarioValidationStatusChipDeleteIcon().click();
+  Scenarios.getScenarioValidationStatusLoadingSpinner().should('be.visible');
+
+  api.waitAlias(resetScenarioAlias);
+  api.waitAlias(getScenarioAlias);
 }
 
 export const Scenarios = {
   getScenarioView,
   getScenarioViewTab,
+  getScenarioLoadingSpinner,
   getScenarioSelector,
   getScenarioSelectorInput,
   getScenarioSelectorOption,
@@ -260,6 +302,7 @@ export const Scenarios = {
   getScenarioCreationDialogRunTypeSelector,
   getScenarioCreationDialogRunTypeSelectorOptions,
   getScenarioCreationDialogSubmitButton,
+  getScenarioCreationDialogCancelButton,
   getDashboardPlaceholder,
   switchToScenarioView,
   selectScenario,
@@ -269,6 +312,7 @@ export const Scenarios = {
   selectDataset,
   selectRunTemplate,
   createScenario,
+  cancelCreateScenario,
   validateScenario,
   rejectScenario,
   resetScenarioValidationStatus,

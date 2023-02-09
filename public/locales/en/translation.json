@@ -24,7 +24,7 @@
       },
       "create": {
         "scenario": {
-          "label": "Create new scenario",
+          "label": "Create",
           "tooltip": {
             "disabled": "Please save or discard current modifications before creating a new scenario"
           }
@@ -38,11 +38,11 @@
             "validated": "This scenario is validated, you cannot edit its parameters",
             "noTabs": "No parameters to edit"
           },
-          "discard": "Discard Modifications",
-          "edit": "Edit",
-          "launch": "Launch Scenario",
+          "discard": "Discard modifications",
+          "edit": "Edit parameters",
+          "launch": "Launch scenario",
           "update": {
-            "launch": "Update And Launch Scenario"
+            "launch": "Update and launch scenario"
           }
         }
       }
@@ -100,7 +100,10 @@
         "layout": "Layout",
         "title": "Settings",
         "spacingFactor": "Spacing factor",
-        "zoomLimits": "Min & max zoom"
+        "zoomLimits": "Min & max zoom",
+        "opensettings": "Open settings",
+        "closesettings": "Close settings",
+        "showStats": "Cytoscape statistics"
       },
       "elementData": {
         "dictKey": "Key",
@@ -108,6 +111,27 @@
         "noData": "No data to display for this element.",
         "attributes": {
           "PlantName": "Plant"
+        }
+      },
+      "accordion": {
+        "nodeDetails": "Node details",
+        "findNode": {
+          "headline": "Find a node",
+          "searchByID": "Search by ID"
+        },
+        "exploreGraph": {
+          "headline": "Explore a subgraph",
+          "startingNodes": "Select the starting node(s)",
+          "startingNodesError": "Select at least one node",
+          "limitDepth": "Limit the search depth",
+          "limitDepthError": "Enter a positive integer",
+          "flowDirection": "Choose the flow direction",
+          "flowDirectionError": "Select at least one",
+          "inEdges": "IN-Edges",
+          "outEdges": "OUT-Edges",
+          "excludeEdges": "Exclude relation types",
+          "compoundNeighbors": "Include the other entities of a compound",
+          "launch": "Explore"
         }
       },
       "placeholder": {
@@ -139,7 +163,7 @@
         },
         "noscenario": {
           "title": "No scenario yet",
-          "label": "You can create a scenario by clicking on \"Create new scenario\""
+          "label": "You can create a scenario by clicking on the \"CREATE\" button"
         },
         "nodashboard": {
           "label": "There isn't any dashboard configured for this run template"
@@ -262,6 +286,62 @@
           }
         }
       },
+      "share": {
+        "button": {
+          "label": "Share",
+          "tooltip": "Modify access"
+        },
+        "dialog": {
+          "buttons": {
+            "share": "Share",
+            "cancel": "Cancel",
+            "done": "Done"
+          },
+          "title": "Share ",
+          "select": {
+            "addPeople": "Add people",
+            "userSelected": "Selected user"
+          },
+          "editor": {
+            "usersAccess": "Users access",
+            "generalAccess": "General access",
+            "removeAccess": "Remove specific access",
+            "helperText": {
+              "admin": "Anyone in this workspace is admin",
+              "viewer": "Anyone in this workspace is viewer",
+              "validator": "Anyone in this workspace is validator",
+              "editor": "Anyone in this workspace is editor",
+              "none": "Other users cannot view the scenario"
+            }
+          },
+          "error": {
+            "noAdmin": "The scenario must have at least one admin"
+          },
+          "add": {
+            "deniedPermissions": "Not granted permissions",
+            "grantedPermissions": "Granted permissions",
+            "rolesTitle": "Roles",
+            "rolesHelperText": "Select one role"
+          }
+        },
+        "roles": {
+          "admin": "Admin",
+          "editor": "Editor",
+          "none": "Restricted",
+          "validator": "Validator",
+          "viewer": "Viewer"
+        },
+        "permissions": {
+          "create_children": "Create children",
+          "write_security": "Edit permissions",
+          "validate": "Change validation status",
+          "write": "Edit parameters and rename scenario",
+          "read": "View scenario and its results",
+          "read_security": "See other people's permissions",
+          "launch": "Launch scenario",
+          "delete": "Delete scenario"
+        }
+      },
       "sessionTimeout": {
         "body": "You have been idle for too long. You will be automatically signed out in {{seconds}} seconds...",
         "cancel": "Stay connected",
@@ -277,6 +357,7 @@
       "create": "Scenario hasn't been created.",
       "delete": "Scenario hasn't been deleted.",
       "rename": "Scenario hasn't been renamed",
+      "updatePermissions": "Some scenario permissions have not been updated correctly.",
       "run": "A problem occurred during the scenario run.",
       "update": "A problem occurred during scenario update; your new parameters haven't been saved.",
       "incompleteRun": "A problem occurred during dataset update; the scenario is running but your new parameters haven't been saved.",
@@ -308,7 +389,8 @@
         "update": "Update"
       },
       "tooltip": {
-        "isvalidfile": "Error: column name must be a string"
+        "isvalidfile": "Error: column name must be a string",
+        "delete": "Delete file"
       },
       "mass_action_lever": {
         "download": "Download dataset from ADT",
@@ -372,9 +454,14 @@
       }
     },
     "helpmenu": {
+      "title": "Help",
       "documentation": "Documentation",
       "support": "Contact support",
       "about": "About"
+    },
+    "switchtheme": {
+      "light": "Switch to light",
+      "dark": "Switch to dark"
     },
     "dialog": {
       "scenario": {

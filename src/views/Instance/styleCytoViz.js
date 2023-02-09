@@ -10,18 +10,35 @@ const NODE_SELECTED_ICON_SIZE = '34';
 const NODE_SELECTED_BLACKEN_RATIO = 0.1;
 // Edges
 const EDGE_DEFAULT_COLOR = '#999999';
-const EDGE_SELECTED_WIDTH = 3.5;
+const EDGE_SELECTED_COLOR = '#5b5b5b';
+const EDGE_SELECTED_WIDTH = 5;
 const EDGE_WIDTH = 2;
 
 // Styles details
 export const getDefaultEdgeStyle = (theme) => ({
   'line-color': EDGE_DEFAULT_COLOR,
+  'curve-style': 'bezier',
   width: EDGE_WIDTH,
 });
 
 export const getDefaultSelectedEdgeStyle = (theme) => ({
   ...getDefaultEdgeStyle(theme),
   width: EDGE_SELECTED_WIDTH,
+  'line-color': EDGE_SELECTED_COLOR,
+  'target-arrow-color': EDGE_SELECTED_COLOR,
+  'target-arrow-shape': 'triangle',
+});
+export const getDefaultInEdgeStyle = (theme) => ({
+  ...getDefaultEdgeStyle(theme),
+  width: EDGE_SELECTED_WIDTH,
+  'line-color': EDGE_SELECTED_COLOR,
+  'line-style': 'dashed',
+  'target-arrow-color': EDGE_SELECTED_COLOR,
+  'target-arrow-shape': 'triangle',
+});
+export const getDefaultHiddenStyle = (theme) => ({
+  visibility: 'hidden',
+  opacity: 1,
 });
 
 export const getDefaultNodeStyle = (theme) => ({

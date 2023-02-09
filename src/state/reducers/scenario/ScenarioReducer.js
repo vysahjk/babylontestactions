@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { combineReducers } from 'redux';
+import { ScenariosUtils } from '../../../utils';
 import { SCENARIO_ACTIONS_KEY } from '../../commons/ScenarioConstants';
 import { STATUSES } from '../../commons/Constants';
 import { createReducer } from '@reduxjs/toolkit';
@@ -40,6 +41,21 @@ export const scenarioListReducer = createReducer(scenarioListInitialState, (buil
         return scenarioData;
       });
     })
+    .addCase(SCENARIO_ACTIONS_KEY.SET_SCENARIO_SECURITY, (state, action) => {
+      state.data = state.data.map((scenarioData) => {
+        if (scenarioData.id === action.scenarioId) {
+          const scenarioWithNewSecurity = { ...scenarioData, security: action.security };
+          ScenariosUtils.patchScenarioWithCurrentUserPermissions(
+            scenarioWithNewSecurity,
+            action.userEmail,
+            action.userId,
+            action.scenariosPermissionsMapping
+          );
+          return { ...scenarioData, security: scenarioWithNewSecurity.security };
+        }
+        return scenarioData;
+      });
+    })
     .addCase(SCENARIO_ACTIONS_KEY.SET_SCENARIO_NAME, (state, action) => {
       state.data = state.data.map((scenarioData) => {
         if (scenarioData.id === action.scenarioId) {
@@ -64,7 +80,7 @@ export const currentScenarioReducer = createReducer(currentScenarioInitialState,
       state.status = STATUSES.IDLE;
     })
     .addCase(SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO, (state, action) => {
-      if (action.scenario !== null) {
+      if ((state.data !== null && action.scenario !== null) || (state.data === null && action.scenario != null)) {
         state.data = {
           ...state.data,
           ...action.scenario,
@@ -72,7 +88,7 @@ export const currentScenarioReducer = createReducer(currentScenarioInitialState,
       } else {
         state.data = null;
       }
-      state.status = action.status;
+      state.status = action.status ?? state.status;
     })
     .addCase(SCENARIO_ACTIONS_KEY.UPDATE_SCENARIO, (state, action) => {
       // Replace state and lastRun in data if the scenario to update is currently selected
@@ -89,6 +105,21 @@ export const currentScenarioReducer = createReducer(currentScenarioInitialState,
         state.data = {
           ...state.data,
           validationStatus: action.validationStatus,
+        };
+      }
+    })
+    .addCase(SCENARIO_ACTIONS_KEY.SET_SCENARIO_SECURITY, (state, action) => {
+      if (state.data.id === action.scenarioId) {
+        const scenarioWithNewSecurity = { ...state.data, security: action.security };
+        ScenariosUtils.patchScenarioWithCurrentUserPermissions(
+          scenarioWithNewSecurity,
+          action.userEmail,
+          action.userId,
+          action.scenariosPermissionsMapping
+        );
+        state.data = {
+          ...state.data,
+          security: scenarioWithNewSecurity.security,
         };
       }
     });

@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { CytoViz, HierarchicalComboBox } from '@cosmotech/ui';
-import { Backdrop, CircularProgress } from '@material-ui/core';
 import { sortScenarioList } from '../../utils/SortScenarioListUtils';
 import { parseError } from '../../utils/ErrorsUtils';
 import { STATUSES } from '../../state/commons/Constants';
@@ -44,7 +43,7 @@ const Instance = (props) => {
   const noScenario = currentScenario.data === null;
   const scenarioListDisabled = scenarioList === null || noScenario;
   const scenarioListLabel = noScenario ? null : t('views.scenario.dropdown.scenario.label', 'Scenario');
-  const showBackdrop = currentScenario.status === STATUSES.LOADING;
+  const isSwitchingScenario = currentScenario.status === STATUSES.LOADING;
 
   useEffect(() => {
     // Note that the "active" variable is necessary to prevent race conditions when the effect is called several times
@@ -93,12 +92,51 @@ const Instance = (props) => {
       title: t('commoncomponents.cytoviz.settings.title', 'Settings'),
       spacingFactor: t('commoncomponents.cytoviz.settings.spacingFactor', 'Spacing factor'),
       zoomLimits: t('commoncomponents.cytoviz.settings.zoomLimits', 'Min & max zoom'),
+      open: t('commoncomponents.cytoviz.settings.opensettings', 'Open settings'),
+      close: t('commoncomponents.cytoviz.settings.closesettings', 'Close settings'),
+      showStats: t('commoncomponents.cytoviz.settings.showStats', 'Cytoscape statistics'),
     },
     elementData: {
       dictKey: t('commoncomponents.cytoviz.elementData.dictKey', 'Key'),
       dictValue: t('commoncomponents.cytoviz.elementData.dictValue', 'Value'),
       noData: t('commoncomponents.cytoviz.elementData.noData', 'No data to display for this element.'),
       attributes: {},
+    },
+    accordion: {
+      nodeDetails: t('commoncomponents.cytoviz.accordion.nodeDetails', 'Node details'),
+      findNode: {
+        headline: t('commoncomponents.cytoviz.accordion.findNode.headline', 'Find a node'),
+        searchByID: t('commoncomponents.cytoviz.accordion.findNode.searchByID', 'Search by ID'),
+      },
+      exploreGraph: {
+        headline: t('commoncomponents.cytoviz.accordion.exploreGraph.headline', 'Explore a subgraph'),
+        startingNodes: t(
+          'commoncomponents.cytoviz.accordion.exploreGraph.startingNodes',
+          'Select the starting node(s)'
+        ),
+        startingNodesError: t(
+          'commoncomponents.cytoviz.accordion.exploreGraph.startingNodesError',
+          'Select at least one node'
+        ),
+        limitDepth: t('commoncomponents.cytoviz.accordion.exploreGraph.limitDepth', 'Limit the search depth'),
+        limitDepthError: t(
+          'commoncomponents.cytoviz.accordion.exploreGraph.limitDepthError',
+          'Enter a positive integer'
+        ),
+        flowDirection: t('commoncomponents.cytoviz.accordion.exploreGraph.flowDirection', 'Choose the flow direction'),
+        flowDirectionError: t(
+          'commoncomponents.cytoviz.accordion.exploreGraph.flowDirectionError',
+          'Select at least one'
+        ),
+        inEdges: t('commoncomponents.cytoviz.accordion.exploreGraph.inEdges', 'IN-Edges'),
+        outEdges: t('commoncomponents.cytoviz.accordion.exploreGraph.outEdges', 'OUT-Edges'),
+        excludeEdges: t('commoncomponents.cytoviz.accordion.exploreGraph.excludeEdges', 'Exclude relation types'),
+        compoundNeighbors: t(
+          'commoncomponents.cytoviz.accordion.exploreGraph.compoundNeighbors',
+          'Include the other entities of a compound'
+        ),
+        launch: t('commoncomponents.cytoviz.accordion.exploreGraph.launch', 'Explore'),
+      },
     },
     errorBanner: {
       dismissButtonText: t('commoncomponents.banner.button.dismiss', 'Dismiss'),
@@ -133,12 +171,8 @@ const Instance = (props) => {
       'An error occured, cannot visualize data.'
     );
   }
-
   return (
     <>
-      <Backdrop className={classes.backdrop} open={showBackdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <div className={classes.mainGrid}>
         <div className={classes.scenarioSelectGridItem}>
           <HierarchicalComboBox
@@ -155,7 +189,7 @@ const Instance = (props) => {
             elements={graphElements}
             error={errorBannerMessage}
             labels={cytoVizLabels}
-            loading={isLoadingData}
+            loading={isSwitchingScenario || isLoadingData}
             extraLayouts={EXTRA_LAYOUTS}
             defaultSettings={defaultSettings}
             placeholderMessage={cytoVizPlaceholderMessage}

@@ -10,7 +10,6 @@ import { getAllScenariosData } from '../../scenario/FindAllScenarios/FindAllScen
 import { fetchAllDatasetsData } from '../../datasets/FindAllDatasets/FindAllDatasets';
 import { fetchWorkspaceByIdData } from '../../workspace/FindWorkspaceById/FindWorkspaceByIdData';
 import { fetchSolutionByIdData } from '../../solution/FindSolutionById/FindSolutionByIdData';
-import { fetchScenarioByIdForInitialData } from '../../scenario/FindScenarioById';
 import { getPowerBIEmbedInfoSaga } from '../../powerbi/GetPowerBIEmbedInfo/GetPowerBIEmbedInfoData';
 import { POWER_BI_ACTIONS_KEY } from '../../../commons/PowerBIConstants';
 import { DATASET_ACTIONS_KEY } from '../../../commons/DatasetConstants';
@@ -18,11 +17,32 @@ import { WORKSPACE_ACTIONS_KEY } from '../../../commons/WorkspaceConstants';
 import { SOLUTION_ACTIONS_KEY } from '../../../commons/SolutionConstants';
 import { getFirstScenarioMaster } from '../../../../utils/SortScenarioListUtils';
 import { parseError } from '../../../../utils/ErrorsUtils';
+import { Api } from '../../../../services/config/Api';
 
 const selectSolutionIdFromCurrentWorkspace = (state) => state.workspace.current.data.solution.solutionId;
 const selectScenarioList = (state) => state.scenario.list.data;
 
 export function* fetchAllInitialData(action) {
+  try {
+    const { data: organizationPermissions } = yield call(Api.Organization.getAllPermissions);
+    yield put({
+      type: APPLICATION_ACTIONS_KEY.SET_PERMISSIONS_MAPPING,
+      organizationPermissions: organizationPermissions,
+    });
+  } catch (error) {
+    console.error(error);
+    const errorDetails = parseError(error);
+    if (error?.response?.status === 404) {
+      errorDetails.detail += '\nPlease make sure you are using at least v2 of Cosmo Tech API';
+    }
+    yield put({
+      type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
+      status: STATUSES.ERROR,
+      error: errorDetails,
+    });
+    return;
+  }
+
   try {
     const workspaceId = action.workspaceId;
     yield put({
@@ -36,9 +56,13 @@ export function* fetchAllInitialData(action) {
     const solutionId = yield select(selectSolutionIdFromCurrentWorkspace);
     yield call(fetchSolutionByIdData, workspaceId, solutionId);
     const scenarioList = yield select(selectScenarioList);
+    yield put({
+      type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
+      scenario: getFirstScenarioMaster(scenarioList), // Function returns null if list is empty
+      status: STATUSES.SUCCESS,
+    });
     if (scenarioList.length !== 0) {
-      yield call(fetchScenarioByIdForInitialData, workspaceId, getFirstScenarioMaster(scenarioList).id);
-      // Start state polling for running scenarios
+      // Start run status polling for running scenarios
       for (let i = 0; i < scenarioList.length; ++i) {
         if (scenarioList[i].state === SCENARIO_RUN_STATE.RUNNING) {
           yield put({
@@ -48,19 +72,15 @@ export function* fetchAllInitialData(action) {
           });
         }
       }
-    } else {
-      yield put({
-        type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
-        scenario: null,
-        status: STATUSES.SUCCESS,
-      });
     }
+
     yield fork(getPowerBIEmbedInfoSaga);
     yield put({
       type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
       status: STATUSES.SUCCESS,
     });
   } catch (error) {
+    console.log(error);
     const errorDetails = parseError(error);
     yield put({
       type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,

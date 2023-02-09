@@ -48,6 +48,7 @@ export const GENERIC_SELECTORS = {
   scenario: {
     view: '[data-cy=scenario-view]',
     tabName: '[data-cy="tabs.scenario.key"]',
+    loadingSpinner: '[data-cy="scenario-loading-spinner"]',
     dashboard: {
       placeholder: '[data-cy=dashboard-placeholder]',
     },
@@ -96,6 +97,7 @@ export const GENERIC_SELECTORS = {
       typeSelect: '[data-cy=create-scenario-dialog-type-select]',
       typeSelectorOptions: '[data-cy=create-scenario-dialog-type-select-options]',
       submitButton: '[data-cy=create-scenario-dialog-submit-button]',
+      cancelButton: '[data-cy=create-scenario-dialog-cancel-button]',
     },
     manager: {
       view: '[data-cy=scenario-manager-view]',
@@ -106,6 +108,7 @@ export const GENERIC_SELECTORS = {
         delete: '[data-cy=scenario-delete-button]',
       },
       scenarioAccordion: '[data-cy=scenario-accordion-$SCENARIOID]',
+      scenarioAccordions: '[data-cy^=scenario-accordion-]',
       scenarioAccordionExpandButton: '[data-cy=expand-accordion-button]',
       scenarioDataset: '[data-cy=scenario-datasets]',
       editableLabel: '[data-cy=editable-label]',
@@ -155,6 +158,27 @@ export const GENERIC_SELECTORS = {
     hierarchicalComboBox: {
       selector: '[data-cy=scenario-selector]',
       selectorOptions: '[data-cy=scenario-selector-options]',
+    },
+    rolesEdition: {
+      shareScenarioButton: '[data-cy=share-scenario-button]',
+      shareScenarioDialogAgentsSelect: '[data-cy=share-scenario-dialog-agents-select]',
+      shareScenarioDialogFirstCancelButton: '[data-cy=share-scenario-dialog-first-cancel-button]',
+      shareScenarioDialogSubmitButton: '[data-cy=share-scenario-dialog-submit-button]',
+      shareScenarioDialog: '[data-cy=share-scenario-dialog]',
+      shareScenarioDialogTitle: '[data-cy=share-scenario-dialog-title]',
+      shareScenarioDialogDisabledAgentsSelect: '[data-cy=share-scenario-dialog-disabled-agents-select]',
+      shareScenarioDialogRolesCheckboxByRole: '[data-cy=share-scenario-dialog-roles-checkbox-$ROLE]',
+      shareScenarioDialogGrantedPermissionChipByPermission:
+        '[data-cy=share-scenario-dialog-granted-permission-chip-$PERMISSION]',
+      shareScenarioDialogNotGrantedPermissionChipByPermission:
+        '[data-cy=share-scenario-dialog-not-granted-permission-chip-$PERMISSION]',
+      shareScenarioDialogSecondCancelButton: '[data-cy=share-scenario-dialog-second-cancel-button]',
+      shareScenarioDialogConfirmAddAccessButton: '[data-cy=share-scenario-dialog-confirm-add-access-button]',
+      roleEditorAgent: '[data-cy=role-editor-agent]',
+      selectWithAction: '[data-cy=select-with-action]',
+      selectCheckedIconByOption: '[data-cy=select-$OPTION-checked-icon]',
+      selectOptionByOption: '[data-cy=select-option-$OPTION]',
+      selectActionName: '[data-cy=select-action-name]',
     },
   },
 };

@@ -2,15 +2,19 @@
 // Licensed under the MIT license.
 
 import React from 'react';
+
+import { connect, useSelector } from 'react-redux';
 import ScenarioParameterInput from './ScenarioParameterInput';
-import { PermissionsGate } from '../../../index';
+import { PermissionsGate } from '@cosmotech/ui';
 import PropTypes from 'prop-types';
 import { t } from 'i18next';
 
-const ScenarioParametersTab = ({ parametersGroupData, parametersState, setParametersState, context }) => {
+const ScenarioParametersTab = ({ parametersGroupData, parametersState, setParametersState, context, userAppRoles }) => {
   const noPermissionsPlaceHolder = (t) => {
     return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
   };
+
+  const scenarioId = useSelector((state) => state.scenario?.current?.data?.id);
 
   const groupContainerStyle = {
     display: 'flex',
@@ -20,12 +24,14 @@ const ScenarioParametersTab = ({ parametersGroupData, parametersState, setParame
   return (
     <PermissionsGate
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
-      authorizedRoles={parametersGroupData.authorizedRoles}
+      necessaryPermissions={parametersGroupData.authorizedRoles}
+      sufficientPermissions={parametersGroupData.authorizedRoles}
+      userPermissions={userAppRoles}
     >
       <div key={parametersGroupData.id} style={groupContainerStyle}>
         {parametersGroupData.parameters.map((parameterData) => (
           <ScenarioParameterInput
-            key={parameterData.id}
+            key={`${scenarioId}_${parameterData.id}`}
             parameterData={parameterData}
             parametersState={parametersState}
             setParametersState={setParametersState}
@@ -36,11 +42,17 @@ const ScenarioParametersTab = ({ parametersGroupData, parametersState, setParame
     </PermissionsGate>
   );
 };
+
 ScenarioParametersTab.propTypes = {
-  parametersGroupData: PropTypes.array.isRequired,
-  parameterData: PropTypes.object.isRequired,
+  parametersGroupData: PropTypes.object.isRequired,
   parametersState: PropTypes.object.isRequired,
   setParametersState: PropTypes.func.isRequired,
   context: PropTypes.object.isRequired,
+  userAppRoles: PropTypes.array.isRequired,
 };
-export default ScenarioParametersTab;
+
+const mapStateToProps = (state) => ({
+  userAppRoles: state.auth.roles,
+});
+
+export default connect(mapStateToProps)(ScenarioParametersTab);

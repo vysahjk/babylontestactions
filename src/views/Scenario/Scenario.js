@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   Backdrop,
   Button,
@@ -10,84 +9,111 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Paper,
   Tooltip,
   Typography,
   Box,
 } from '@material-ui/core';
-import { ScenarioParameters } from '../../components';
+import { ScenarioParameters, SimplePowerBIReportEmbedWrapper } from '../../components';
 import { useTranslation } from 'react-i18next';
 import {
   CreateScenarioButton,
   HierarchicalComboBox,
   ScenarioValidationStatusChip,
-  SimplePowerBIReportEmbed,
+  PermissionsGate,
+  RolesEditionButton,
 } from '@cosmotech/ui';
 import { sortScenarioList } from '../../utils/SortScenarioListUtils';
-import { LOG_TYPES } from '../../services/scenarioRun/ScenarioRunConstants.js';
 import { SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants.js';
-import { SCENARIO_RUN_LOG_TYPE } from '../../services/config/FunctionalConstants';
-import {
-  USE_POWER_BI_WITH_USER_CREDENTIALS,
-  SCENARIO_VIEW_IFRAME_DISPLAY_RATIO,
-  SCENARIO_DASHBOARD_CONFIG,
-} from '../../config/PowerBI';
 import ScenarioService from '../../services/scenario/ScenarioService';
-import ScenarioRunService from '../../services/scenarioRun/ScenarioRunService';
 import { STATUSES } from '../../state/commons/Constants';
 import { AppInsights } from '../../services/AppInsights';
-import { PERMISSIONS } from '../../services/config/Permissions';
-import { PermissionsGate } from '../../components/PermissionsGate';
-import { getCreateScenarioDialogLabels, getReportLabels } from './labels';
-import useStyles from './style';
+import { ACL_PERMISSIONS } from '../../services/config/accessControl';
+import {
+  getCreateScenarioDialogLabels,
+  getShareScenarioDialogLabels,
+  getPermissionsLabels,
+  getRolesLabels,
+} from './labels';
 import { useNavigate, useParams } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { useScenario } from './ScenarioHook';
+
+const useStyles = makeStyles((theme) => ({
+  content: {
+    paddingTop: '16px',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+  },
+  rightButton: {
+    marginLeft: '8px',
+  },
+  alignRight: {
+    textAlign: 'right',
+  },
+  runTemplate: {
+    color: theme.palette.text.secondary,
+  },
+  scenarioRunTemplateId: {
+    marginLeft: '15px',
+  },
+  scenarioRunTemplateBox: {
+    marginTop: '2px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
 
 const appInsights = AppInsights.getInstance();
 
-const Scenario = (props) => {
+const Scenario = () => {
   const classes = useStyles();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  const {
-    setScenarioValidationStatus,
-    currentScenario,
+  const [
     scenarioList,
-    findScenarioById,
     datasetList,
+    currentScenario,
     user,
     workspace,
+    userPermissionsOnCurrentWorkspace,
     solution,
+    roles,
+    permissions,
+    permissionsMapping,
     addDatasetToStore,
+    applyScenarioSharingSecurity,
+    setScenarioValidationStatus,
+    findScenarioById,
     createScenario,
+    updateCurrentScenario,
     updateAndLaunchScenario,
     launchScenario,
-    reports,
     setApplicationErrorMessage,
-  } = props;
+  ] = useScenario();
 
   const routerParameters = useParams();
   const navigate = useNavigate();
   const workspaceId = workspace.data.id;
+  const workspaceUsers = workspace.data.users.map((user) => ({ id: user }));
   const [editMode, setEditMode] = useState(false);
 
   const createScenarioDialogLabels = getCreateScenarioDialogLabels(t, editMode);
-  const reportLabels = getReportLabels(t);
+  const shareScenarioDialogLabels = getShareScenarioDialogLabels(t, currentScenario?.data?.name);
 
-  // Get the right report for given run template
-  const currentScenarioRunTemplateReport = Array.isArray(SCENARIO_DASHBOARD_CONFIG)
-    ? SCENARIO_DASHBOARD_CONFIG
-    : currentScenario?.data?.runTemplateId in SCENARIO_DASHBOARD_CONFIG
-    ? [SCENARIO_DASHBOARD_CONFIG[currentScenario.data.runTemplateId]]
-    : [];
   // Add accordion expand status in state
   const [accordionSummaryExpanded, setAccordionSummaryExpanded] = useState(
     localStorage.getItem('scenarioParametersAccordionExpanded') === 'true'
   );
+
   const handleScenarioChange = (event, scenario) => {
     findScenarioById(workspaceId, scenario.id);
   };
+
   useEffect(() => {
     localStorage.setItem('scenarioParametersAccordionExpanded', accordionSummaryExpanded);
   }, [accordionSummaryExpanded]);
+
   useEffect(() => {
     if (sortedScenarioList.length !== 0) {
       if (routerParameters.id === undefined) {
@@ -102,11 +128,13 @@ const Scenario = (props) => {
     }
     // eslint-disable-next-line
   }, []);
+
   // this function enables backwards navigation between scenario's URLs
   window.onpopstate = (e) => {
     const scenarioFromUrl = scenarioList.data.find((el) => el.id === routerParameters.id);
     if (scenarioFromUrl) handleScenarioChange(event, scenarioFromUrl);
   };
+
   useEffect(() => {
     if (sortedScenarioList.length > 0) {
       if (currentScenario.data === null) {
@@ -114,15 +142,16 @@ const Scenario = (props) => {
         navigate(`/scenario/${sortedScenarioList[0].id}`);
       } else if (currentScenario.data.id !== routerParameters.id) {
         navigate(`/scenario/${currentScenario.data.id}`);
+        updateCurrentScenario({ status: STATUSES.SUCCESS });
       }
     }
     // eslint-disable-next-line
   }, [currentScenario]);
+
   const expandParametersAndCreateScenario = (workspaceId, scenarioData) => {
     createScenario(workspaceId, scenarioData);
     setAccordionSummaryExpanded(true);
   };
-
   const currentScenarioRenderInputTooltip = editMode
     ? t(
         'views.scenario.dropdown.scenario.tooltip.disabled',
@@ -147,9 +176,7 @@ const Scenario = (props) => {
       (runTemplate) => solutionRunTemplates.indexOf(runTemplate.id) !== -1
     );
   }
-  const downloadLogsFile = () => {
-    return ScenarioRunService.downloadLogsFile(currentScenario.data?.lastRun, LOG_TYPES[SCENARIO_RUN_LOG_TYPE]);
-  };
+
   const resetScenarioValidationStatus = async () => {
     const currentStatus = currentScenario.data.validationStatus;
     try {
@@ -202,11 +229,10 @@ const Scenario = (props) => {
 
   const validateButton = (
     <Button
-      className={classes.scenarioValidationButton}
+      className={classes.rightButton}
       data-cy="validate-scenario-button"
       disabled={editMode}
-      size="small"
-      variant="contained"
+      variant="outlined"
       color="primary"
       onClick={(event) => validateScenario()}
     >
@@ -215,11 +241,10 @@ const Scenario = (props) => {
   );
   const rejectButton = (
     <Button
-      className={classes.scenarioValidationButton}
+      className={classes.rightButton}
       data-cy="reject-scenario-button"
       disabled={editMode}
-      size="small"
-      variant="contained"
+      variant="outlined"
       color="primary"
       onClick={(event) => rejectScenario()}
     >
@@ -261,8 +286,12 @@ const Scenario = (props) => {
     rejectButton
   );
 
+  const userPermissionsOnCurrentScenario = currentScenario?.data?.security?.currentUserPermissions || [];
   const validationStatusButtons = (
-    <PermissionsGate authorizedPermissions={[PERMISSIONS.canChangeScenarioValidationStatus]}>
+    <PermissionsGate
+      userPermissions={userPermissionsOnCurrentScenario}
+      necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.VALIDATE]}
+    >
       {validateButtonTooltipWrapper}
       {rejectButtonTooltipWrapper}
     </PermissionsGate>
@@ -270,12 +299,10 @@ const Scenario = (props) => {
 
   const scenarioValidationStatusChip = (
     <PermissionsGate
-      authorizedPermissions={[PERMISSIONS.canChangeScenarioValidationStatus]}
-      RenderNoPermissionComponent={ScenarioValidationStatusChip}
+      userPermissions={userPermissionsOnCurrentScenario}
+      necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.VALIDATE]}
       noPermissionProps={{
-        status: currentScenarioValidationStatus,
-        labels: scenarioValidationStatusLabels,
-        onDelete: null,
+        onDelete: null, // Prevent status edition if user has insufficient privileges
       }}
     >
       <ScenarioValidationStatusChip
@@ -292,123 +319,154 @@ const Scenario = (props) => {
     label: scenarioListLabel,
     validationStatus: scenarioValidationStatusLabels,
   };
-  return (
+
+  const createScenarioButton = (
+    <PermissionsGate
+      userPermissions={userPermissionsOnCurrentWorkspace}
+      necessaryPermissions={[ACL_PERMISSIONS.WORKSPACE.CREATE_CHILDREN]}
+      noPermissionProps={{
+        disabled: true, // Prevent scenario creation if user has insufficient privileges
+      }}
+    >
+      <CreateScenarioButton
+        solution={solution}
+        workspaceId={workspaceId}
+        createScenario={expandParametersAndCreateScenario}
+        currentScenario={currentScenario}
+        runTemplates={filteredRunTemplates}
+        datasets={datasetList.data}
+        scenarios={scenarioList.data}
+        user={user}
+        disabled={editMode}
+        labels={createScenarioDialogLabels}
+      />
+    </PermissionsGate>
+  );
+
+  const applyScenarioSecurityChanges = (newScenarioSecurity) => {
+    applyScenarioSharingSecurity(currentScenario.data.id, newScenarioSecurity);
+  };
+
+  const accessListSpecific = currentScenario?.data?.security?.accessControlList;
+  const defaultRole = currentScenario?.data?.security?.default;
+
+  const rolesNames = Object.values(roles.scenario);
+  const rolesLabels = getRolesLabels(t, rolesNames);
+  const permissionsNames = Object.values(permissions.scenario);
+  const permissionsLabels = getPermissionsLabels(t, permissionsNames);
+
+  const shareScenarioButton = (
     <>
-      <Backdrop className={classes.backdrop} open={showBackdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <Grid data-cy="scenario-view" container direction="column" className={classes.mainGrid}>
-        <Grid item xs={12}>
-          <Grid container alignItems="center" className={classes.mainGrid}>
-            <Grid item xs={9}>
-              <Grid container spacing={0} alignItems="center" className={classes.mainGrid}>
-                <Grid item xs={5} className={classes.scenarioList}>
-                  <HierarchicalComboBox
-                    value={currentScenario.data}
-                    values={sortedScenarioList}
-                    labels={hierarchicalComboBoxLabels}
-                    handleChange={handleScenarioChange}
-                    disabled={scenarioListDisabled}
-                    renderInputToolType={currentScenarioRenderInputTooltip}
-                  />
-                </Grid>
-                {currentScenario.data && (
-                  <Grid item xs={7} className={classes.scenarioMetadata}>
-                    {scenarioValidationArea}
-                    <Typography data-cy="run-template-name" className={classes.scenarioRunTemplateLabel}>
-                      <Box className={classes.scenarioRunTemplateBox}>
-                        <Typography>{t('views.scenario.text.scenariotype')}</Typography>:
-                        <Box className={classes.scenarioRunTemplateId}>
-                          {t(
-                            `views.runtemplate.title.${currentScenario.data.runTemplateId}`,
-                            currentScenario.data.runTemplateName
-                          )}
-                        </Box>
-                      </Box>
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
-            </Grid>
-            <Grid item xs={3}>
-              <Grid container spacing={0} justifyContent="flex-end" className={classes.mainGrid}>
-                <Grid item>
-                  <PermissionsGate authorizedPermissions={[PERMISSIONS.canCreateScenario]}>
-                    <CreateScenarioButton
-                      solution={solution}
-                      workspaceId={workspaceId}
-                      createScenario={expandParametersAndCreateScenario}
-                      currentScenario={currentScenario}
-                      runTemplates={filteredRunTemplates}
-                      datasets={datasetList.data}
-                      scenarios={scenarioList.data}
-                      user={user}
-                      disabled={editMode}
-                      labels={createScenarioDialogLabels}
-                    />
-                  </PermissionsGate>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            {currentScenario.data && (
-              <ScenarioParameters
-                editMode={editMode}
-                changeEditMode={setEditMode}
-                addDatasetToStore={addDatasetToStore}
-                updateAndLaunchScenario={updateAndLaunchScenario}
-                launchScenario={launchScenario}
-                accordionSummaryExpanded={accordionSummaryExpanded}
-                onChangeAccordionSummaryExpanded={setAccordionSummaryExpanded}
-                workspaceId={workspaceId}
-                solution={solution.data}
-                datasets={datasetList.data}
-                currentScenario={currentScenario}
-                scenarioId={currentScenario.data.id}
-                scenarioList={scenarioList.data}
-                userRoles={user.roles}
-              />
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
-      <Card>
-        <CardContent>
-          <SimplePowerBIReportEmbed
-            // key is used here to assure the complete re-rendering of the component when scenario changes ;
-            // we need to remount it to avoid errors in powerbi-client-react which throws an error if filters change
-            key={currentScenario?.data?.id}
-            reports={reports}
-            reportConfiguration={currentScenarioRunTemplateReport}
-            scenario={currentScenario.data}
-            lang={i18n.language}
-            downloadLogsFile={currentScenario.data?.lastRun ? downloadLogsFile : null}
-            labels={reportLabels}
-            useAAD={USE_POWER_BI_WITH_USER_CREDENTIALS}
-            iframeRatio={SCENARIO_VIEW_IFRAME_DISPLAY_RATIO}
+      <PermissionsGate
+        userPermissions={userPermissionsOnCurrentScenario}
+        necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.READ_SECURITY]}
+      >
+        <PermissionsGate
+          userPermissions={userPermissionsOnCurrentScenario}
+          necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.WRITE_SECURITY]}
+          noPermissionProps={{ isReadOnly: true }}
+        >
+          <RolesEditionButton
+            data-cy="share-scenario-button"
+            labels={shareScenarioDialogLabels}
+            onConfirmChanges={(newScenarioSecurity) => {
+              applyScenarioSecurityChanges(newScenarioSecurity);
+            }}
+            resourceRolesPermissionsMapping={permissionsMapping.scenario}
+            agents={workspaceUsers}
+            specificAccessByAgent={accessListSpecific ?? []}
+            defaultRole={defaultRole || ''}
+            defaultAccessScope="Workspace"
+            preventNoneRoleForAgents={true}
+            allRoles={rolesLabels}
+            allPermissions={permissionsLabels}
           />
-        </CardContent>
-      </Card>
+        </PermissionsGate>
+      </PermissionsGate>
     </>
   );
-};
 
-Scenario.propTypes = {
-  setScenarioValidationStatus: PropTypes.func.isRequired,
-  scenarioList: PropTypes.object.isRequired,
-  datasetList: PropTypes.object.isRequired,
-  currentScenario: PropTypes.object.isRequired,
-  findScenarioById: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  workspace: PropTypes.object.isRequired,
-  solution: PropTypes.object.isRequired,
-  addDatasetToStore: PropTypes.func.isRequired,
-  createScenario: PropTypes.func.isRequired,
-  updateAndLaunchScenario: PropTypes.func.isRequired,
-  launchScenario: PropTypes.func.isRequired,
-  reports: PropTypes.object.isRequired,
-  setApplicationErrorMessage: PropTypes.func,
+  return (
+    <>
+      <Backdrop open={showBackdrop} style={{ zIndex: '10000' }}>
+        <CircularProgress data-cy="scenario-loading-spinner" color="inherit" />
+      </Backdrop>
+      <div data-cy="scenario-view" className={classes.content}>
+        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+          <Grid item xs={4}>
+            <div>
+              <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
+                <Grid item>{createScenarioButton}</Grid>
+                <Grid item>{shareScenarioButton}</Grid>
+              </Grid>
+            </div>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container direction="column">
+              <HierarchicalComboBox
+                value={currentScenario.data}
+                values={sortedScenarioList}
+                labels={hierarchicalComboBoxLabels}
+                handleChange={handleScenarioChange}
+                disabled={scenarioListDisabled}
+                renderInputToolType={currentScenarioRenderInputTooltip}
+              />
+              {currentScenario.data && (
+                <Typography
+                  data-cy="run-template-name"
+                  variant="caption"
+                  align="center"
+                  className={classes.runTemplate}
+                >
+                  <Box className={classes.scenarioRunTemplateBox}>
+                    {t('views.scenario.text.scenariotype')}:
+                    <Box className={classes.scenarioRunTemplateId}>
+                      {t(
+                        `views.runtemplate.title.${currentScenario.data.runTemplateId}`,
+                        currentScenario.data.runTemplateName
+                      )}
+                    </Box>
+                  </Box>
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+          <Grid item xs={4} className={classes.alignRight}>
+            {currentScenario.data && scenarioValidationArea}
+          </Grid>
+          <Grid item xs={12}>
+            <Card component={Paper} elevation={2}>
+              {currentScenario.data && (
+                <ScenarioParameters
+                  editMode={editMode}
+                  changeEditMode={setEditMode}
+                  addDatasetToStore={addDatasetToStore}
+                  updateAndLaunchScenario={updateAndLaunchScenario}
+                  launchScenario={launchScenario}
+                  accordionSummaryExpanded={accordionSummaryExpanded}
+                  onChangeAccordionSummaryExpanded={setAccordionSummaryExpanded}
+                  workspaceId={workspaceId}
+                  solution={solution.data}
+                  datasets={datasetList.data}
+                  currentScenario={currentScenario}
+                  scenarioId={currentScenario.data.id}
+                  scenarioList={scenarioList.data}
+                  userRoles={user.roles}
+                />
+              )}
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card component={Paper} elevation={2}>
+              <CardContent>
+                <SimplePowerBIReportEmbedWrapper />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </div>
+    </>
+  );
 };
 
 export default Scenario;

@@ -7,13 +7,12 @@ import { Grid, makeStyles, Typography, Accordion, AccordionSummary, AccordionDet
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { SCENARIO_PARAMETERS_CONFIG } from '../../config/ScenarioParameters';
 import { DATASET_ID_VARTYPE, SCENARIO_RUN_STATE, SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants';
+import { ACL_PERMISSIONS } from '../../services/config/accessControl';
 import { EditModeButton, NormalModeButton, ScenarioParametersTabsWrapper } from './components';
 import { useTranslation } from 'react-i18next';
-import { SimpleTwoActionsDialog, DontAskAgainDialog } from '@cosmotech/ui';
+import { SimpleTwoActionsDialog, DontAskAgainDialog, PermissionsGate } from '@cosmotech/ui';
 import { FileManagementUtils } from './FileManagementUtils';
 import { ScenarioParametersUtils } from '../../utils';
-import { PERMISSIONS } from '../../services/config/Permissions';
-import { PermissionsGate } from '../PermissionsGate';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -336,23 +335,30 @@ const ScenarioParameters = ({
     localStorage.setItem('scenarioParametersAccordionExpanded', expandedNewState);
     onChangeAccordionSummaryExpanded(expandedNewState);
   };
+
+  const userPermissionsOnCurrentScenario = currentScenario?.data?.security?.currentUserPermissions ?? [];
+
   return (
     <div>
       <Accordion expanded={accordionSummaryExpanded}>
         <AccordionSummary
           data-cy="scenario-params-accordion-summary"
           className={classes.accordionSummary}
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon color="secondary" />}
           onClick={handleSummaryClick}
         >
           <Grid container className={classes.gridContainerSummary}>
             <Grid className={classes.gridSummary}>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" color="secondary">
                 {t('genericcomponent.text.scenario.parameters.title', 'Scenario parameters')}
               </Typography>
             </Grid>
             <Grid item>
-              <PermissionsGate authorizedPermissions={[PERMISSIONS.canEditOrLaunchScenario]}>
+              {/* FIXME: add PLATFORM.ADMIN bypass */}
+              <PermissionsGate
+                userPermissions={userPermissionsOnCurrentScenario}
+                necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.WRITE, ACL_PERMISSIONS.SCENARIO.LAUNCH]}
+              >
                 {editMode ? (
                   <EditModeButton
                     classes={classes}

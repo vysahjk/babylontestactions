@@ -8,6 +8,8 @@ import {
   getDefaultNodeStyle,
   getDefaultSelectedEdgeStyle,
   getDefaultSelectedNodeStyle,
+  getDefaultInEdgeStyle,
+  getDefaultHiddenStyle,
 } from './styleCytoViz';
 import { ORGANIZATION_ID, WORKSPACE_ID } from '../../config/GlobalConfiguration';
 import instanceViewData from '../../config/InstanceVisualization.js';
@@ -60,7 +62,8 @@ const _processGraphNodes = (processedData, nodesParentsDict, datasetContent, nod
         _forgeCytoscapeNodeData(node, [nodesGroupName], nodesGroupMetadata, nodesParentsDict)
       );
     });
-    // Nodes style
+
+    // Nodes style by node type
     processedData.stylesheet.push({
       selector: `node.${nodesGroupName}`,
       style: { ...getDefaultNodeStyle(theme), ...nodesGroupMetadata.style },
@@ -69,6 +72,12 @@ const _processGraphNodes = (processedData, nodesParentsDict, datasetContent, nod
       selector: `node.${nodesGroupName}:selected`,
       style: { ...getDefaultSelectedNodeStyle(theme), ...nodesGroupMetadata.style },
     });
+  });
+
+  // Generic nodes styles
+  processedData.stylesheet.push({
+    selector: 'node[?hidden]',
+    style: { ...getDefaultHiddenStyle(theme) },
   });
 };
 
@@ -79,7 +88,8 @@ const _processGraphEdges = (processedData, datasetContent, edgesGroups, theme) =
     edgesGroupFromDataset.forEach((edge) => {
       processedData.graphElements.push(_forgeCytoscapeEdgeData(edge, [edgesGroupName], edgesGroupMetadata));
     });
-    // Edges style
+
+    // Edges style by edge type
     processedData.stylesheet.push({
       selector: `edge.${edgesGroupName}`,
       style: { ...getDefaultEdgeStyle(theme), ...edgesGroupMetadata.style },
@@ -88,6 +98,20 @@ const _processGraphEdges = (processedData, datasetContent, edgesGroups, theme) =
       selector: `edge.${edgesGroupName}:selected`,
       style: { ...getDefaultSelectedEdgeStyle(theme), ...edgesGroupMetadata.style },
     });
+    processedData.stylesheet.push({
+      selector: 'edge[?asInEdgeHighlighted]',
+      style: { ...getDefaultInEdgeStyle(theme), ...edgesGroupMetadata.style },
+    });
+    processedData.stylesheet.push({
+      selector: 'edge[?asOutEdgeHighlighted]',
+      style: { ...getDefaultSelectedEdgeStyle(theme), ...edgesGroupMetadata.style },
+    });
+  });
+
+  // Generic edges types
+  processedData.stylesheet.push({
+    selector: 'edge[?hidden]',
+    style: { ...getDefaultHiddenStyle(theme) },
   });
 };
 

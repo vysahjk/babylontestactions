@@ -3,10 +3,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Grid, Tooltip } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
+import { Fade, Grid, IconButton, Tooltip } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import { useTranslation } from 'react-i18next';
+import { ACL_PERMISSIONS } from '../../../services/config/accessControl';
+import { useUserAppAndCurrentScenarioPermissions } from '../../../hooks/SecurityHooks.js';
+import { PermissionsGate } from '@cosmotech/ui';
 
 const NormalModeButton = ({
   classes,
@@ -17,42 +20,59 @@ const NormalModeButton = ({
   disabledEditTooltip,
 }) => {
   const { t } = useTranslation();
+  const userAppAndCurrentScenarioPermissions = useUserAppAndCurrentScenarioPermissions();
+
   const editButton = (
-    <Button
-      data-cy="edit-parameters-button"
-      startIcon={<EditIcon />}
-      variant="contained"
-      color="primary"
-      onClick={handleClickOnEdit}
-      disabled={editDisabled}
-    >
-      {t('commoncomponents.button.scenario.parameters.edit', 'Edit')}
-    </Button>
+    <IconButton data-cy="edit-parameters-button" color="primary" onClick={handleClickOnEdit} disabled={editDisabled}>
+      <EditIcon />
+    </IconButton>
   );
 
   const editButtonTooltipWrapper =
     disabledEditTooltip && disabledEditTooltip.length > 0 ? (
-      <Tooltip title={disabledEditTooltip}>
-        <span>{editButton}</span>
+      <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title={disabledEditTooltip}>
+        <div>{editButton}</div>
       </Tooltip>
     ) : (
-      editButton
+      <Tooltip
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 600 }}
+        title={t('commoncomponents.button.scenario.parameters.edit', 'Edit parameters')}
+      >
+        <div>{editButton}</div>
+      </Tooltip>
     );
 
   return (
     <Grid container spacing={1} alignItems="center">
-      <Grid item>{editButtonTooltipWrapper}</Grid>
+      <PermissionsGate
+        userPermissions={userAppAndCurrentScenarioPermissions}
+        necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.WRITE]}
+      >
+        <Grid item>{editButtonTooltipWrapper}</Grid>
+      </PermissionsGate>
       <Grid item>
-        <Button
-          data-cy="launch-scenario-button"
-          startIcon={<PlayCircleOutlineIcon />}
-          variant="contained"
-          color="primary"
-          onClick={handleClickOnLaunchScenario}
-          disabled={runDisabled}
+        <PermissionsGate
+          userPermissions={userAppAndCurrentScenarioPermissions}
+          necessaryPermissions={[ACL_PERMISSIONS.SCENARIO.LAUNCH]}
         >
-          {t('commoncomponents.button.scenario.parameters.launch', 'Launch Scenario')}
-        </Button>
+          <Tooltip
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+            title={t('commoncomponents.button.scenario.parameters.launch', 'Launch scenario')}
+          >
+            <div>
+              <IconButton
+                data-cy="launch-scenario-button"
+                color="primary"
+                onClick={handleClickOnLaunchScenario}
+                disabled={runDisabled}
+              >
+                <PlayCircleOutlineIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </PermissionsGate>
       </Grid>
     </Grid>
   );
