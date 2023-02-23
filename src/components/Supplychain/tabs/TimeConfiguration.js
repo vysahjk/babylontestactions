@@ -28,6 +28,7 @@ const TimeConfiguration = ({
   }
 
   const simulationGranularityEnumValues = [
+    /*
     {
       key: 'minute',
       value: t('genericcomponent.text.scenario.parameters.units.min', 'Minute'),
@@ -36,6 +37,7 @@ const TimeConfiguration = ({
       key: 'hour',
       value: t('genericcomponent.text.scenario.parameters.units.hour', 'Hour'),
     },
+    */
     {
       key: 'day',
       value: t('genericcomponent.text.scenario.parameters.units.day', 'Day'),
