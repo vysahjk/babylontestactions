@@ -51,6 +51,14 @@ export const ModelBehaviorParameterTab = ({ parametersGroupData, parametersState
     });
   };
 
+  const carbonTax = parametersState.carbon_tax;
+  const setCarbonTax = (newValue) => {
+    setParametersState({
+      ...parametersState,
+      carbon_tax: newValue,
+    });
+  };
+
   const stockDispatch = parametersState.intermediary_stock_dispatch;
   const setStockDispatch = (newValue) => {
     setParametersState({
@@ -76,6 +84,8 @@ export const ModelBehaviorParameterTab = ({ parametersGroupData, parametersState
         setFinancialCost={setFinancialCost}
         stockDispatch={stockDispatch}
         setStockDispatch={setStockDispatch}
+        carbonTax={carbonTax}
+        setCarbonTax={setCarbonTax}
         editMode={context.editMode}
       />
     </PermissionsGate>

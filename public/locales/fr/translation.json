@@ -636,6 +636,10 @@
             "financial_cost": {
               "title": "Coût financier des stocks",
               "tooltip": "Coût financier dû au cash immobilisé en stock (ratio entre 0 et 1 appliqué à la valeur de stock pour chaque pas de temps)"
+            },
+            "carbon_tax": {
+              "title": "Taxe Carbone",
+              "tooltip": "Coût par émission unitaire de CO2 : Le coût lié aux émissions de CO2 est calculé à la fin de la simulation sur la base de l'ensemble des émissions de CO2 (production, achat, transport) selon la formule : taxe carbone x émissions totales de CO2."
             }
           },
           "flow_management_policies": {

@@ -27,6 +27,8 @@ const BehaviorConfiguration = ({
   setFinancialCost,
   stockDispatch,
   setStockDispatch,
+  carbonTax,
+  setCarbonTax,
   editMode,
 }) => {
   const { t } = useTranslation();
@@ -76,6 +78,15 @@ const BehaviorConfiguration = ({
     max: 1.0,
   };
 
+  const carbonTaxProps = {
+    disabled: !editMode,
+    id: 'carbon-tax-input-id',
+  };
+
+  const carbonTaxLimitsProps = {
+    min: 0.0,
+    max: 1000000000.0,
+  };
   const enumDisplay = (
     labelKey,
     labelPlaceholder,
@@ -178,6 +189,27 @@ const BehaviorConfiguration = ({
       </Grid>
       <Grid container>
         <Grid container item xs={4}>
+          <Typography>{t(baseTranslation + 'carbon_tax.title', 'carbon_tax.title')}</Typography>
+          <StyledTooltip
+            title={t(baseTranslation + 'carbon_tax.tooltip', 'carbon_tax.tooltip')}
+            placement="top-end"
+            TransitionComponent={Zoom}
+          >
+            <InfoIcon style={{ fontSize: '14px', marginLeft: '4px' }} />
+          </StyledTooltip>
+        </Grid>
+        <Grid item xs={4}>
+          <BasicNumberInput
+            label=""
+            changeNumberField={setCarbonTax}
+            textFieldProps={carbonTaxProps}
+            inputProps={carbonTaxLimitsProps}
+            value={carbonTax}
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid container item xs={4}>
           <Typography>{t(baseTranslation + 'manage_backlog.title', 'manage_backlog.title')}</Typography>
           <StyledTooltip
             title={t(baseTranslation + 'manage_backlog.tooltip', 'manage_backlog.tooltip')}
@@ -263,6 +295,8 @@ BehaviorConfiguration.propTypes = {
   setFinancialCost: PropTypes.func.isRequired,
   stockDispatch: PropTypes.string.isRequired,
   setStockDispatch: PropTypes.func.isRequired,
+  carbonTax: PropTypes.number.isRequired,
+  setCarbonTax: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
 };
 

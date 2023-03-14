@@ -44,6 +44,9 @@ const PARAMETERS = {
   financial_cost_of_stocks: {
     defaultValue: 0.0,
   },
+  carbon_tax: {
+    defaultValue: 0.0,
+  },
   uncertainties_probability_distribution: {
     defaultValue: 'Gaussian',
   },

@@ -637,6 +637,10 @@
             "financial_cost": {
               "title": "Financial cost of stock",
               "tooltip": "Cost of the financial asset due to inventory (ratio between 0 and 1 applied to inventory value for each time step)"
+            },
+            "carbon_tax": {
+              "title": "Carbon tax",
+              "tooltip": "Cost per CO2 unit emission: Cost linked to CO2 emissions is calculated at the end of simulation based on all CO2 emissions (production, purchasing, transport) following the formula: carbon tax x CO2 emissions."
             }
           },
           "flow_management_policies": {
