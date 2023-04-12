@@ -663,6 +663,10 @@
                 "value": "Make to forecast",
                 "tooltip": "Stock policy aiming at replenishing the stock to have enough quantities available to serve the forecasted demand and maintaining the defined safety stock."
               },
+              "make_to_order": {
+                "value": "Make to order",
+                "tooltip": "Stock policy initiating supply orders based on orders to be served."
+              },
               "from_dataset": {
                 "value": "Mixed",
                 "tooltip": "Enables to use different stock policies (to be defined for each stock in the dataset)."

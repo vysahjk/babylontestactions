@@ -87,6 +87,11 @@ const FlowManagementPoliciesConfiguration = ({
       tooltip: t(baseTranslation + '.' + 'stock.make_to_forecast.tooltip', 'stock.make_to_forecast.tooltip'),
     },
     {
+      key: 'MakeToOrder',
+      value: t(baseTranslation + '.' + 'stock.make_to_order.value', 'stock.make_to_order.value'),
+      tooltip: t(baseTranslation + '.' + 'stock.make_to_order.tooltip', 'stock.make_to_order.tooltip'),
+    },
+    {
       key: 'FromDataset',
       value: t(baseTranslation + '.' + 'stock.from_dataset.value', 'stock.from_dataset.value'),
       tooltip: t(baseTranslation + '.' + 'stock.from_dataset.tooltip', 'stock.from_dataset.tooltip'),

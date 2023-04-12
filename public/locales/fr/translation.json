@@ -662,6 +662,10 @@
                 "value": "Production sur prévision",
                 "tooltip": "Politique de stock visant à réapprovisionner le stock afin d'avoir suffisamment de quantités disponibles pour répondre à la demande prévue et maintenir le stock de sécurité défini."
               },
+              "make_to_order": {
+                "value": "Production à la commande",
+                "tooltip": "Politique de stock lancant des ordres d'approvisionnement sur la base des commandes à servir."
+              },
               "from_dataset": {
                 "value": "Mixte",
                 "tooltip": "Permet d'utiliser différentes politiques de stock (à définir pour chaque stock dans le jeu de données)."
