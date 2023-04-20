@@ -6,12 +6,26 @@ import { GENERIC_SELECTORS } from '../../constants/generic/IdConstants';
 import { apiUtils as api } from '../../utils';
 
 // Get elements in scenario parameters panel
-function getParametersTabs() {
-  return cy.get(GENERIC_SELECTORS.scenario.parameters.tabs);
+function getParametersTabs(timeout = 4) {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.tabs, { timeout: timeout * 1000 });
 }
 function getParametersAccordionSummary() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.accordionSummary);
 }
+
+// Generic get & set actions for scenario parameters
+function getParameterContainer(id) {
+  return cy.get(`[data-cy=${id}]`);
+}
+function getParameterValue(id) {
+  return getParameterContainer(id).find(GENERIC_SELECTORS.genericComponents.basicInput.disabledInputValue);
+}
+function getParameterInput(id) {
+  return getParameterContainer(id).find(GENERIC_SELECTORS.genericComponents.basicInput.input);
+}
+
+// TODO: add generic setters for scenario parameters input ()
+
 //  - timeout: max time to wait before throwing an error (seconds)
 function getParametersEditButton(timeout = 4) {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.editButton, { timeout: timeout * 1000 });
@@ -22,11 +36,14 @@ function getParametersDiscardButton() {
 function getParametersConfirmDiscardButton() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogDiscardButton);
 }
-function getLaunchButton() {
-  return cy.get(GENERIC_SELECTORS.scenario.parameters.launchButton);
+function getLaunchButton(timeout) {
+  return cy.get(GENERIC_SELECTORS.scenario.parameters.launchButton, timeout ? { timeout: timeout * 1000 } : undefined);
 }
-function getParametersUpdateAndLaunchButton() {
-  return cy.get(GENERIC_SELECTORS.scenario.parameters.updateAndLaunchButton);
+function getParametersUpdateAndLaunchButton(timeout) {
+  return cy.get(
+    GENERIC_SELECTORS.scenario.parameters.updateAndLaunchButton,
+    timeout ? { timeout: timeout * 1000 } : undefined
+  );
 }
 function getLaunchConfirmDialog() {
   return cy.get(GENERIC_SELECTORS.scenario.parameters.dialogLaunch.dialogTitle);
@@ -74,14 +91,14 @@ function discard() {
   getParametersConfirmDiscardButton().click();
 }
 
-function launch(dontAskAgain = false, withUpdate = false) {
+function launch(dontAskAgain = false, withUpdate = false, timeoutGetLaunchButton = 180) {
   const alias = api.forgeAlias('reqRunScenarioAlias');
   cy.intercept('POST', URL_REGEX.SCENARIO_PAGE_RUN_WITH_ID).as(alias);
 
   if (withUpdate) {
-    getParametersUpdateAndLaunchButton().click();
+    getParametersUpdateAndLaunchButton(timeoutGetLaunchButton).should('not.be.disabled').click();
   } else {
-    getLaunchButton().click();
+    getLaunchButton(timeoutGetLaunchButton).should('not.be.disabled').click();
   }
   if (localStorage.getItem('dontAskAgainToConfirmLaunch') !== 'true') {
     if (dontAskAgain) {
@@ -108,6 +125,9 @@ function getTextField(textElement) {
 export const ScenarioParameters = {
   getParametersTabs,
   getParametersAccordionSummary,
+  getParameterContainer,
+  getParameterValue,
+  getParameterInput,
   getParametersEditButton,
   getParametersDiscardButton,
   getParametersConfirmDiscardButton,

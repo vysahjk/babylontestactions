@@ -3,7 +3,8 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Countdown from 'react-countdown';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +71,7 @@ SessionTimeoutDialog.propTypes = {
     cancel: PropTypes.string.isRequired,
     logOut: PropTypes.string.isRequired,
     loggingOut: PropTypes.string.isRequired,
-    title: PropTypes.string,
+    title: PropTypes.string.isRequired,
   }),
   onClose: PropTypes.func.isRequired,
   onLogOut: PropTypes.func.isRequired,

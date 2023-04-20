@@ -3,20 +3,15 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Grid, makeStyles, Tab, Tabs } from '@material-ui/core';
-import { SimplePowerBIReportEmbed } from '@cosmotech/ui';
-import {
-  DASHBOARDS_LIST_CONFIG,
-  USE_POWER_BI_WITH_USER_CREDENTIALS,
-  DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO,
-} from '../../config/PowerBI';
-import { getReportLabels } from '../Scenario/labels';
+import { Card, CardContent, Grid, Tab, Tabs } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from 'react-i18next';
+import { useDashboardsViewReportsConfig } from '../../state/hooks/PowerBIHooks';
+import { DashboardsPowerBiReport } from './components';
 
 const useStyles = makeStyles((theme) => ({
   dashboardsRoot: {
-    height: 'calc(100% - 36px)',
-    position: 'fixed',
+    height: '100%',
     margin: 'auto',
     width: '100%',
   },
@@ -29,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiButtonBase-root': {
       maxWidth: '900px',
     },
-    '& .MuiTab-wrapper': {
+    '& .MuiTab-root': {
       textAlign: 'right',
       alignItems: 'flex-end',
     },
@@ -37,14 +32,22 @@ const useStyles = makeStyles((theme) => ({
   dashboardsTabsContainer: {
     height: '100%',
   },
+  dashboardsTabPanel: {
+    height: '100%',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+  },
   dashboardsMainContainer: {
     height: '100%',
   },
-  dashboardsTabCard: {
+  dashboardsMainCard: {
     height: '100%',
   },
-  dashboard: {
+  dashboardsMainCardContent: {
+    height: '100%',
     overflow: 'auto',
+  },
+  dashboardsTabCard: {
     height: '100%',
   },
 }));
@@ -58,21 +61,17 @@ function a11yProps(index) {
   };
 }
 
-const Dashboards = ({ currentScenario, scenarioList, reports }) => {
+const Dashboards = () => {
   const classes = useStyles();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const dashboardTitle =
-    DASHBOARDS_LIST_CONFIG[value].title[i18n.language] === undefined
-      ? DEFAULT_MISSING_TITLE
-      : DASHBOARDS_LIST_CONFIG[value].title[i18n.language];
-
-  const reportLabels = getReportLabels(t);
+  const dashboardsViewReportsConfig = useDashboardsViewReportsConfig();
+  const dashboardTitle = dashboardsViewReportsConfig?.[value]?.title?.[i18n.language] ?? DEFAULT_MISSING_TITLE;
 
   return (
     <Grid container className={classes.dashboardsRoot} direction="row">
@@ -85,26 +84,22 @@ const Dashboards = ({ currentScenario, scenarioList, reports }) => {
             onChange={handleChange}
             aria-label="Dashboards list"
             className={classes.tabs}
+            indicatorColor="primary"
+            textColor="inherit"
           >
-            {constructDashboardTabs(i18n)}
+            {constructDashboardTabs(i18n, dashboardsViewReportsConfig)}
           </Tabs>
         </Card>
       </Grid>
       <Grid item sm={10} className={classes.dashboardsMainContainer}>
-        <Card>
-          <CardContent>
-            {
-              <TabPanel
-                index={value}
-                key={dashboardTitle}
-                title={dashboardTitle}
-                reports={reports}
-                scenario={currentScenario}
-                scenarioList={scenarioList.data}
-                lang={i18n.language}
-                labels={reportLabels}
-              />
-            }
+        <Card className={classes.dashboardsMainCard}>
+          <CardContent className={classes.dashboardsMainCardContent}>
+            <TabPanel
+              className={classes.dashboardsTabPanel}
+              index={value}
+              key={dashboardTitle}
+              title={dashboardTitle}
+            />
           </CardContent>
         </Card>
       </Grid>
@@ -112,39 +107,20 @@ const Dashboards = ({ currentScenario, scenarioList, reports }) => {
   );
 };
 
-Dashboards.propTypes = {
-  classes: PropTypes.any,
-  currentScenario: PropTypes.object,
-  scenarioList: PropTypes.object.isRequired,
-  reports: PropTypes.object.isRequired,
-};
-
 function TabPanel(props) {
-  const { children, index, title, reports, scenario, scenarioList, lang, labels, ...other } = props;
+  const { children, index, title, ...other } = props;
 
   return (
     <div role="tabpanel" id={`vertical-tabpanel-${index}`} aria-labelledby={`vertical-tab-${index}`} {...other}>
-      <SimplePowerBIReportEmbed
-        index={index}
-        reports={reports}
-        reportConfiguration={DASHBOARDS_LIST_CONFIG}
-        scenario={scenario}
-        alwaysShowReports={true}
-        scenarioList={scenarioList}
-        lang={lang}
-        labels={labels}
-        useAAD={USE_POWER_BI_WITH_USER_CREDENTIALS}
-        iframeRatio={DASHBOARDS_VIEW_IFRAME_DISPLAY_RATIO}
-      />
+      <DashboardsPowerBiReport index={index} />
     </div>
   );
 }
 
-const constructDashboardTabs = (i18n) => {
+const constructDashboardTabs = (i18n, dashboardsViewReportsConfig) => {
   const tabs = [];
-  for (const dashboardConf of DASHBOARDS_LIST_CONFIG) {
-    const dashboardTitle =
-      dashboardConf.title[i18n.language] === undefined ? DEFAULT_MISSING_TITLE : dashboardConf.title[i18n.language];
+  for (const dashboardConf of dashboardsViewReportsConfig) {
+    const dashboardTitle = dashboardConf.title[i18n.language] ?? DEFAULT_MISSING_TITLE;
     tabs.push(<Tab key={dashboardTitle} label={dashboardTitle} {...a11yProps(dashboardConf.id)} />);
   }
   return tabs;
@@ -154,15 +130,6 @@ TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   title: PropTypes.string.isRequired,
-  lang: PropTypes.string.isRequired,
-  scenarioList: PropTypes.array.isRequired,
-  scenario: PropTypes.object,
-  reports: PropTypes.object.isRequired,
-  labels: PropTypes.object,
-};
-
-TabPanel.defaultProps = {
-  title: '',
 };
 
 export default Dashboards;

@@ -1,38 +1,48 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
+import React from 'react';
 import { Dashboards, Instance, Scenario, ScenarioManager } from './views';
-import { IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID } from './views/Instance/data';
+import { ConfigUtils } from './utils';
 
-// Tabs configuration
-const TABS = [
+const DEFAULT_TABS = [
   {
     key: 'tabs.scenario.key',
     label: 'layouts.tabs.scenario.tab.title',
-    to: '/scenario',
-    render: <Scenario />, // eslint-disable-line
+    to: 'scenario',
+    render: <Scenario />,
+  },
+  {
+    key: 'tabs.instance.key',
+    label: 'layouts.tabs.instance.tab.title',
+    to: 'instance',
+    render: <Instance />,
   },
   {
     key: 'tabs.dashboards.key',
     label: 'layouts.tabs.dashboards.tab.title',
-    to: '/dashboards',
-    render: <Dashboards />, // eslint-disable-line
+    to: 'dashboards',
+    render: <Dashboards />,
   },
   {
     key: 'tabs.scenariomanager.key',
     label: 'layouts.tabs.scenariomanager.tab.title',
-    to: '/scenariomanager',
-    render: <ScenarioManager />, // eslint-disable-line
+    to: 'scenariomanager',
+    render: <ScenarioManager />,
   },
 ];
 
-if (IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID) {
-  TABS.splice(1, 0, {
-    key: 'tabs.instance.key',
-    label: 'layouts.tabs.instance.tab.title',
-    to: '/instance',
-    render: <Instance />, // eslint-disable-line
-  });
-}
+export const getTabsForCurrentWorkspace = (currentWorkspaceData) => {
+  return filterTabsForCurrentWorkspace([...DEFAULT_TABS], currentWorkspaceData);
+};
 
-export { TABS };
+export const filterTabsForCurrentWorkspace = (tabs, currentWorkspaceData) => {
+  if (!ConfigUtils.isInstanceViewConfigValid(currentWorkspaceData?.webApp?.options?.instanceView)) {
+    return tabs.filter((tab) => tab.key !== 'tabs.instance.key');
+  }
+  return tabs;
+};
+
+export const getAllTabs = () => {
+  return DEFAULT_TABS;
+};

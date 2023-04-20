@@ -5,6 +5,7 @@ export const getScenarioManagerLabels = (t) => ({
   status: t('commoncomponents.scenariomanager.treelist.node.status.label'),
   successful: t('commoncomponents.scenariomanager.treelist.node.status.successful'),
   running: t('commoncomponents.scenariomanager.treelist.node.status.running'),
+  dataingestioninprogress: t('commoncomponents.scenariomanager.treelist.node.status.dataingestioninprogress'),
   failed: t('commoncomponents.scenariomanager.treelist.node.status.failed'),
   created: t('commoncomponents.scenariomanager.treelist.node.status.created'),
   delete: t('commoncomponents.scenariomanager.treelist.node.action.delete'),
@@ -22,8 +23,9 @@ export const getScenarioManagerLabels = (t) => ({
   deleteDialog: {
     description: t(
       'commoncomponents.dialog.confirm.delete.description',
-      'The scenario will be deleted. If this scenario has children, ' +
-        'then its parent will become the new parent of all these scenarios.'
+      'This operation is irreversible. Dataset(s) will not be removed, but the scenario parameters will be lost. ' +
+        'If this scenario has children, they will be moved to a new parent. ' +
+        'The new parent will be the parent of the deleted scenario.'
     ),
     cancel: t('commoncomponents.dialog.confirm.delete.button.cancel', 'Cancel'),
     confirm: t('commoncomponents.dialog.confirm.delete.button.confirm', 'Confirm'),

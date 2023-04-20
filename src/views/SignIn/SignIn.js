@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Trans, useTranslation } from 'react-i18next';
 import { Auth, AuthDev } from '@cosmotech/core';
 import { AuthMSAL } from '@cosmotech/azure';
-import { Grid, Button, Typography, Box, Select, MenuItem, Paper } from '@material-ui/core';
+import { Grid, Button, Typography, Box, Select, MenuItem } from '@mui/material';
 import { SignInButton } from '@cosmotech/ui';
 import { TranslationUtils } from '../../utils';
 import { AUTH_STATUS } from '../../state/commons/AuthConstants.js';
@@ -18,8 +18,8 @@ const SignIn = ({ logInAction, auth }) => {
   const classes = useStyles();
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const previousURL = location?.state?.from || '/scenario';
-  sessionStorage.setItem('previousURL', previousURL);
+  const providedUrlBeforeSignIn = location?.state?.from;
+  if (providedUrlBeforeSignIn) sessionStorage.setItem('providedUrlBeforeSignIn', providedUrlBeforeSignIn);
   const handleSignIn = (event, authProvider) => {
     event.preventDefault();
     Auth.setProvider(authProvider);
@@ -30,18 +30,18 @@ const SignIn = ({ logInAction, auth }) => {
     auth.status === AUTH_STATUS.DENIED ? (
       <>
         <Typography className={classes.errorTitle}>{t('views.signin.error.title', 'Authentication failed')}</Typography>
-        <Paper className={classes.errorPaper} elevation={0}>
+        <div className={classes.errorPaper}>
           <Typography className={classes.errorText}>{auth.error}</Typography>
-        </Paper>
+        </div>
       </>
     ) : null;
   const infoMessage =
     localStorage.getItem('logoutByTimeout') === 'true' ? (
-      <Paper className={classes.infoPaper} elevation={0}>
+      <div className={classes.infoPaper}>
         <Typography className={classes.infoText}>
           {t('views.signin.info.timeout', 'For security reasons, your sessions has expired, due to inactivity.')}
         </Typography>
-      </Paper>
+      </div>
     ) : null;
 
   return (
@@ -107,6 +107,7 @@ const SignIn = ({ logInAction, auth }) => {
               <Grid container direction="row" justifyContent="center" alignItems="baseline">
                 <Grid item>
                   <Select
+                    variant="standard"
                     className={classes.languageSelect}
                     value={i18n.language}
                     onChange={(event) => TranslationUtils.changeLanguage(event.target.value, i18n)}

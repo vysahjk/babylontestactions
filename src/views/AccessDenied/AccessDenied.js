@@ -3,7 +3,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, Typography, Select, FormControl, MenuItem, Paper } from '@material-ui/core';
+import { Grid, Button, Typography, Select, FormControl, MenuItem, Paper } from '@mui/material';
 import { Auth } from '@cosmotech/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { TranslationUtils } from '../../utils';
@@ -30,7 +30,7 @@ const AccessDenied = ({ application }) => {
     return (
       <Typography className={classes.timeout}>
         {t('views.accessdenied.signouttimeout', 'You will be automatically signed out in {{seconds}} seconds...', {
-          seconds: seconds,
+          seconds,
         })}
       </Typography>
     );
@@ -60,7 +60,9 @@ const AccessDenied = ({ application }) => {
             <div className={classes.contentBody}>
               <Typography className={classes.title}>{t('views.accessdenied.title', 'Access denied')}</Typography>
               <Paper className={classes.errorPaper} elevation={0}>
-                <Typography className={classes.errorText}>{errorMessage}</Typography>
+                <Typography data-cy="access-denied-error-message" className={classes.errorText}>
+                  {errorMessage}
+                </Typography>
               </Paper>
               <div>
                 <Countdown
@@ -77,6 +79,7 @@ const AccessDenied = ({ application }) => {
               <Grid item>
                 <FormControl className={classes.formControl}>
                   <Select
+                    variant="standard"
                     className={classes.languageSelect}
                     value={i18n.language}
                     onChange={(event) => TranslationUtils.changeLanguage(event.target.value, i18n)}

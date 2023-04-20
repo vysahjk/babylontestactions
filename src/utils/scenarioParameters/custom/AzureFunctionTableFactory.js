@@ -7,12 +7,15 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import rfdc from 'rfdc';
 import { Table, TABLE_DATA_STATUS, UPLOAD_FILE_STATUS_KEY } from '@cosmotech/ui';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { AgGridUtils, Auth, FileBlobUtils } from '@cosmotech/core';
 import { gridDark, gridLight } from '../../../theme';
 import axios from 'axios';
-import { ORGANIZATION_ID, WORKSPACE_ID } from '../../../config/GlobalConfiguration';
-import { FileManagementUtils } from '../../../components/ScenarioParameters/FileManagementUtils';
+import ConfigService from '../../../services/ConfigService';
+import { FileManagementUtils } from '../../../utils/FileManagementUtils';
+
+const ORGANIZATION_ID = ConfigService.getParameterValue('ORGANIZATION_ID');
+const WORKSPACE_ID = ConfigService.getParameterValue('WORKSPACE_ID');
 
 const theme = { gridDark, gridLight };
 
@@ -66,7 +69,7 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
   };
   const columns = parameterData?.columns || [];
   const dateFormat = parameterData?.dateFormat ?? DEFAULT_DATE_FORMAT;
-  const options = { dateFormat: dateFormat };
+  const options = { dateFormat };
 
   function setParameterInState(newValuePart) {
     setParametersState((currentParametersState) => ({
@@ -122,7 +125,7 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
       const { data } = await axios({
         method: 'post',
         url: azureFunctionAddress,
-        headers: headers,
+        headers,
         params: {
           'organization-id': ORGANIZATION_ID,
           'scenario-id': context.currentScenario.id,
@@ -347,7 +350,7 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     setClientFileDescriptor({
       agGridRows: null,
       name: file.name,
-      file: file,
+      file,
       content: null,
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,

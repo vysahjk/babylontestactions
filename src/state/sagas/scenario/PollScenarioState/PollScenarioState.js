@@ -1,9 +1,8 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import { call, put, take, takeEvery, delay, race } from 'redux-saga/effects';
+import { call, put, take, takeEvery, delay, race, select } from 'redux-saga/effects';
 import { SCENARIO_ACTIONS_KEY } from '../../../commons/ScenarioConstants';
-import { ORGANIZATION_ID } from '../../../../config/GlobalConfiguration';
 import { Api } from '../../../../services/config/Api';
 import { SCENARIO_STATUS_POLLING_DELAY } from '../../../../services/config/FunctionalConstants';
 import { AppInsights } from '../../../../services/AppInsights';
@@ -17,24 +16,25 @@ const appInsights = AppInsights.getInstance();
 function forgeStopPollingAction(scenarioId) {
   let actionName = SCENARIO_ACTIONS_KEY.STOP_SCENARIO_STATUS_POLLING;
   actionName += '_' + scenarioId;
-  return { type: actionName, data: { scenarioId: scenarioId } };
+  return { type: actionName, data: { scenarioId } };
 }
 
-// generators function
+const getCurrentScenarioState = (state) => state.scenario.current?.data?.state;
+
 export function* pollScenarioState(action) {
-  // Loop until the scenario state is FAILED or SUCCESS
+  // Loop until the scenario state is FAILED, SUCCESS or UNKNOWN
   while (true) {
     try {
       // Fetch data of the scenario with the provided id
       const response = yield call(
         Api.Scenarios.findScenarioById,
-        ORGANIZATION_ID,
+        action.organizationId,
         action.workspaceId,
         action.scenarioId
       );
 
       const data = response.data;
-      if (data.state === 'Failed' || data.state === 'Successful') {
+      if (['Failed', 'Successful', 'Unknown'].includes(data.state)) {
         // Update the scenario state in all scenario redux states
         yield put({
           type: SCENARIO_ACTIONS_KEY.UPDATE_SCENARIO,
@@ -52,9 +52,23 @@ export function* pollScenarioState(action) {
         // Stop the polling for this scenario
         yield put(forgeStopPollingAction(action.scenarioId));
       }
+
+      // Update scenario on transition Running -> DataIngestionInProgress
+      const currentScenarioState = yield select(getCurrentScenarioState);
+      if (currentScenarioState !== data.state) {
+        yield put({
+          type: SCENARIO_ACTIONS_KEY.UPDATE_SCENARIO,
+          data: {
+            scenarioState: data.state,
+            scenarioId: action.scenarioId,
+          },
+        });
+      }
+
       // Wait before retrying
       yield delay(SCENARIO_STATUS_POLLING_DELAY);
     } catch (error) {
+      console.error(error);
       yield put(
         dispatchSetApplicationErrorMessage(
           error,

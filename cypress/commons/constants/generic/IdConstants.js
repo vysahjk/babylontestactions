@@ -5,6 +5,9 @@ export const GENERIC_SELECTORS = {
   login: {
     microsoftLoginButton: '[data-cy=sign-in-with-microsoft-button]',
   },
+  accessDenied: {
+    errorMessage: '[data-cy=access-denied-error-message]',
+  },
   userInfoMenu: {
     button: '[data-cy=user-profile-menu]',
     popover: '[data-cy=main-menu]',
@@ -53,7 +56,7 @@ export const GENERIC_SELECTORS = {
       placeholder: '[data-cy=dashboard-placeholder]',
     },
     selectInput: '[data-cy=scenario-select-input]',
-    scenarioSelectOption: 'span[data-testid=option-$SCENARIOID]',
+    scenarioSelectOption: 'li[data-testid=option-$SCENARIOID]',
     parameters: {
       tabs: '[data-cy=scenario-parameters-tabs]',
       accordionSummary: '[data-cy=scenario-params-accordion-summary]',
@@ -112,7 +115,15 @@ export const GENERIC_SELECTORS = {
       scenarioAccordionExpandButton: '[data-cy=expand-accordion-button]',
       scenarioDataset: '[data-cy=scenario-datasets]',
       editableLabel: '[data-cy=editable-label]',
+      editableLabelInEditMode: '[data-cy=editable-label-in-edition-mode]',
     },
+  },
+  workspace: {
+    view: '[data-cy=workspaces-view]',
+    workspaceCard: '[data-cy=resource-card-$WORKSPACEID]',
+    openButton: 'Button',
+    noWorkspacePlaceholder: '[data-cy=no-workspace-placeholder]',
+    homeButton: '[data-cy=home-button]',
   },
   genericComponents: {
     uploadFile: {
@@ -132,21 +143,48 @@ export const GENERIC_SELECTORS = {
       errorLoc: '[data-cy=error-loc]',
       importButton: '[data-cy=import-file-button]',
       importButtonInput: 'input[type=file]',
-      csvExportButton: '[data-cy=export-csv-button]',
+      export: {
+        cancelButton: '[data-cy=table-export-file-cancel-button]',
+        confirmButton: '[data-cy=table-export-file-confirm-button]',
+        dialog: '[data-cy=table-export-dialog]',
+        fileNameInput: '[data-cy=table-export-file-name-input]',
+        openDialogButton: '[data-cy=export-button]',
+        fileTypeSelect: '[data-cy=table-export-file-type-select]',
+        fileTypeSelectContainer: '[data-cy=table-export-file-type-container]',
+        fileTypeSelectOptionByExtension: '[data-cy=table-export-file-type-select-option-$EXTENSION]',
+      },
       header: '[class=ag-header-container]',
       colByName: '[col-id=$COLNAME]',
       rowsContainer: '[class=ag-center-cols-container]',
       row: '.ag-row',
       rowByIndex: '[row-index="$ROWINDEX"]',
     },
+    basicInput: {
+      disabledInputLabel: '[data-cy=disabled-input-label]',
+      disabledInputValue: '[data-cy=disabled-input-value]',
+      input: 'input',
+    },
     basicEnumInput: {
       input: 'input',
       textField: '[data-cy=text_field]',
+    },
+    basicRadioInput: {
+      radioButtonByValue: '[data-cy=radio-button-$VALUE]',
+      input: 'input',
+      textField: '[data-cy=text-field]',
     },
     basicTextInput: {
       input: 'input',
     },
     basicNumberInput: {
+      input: 'input',
+    },
+    basicSliderInput: {
+      input: 'input',
+      root: '[data-cy=slider-input]',
+      slider: '[class*=MuiSlider-root]',
+    },
+    basicDateInput: {
       input: 'input',
     },
     errorBanner: {
@@ -162,6 +200,7 @@ export const GENERIC_SELECTORS = {
     rolesEdition: {
       shareScenarioButton: '[data-cy=share-scenario-button]',
       shareScenarioDialogAgentsSelect: '[data-cy=share-scenario-dialog-agents-select]',
+      shareScenarioDialogAgentsSelectAgentName: '[data-cy=share-scenario-dialog-agents-select-$AGENT_NAME]',
       shareScenarioDialogFirstCancelButton: '[data-cy=share-scenario-dialog-first-cancel-button]',
       shareScenarioDialogSubmitButton: '[data-cy=share-scenario-dialog-submit-button]',
       shareScenarioDialog: '[data-cy=share-scenario-dialog]',
@@ -174,11 +213,13 @@ export const GENERIC_SELECTORS = {
         '[data-cy=share-scenario-dialog-not-granted-permission-chip-$PERMISSION]',
       shareScenarioDialogSecondCancelButton: '[data-cy=share-scenario-dialog-second-cancel-button]',
       shareScenarioDialogConfirmAddAccessButton: '[data-cy=share-scenario-dialog-confirm-add-access-button]',
-      roleEditorAgent: '[data-cy=role-editor-agent]',
+      roleEditorByAgent: '[data-cy=role-editor-$AGENT_NAME]',
+      roleEditorAgentName: '[data-cy=role-editor-agent-name]',
       selectWithAction: '[data-cy=select-with-action]',
       selectCheckedIconByOption: '[data-cy=select-$OPTION-checked-icon]',
-      selectOptionByOption: '[data-cy=select-option-$OPTION]',
+      selectOption: '[data-cy=select-option-$OPTION]',
       selectActionName: '[data-cy=select-action-name]',
+      noAdminErrorMessage: '[data-cy=no-admin-error-message]',
     },
   },
 };

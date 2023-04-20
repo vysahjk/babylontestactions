@@ -11,11 +11,7 @@ import {
   getDefaultInEdgeStyle,
   getDefaultHiddenStyle,
 } from './styleCytoViz';
-import { ORGANIZATION_ID, WORKSPACE_ID } from '../../config/GlobalConfiguration';
-import instanceViewData from '../../config/InstanceVisualization.js';
-
-const IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID = !(instanceViewData.dataSource == null);
-export { IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID };
+import { ConfigUtils } from '../../utils';
 
 const _formatLabelWithNewlines = (label) => label?.replace(/[_|\s]/g, '\n') || '';
 
@@ -24,8 +20,8 @@ const _forgeCytoscapeNodeData = (node, classes, nodesGroupMetadata = {}, nodesPa
   const { style, ...otherMetadata } = nodesGroupMetadata;
   return {
     group: 'nodes',
-    data: { ...node, label: _formatLabelWithNewlines(node.id), parent: parent },
-    classes: classes,
+    data: { ...node, label: _formatLabelWithNewlines(node.id), parent },
+    classes,
     ...otherMetadata,
   };
 };
@@ -35,7 +31,7 @@ const _forgeCytoscapeEdgeData = (edge, classes, edgesGroupMetadata = {}) => {
   return {
     group: 'edges',
     data: edge,
-    classes: classes,
+    classes,
     ...otherMetadata,
   };
 };
@@ -115,8 +111,7 @@ const _processGraphEdges = (processedData, datasetContent, edgesGroups, theme) =
   });
 };
 
-export const processGraphElements = (scenario, theme) => {
-  if (!IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID) return [];
+export const processGraphElements = (instanceViewConfig, scenario, theme) => {
   const processedData = {
     graphElements: [],
     stylesheet: [],
@@ -130,20 +125,20 @@ export const processGraphElements = (scenario, theme) => {
   const scenarioDatasets = scenario.datasets || [{ content: scenario }];
   for (const dataset of Object.values(scenarioDatasets)) {
     const datasetContent = dataset.content;
-    const nodesParentsDict = _processGraphCompounds(datasetContent, instanceViewData.dataContent.compounds || {});
+    const nodesParentsDict = _processGraphCompounds(datasetContent, instanceViewConfig.dataContent.compounds || {});
     _processGraphNodes(
       processedData,
       nodesParentsDict,
       datasetContent,
-      instanceViewData.dataContent.nodes,
+      instanceViewConfig.dataContent.nodes,
       theme || {}
     );
-    _processGraphEdges(processedData, datasetContent, instanceViewData.dataContent.edges, theme || {});
+    _processGraphEdges(processedData, datasetContent, instanceViewConfig.dataContent.edges, theme || {});
   }
   return processedData;
 };
 
-async function _fetchDataFromADT(scenarioId, dataSource) {
+async function _fetchDataFromADT(organizationId, workspaceId, scenarioId, dataSource) {
   const tokens = await Auth.acquireTokens();
   const headers = { 'x-functions-key': dataSource.functionKey };
   if (tokens?.accessToken) {
@@ -153,30 +148,30 @@ async function _fetchDataFromADT(scenarioId, dataSource) {
   return axios({
     method: 'post',
     url: dataSource.functionUrl,
-    headers: headers,
+    headers,
     params: {
-      'organization-id': ORGANIZATION_ID,
-      'workspace-id': WORKSPACE_ID,
+      'organization-id': organizationId,
+      'workspace-id': workspaceId,
       'scenario-id': scenarioId,
     },
   });
 }
 
-export async function fetchData(scenarioId) {
-  if (!IS_INSTANCE_VIEW_FUNCTION_CONFIG_VALID) {
+export async function fetchData(instanceViewConfig, organizationId, workspaceId, scenarioId) {
+  if (!ConfigUtils.isInstanceViewConfigValid(instanceViewConfig)) {
     return {
       error:
         'Instance view Azure Function is not configured properly. Please check the Azure Function URL and secret key.',
     };
   }
 
-  switch (instanceViewData.dataSource.type) {
+  switch (instanceViewConfig.dataSource.type) {
     case 'adt':
-      return _fetchDataFromADT(scenarioId, instanceViewData.dataSource);
+      return _fetchDataFromADT(organizationId, workspaceId, scenarioId, instanceViewConfig.dataSource);
     default:
       return {
         error:
-          `Data source type "${instanceViewData.dataSource.type}" is not supported in Instance view.` +
+          `Data source type "${instanceViewConfig.dataSource.type}" is not supported in Instance view.` +
           ' The only currently supported type is "adt"',
       };
   }

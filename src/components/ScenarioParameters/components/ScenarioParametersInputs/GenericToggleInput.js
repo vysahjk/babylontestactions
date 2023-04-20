@@ -5,35 +5,31 @@ import React from 'react';
 import { BasicToggleInput } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { TranslationUtils } from '../../../../utils';
 
-export const GenericToggleInput = ({ parameterData, parametersState, setParametersState, context }) => {
+export const GenericToggleInput = ({ parameterData, context, parameterValue, setParameterValue }) => {
   const { t } = useTranslation();
   const switchFieldProps = {
     disabled: !context.editMode,
-    id: parameterData.id,
+    id: `toggle-input-${parameterData.id}`,
   };
-
-  function setValue(newValue) {
-    setParametersState((currentParametersState) => ({
-      ...currentParametersState,
-      [parameterData.id]: newValue,
-    }));
-  }
 
   return (
     <BasicToggleInput
       key={parameterData.id}
-      data-cy={parameterData.dataCy}
+      id={parameterData.id}
       label={t(`solution.parameters.${parameterData.id}`, parameterData.id)}
-      value={parametersState[parameterData.id] || false}
-      changeSwitchType={setValue}
+      tooltipText={t(TranslationUtils.getParameterTooltipTranslationKey(parameterData.id), '')}
+      value={parameterValue ?? false}
+      changeSwitchType={setParameterValue}
       switchProps={switchFieldProps}
     />
   );
 };
+
 GenericToggleInput.propTypes = {
   parameterData: PropTypes.object.isRequired,
-  parametersState: PropTypes.object.isRequired,
-  setParametersState: PropTypes.func.isRequired,
   context: PropTypes.object.isRequired,
+  parameterValue: PropTypes.any,
+  setParameterValue: PropTypes.func.isRequired,
 };

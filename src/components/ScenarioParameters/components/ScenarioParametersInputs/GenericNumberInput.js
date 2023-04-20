@@ -5,6 +5,7 @@ import React from 'react';
 import { BasicNumberInput } from '@cosmotech/ui';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { TranslationUtils } from '../../../../utils';
 
 const DEFAULT_MIN_VALUE = -1e10 + 1;
 const DEFAULT_MAX_VALUE = 1e10 - 1;
@@ -23,7 +24,7 @@ function getMaxValue(parameterData) {
   return parameterData.maxValue;
 }
 
-export const GenericNumberInput = ({ parameterData, parametersState, setParametersState, context }) => {
+export const GenericNumberInput = ({ parameterData, context, parameterValue, setParameterValue }) => {
   const { t } = useTranslation();
   const inputProps = {
     min: getMinValue(parameterData),
@@ -31,17 +32,10 @@ export const GenericNumberInput = ({ parameterData, parametersState, setParamete
   };
   const textFieldProps = {
     disabled: !context.editMode,
-    id: parameterData.id,
+    id: `number-input-${parameterData.id}`,
   };
 
-  function setValue(newValue) {
-    setParametersState((currentParametersState) => ({
-      ...currentParametersState,
-      [parameterData.id]: newValue,
-    }));
-  }
-
-  let value = parametersState[parameterData.id];
+  let value = parameterValue;
   if (value == null) {
     value = NaN;
   }
@@ -49,18 +43,20 @@ export const GenericNumberInput = ({ parameterData, parametersState, setParamete
   return (
     <BasicNumberInput
       key={parameterData.id}
-      data-cy={parameterData.dataCy}
+      id={parameterData.id}
       label={t(`solution.parameters.${parameterData.id}`, parameterData.id)}
+      tooltipText={t(TranslationUtils.getParameterTooltipTranslationKey(parameterData.id), '')}
       value={value}
-      changeNumberField={setValue}
+      changeNumberField={setParameterValue}
       textFieldProps={textFieldProps}
       inputProps={inputProps}
     />
   );
 };
+
 GenericNumberInput.propTypes = {
   parameterData: PropTypes.object.isRequired,
-  parametersState: PropTypes.object.isRequired,
-  setParametersState: PropTypes.func.isRequired,
   context: PropTypes.object.isRequired,
+  parameterValue: PropTypes.any,
+  setParameterValue: PropTypes.func.isRequired,
 };

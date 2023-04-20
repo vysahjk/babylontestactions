@@ -154,6 +154,7 @@
             },
             "error": "Une erreur est survenue lors de l'exécution de ce scénario",
             "running": "Scénario en cours d'exécution...",
+            "dataInTransfer": "Transfert des résultats en cours...",
             "uninitialized": "Le scénario n'a pas encore été lancé"
           },
           "button": {
@@ -177,6 +178,10 @@
             "label": "Erreur inconnue"
           }
         }
+      },
+      "errorPlaceholder": {
+        "title": "Erreur inattendue",
+        "description": "Une erreur est survenue lors de l'affichage des rapports PowerBI. Si le problème persiste, veuillez contacter un administrateur."
       }
     },
     "scenariomanager": {
@@ -188,6 +193,7 @@
             "label": "Statut :",
             "successful": "Succès",
             "running": "En cours",
+            "dataingestioninprogress": "Transfert des résultats",
             "failed": "Erreur",
             "created": "Créé"
           },
@@ -295,9 +301,11 @@
           "buttons": {
             "share": "Partager",
             "cancel": "Annuler",
+            "close": "Fermer",
             "done": "Confirmer"
           },
           "title": "Partager ",
+          "readOnlyTitle": "Permissions pour ",
           "select": {
             "addPeople": "Ajouter un utilisateur",
             "userSelected": "Utilisateur sélectionné"
@@ -396,13 +404,22 @@
       "mass_action_lever": {
         "download": "Téléchager le dataset depuis ADT",
         "generate": "Générer le lien de téléchargement"
-      }
+      },
+      "noFileMessage": "Aucun"
     },
     "loading": {
       "line": {
         "workspace": {
+          "list": {
+            "title": "Chargement des workspaces"
+          },
           "current": {
             "title": "Chargement du workspace"
+          }
+        },
+        "organization": {
+          "current": {
+            "title": "Chargement de l'organisation"
           }
         },
         "solution": {
@@ -463,6 +480,28 @@
     "switchtheme": {
       "light": "Passer en mode clair",
       "dark": "Passer en mode sombre"
+    },
+    "workspaceselector": {
+      "homebutton": "Workspaces",
+      "card": {
+        "button": {
+          "open": "Ouvrir"
+        }
+      },
+      "placeholder": {
+        "noworkspace": {
+          "title": "Aucun workspace n'est accessible",
+          "description": {
+            "reason": "Ceci peut signifier que vous n'avez pas les permissions nécessaires pour accéder aux workspaces existants.",
+            "contact": "Si vous pensez qu'il s'agit d'une erreur, veuillez contacter votre administrateur."
+          }
+        }
+      },
+      "error": {
+        "title": "Erreur d'initialisation de la web app",
+        "message": "Le workspace avec l'identifiant {{workspaceId}} n'existe pas dans la liste des workspaces",
+        "comment": "Vous avez été redirigé vers la liste des workspaces disponibles"
+      }
     },
     "dialog": {
       "scenario": {
@@ -762,13 +801,24 @@
       "button": {
         "clearErrors": "Effacer",
         "fileImport": "Importer un fichier",
-        "csvExport": "Exporter en CSV"
+        "csvExport": "Exporter"
       },
       "labels": {
         "loading": "Chargement en cours...",
         "fileImportError": "Échec du chargement du fichier.",
+        "maxErrorsCount": "(seulement les {{maxCount}} premiers résultats)",
         "errorsCount_one": "{{count}} erreur:",
         "errorsCount_other": "{{count}} erreurs:"
+      },
+      "export": {
+        "labels": {
+          "cancel": "Annuler",
+          "export": "Exporter",
+          "fileNameInputLabel": "Nom",
+          "fileTypeSelectLabel": "Type",
+          "title": "Exporter les données",
+          "exportDescription": "Le fichier sera sauvegardé sur votre ordinateur."
+        }
       }
     }
   },

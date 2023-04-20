@@ -3,9 +3,9 @@
 
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { SelfDestructLinkButton, UploadFile } from '@cosmotech/ui';
-import { FileManagementUtils } from '../../ScenarioParameters/FileManagementUtils';
+import { FileManagementUtils } from '../../../utils/FileManagementUtils';
 import { useTranslation } from 'react-i18next';
 import ScenarioService from '../../../services/scenario/ScenarioService';
 

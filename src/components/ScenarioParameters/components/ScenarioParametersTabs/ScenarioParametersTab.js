@@ -4,49 +4,50 @@
 import React from 'react';
 
 import { connect, useSelector } from 'react-redux';
+import { Grid, Stack } from '@mui/material';
 import ScenarioParameterInput from './ScenarioParameterInput';
 import { PermissionsGate } from '@cosmotech/ui';
+import { ConfigUtils } from '../../../../utils';
 import PropTypes from 'prop-types';
 import { t } from 'i18next';
 
-const ScenarioParametersTab = ({ parametersGroupData, parametersState, setParametersState, context, userAppRoles }) => {
+const ScenarioParametersTab = ({ parametersGroupData, context, userAppRoles }) => {
   const noPermissionsPlaceHolder = (t) => {
     return <div>{t('genericcomponent.text.scenario.parameters.tabs.placeholder')}</div>;
   };
 
   const scenarioId = useSelector((state) => state.scenario?.current?.data?.id);
+  const authorizedRoles = ConfigUtils.getParametersGroupAttribute(parametersGroupData, 'authorizedRoles');
+  const isParameterVisible = (parameter) => ConfigUtils.getParameterAttribute(parameter, 'hidden') !== true;
 
-  const groupContainerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  };
   return (
     <PermissionsGate
       RenderNoPermissionComponent={() => noPermissionsPlaceHolder(t)}
-      necessaryPermissions={parametersGroupData.authorizedRoles}
-      sufficientPermissions={parametersGroupData.authorizedRoles}
+      necessaryPermissions={authorizedRoles}
+      sufficientPermissions={authorizedRoles}
       userPermissions={userAppRoles}
     >
-      <div key={parametersGroupData.id} style={groupContainerStyle}>
-        {parametersGroupData.parameters.map((parameterData) => (
-          <ScenarioParameterInput
-            key={`${scenarioId}_${parameterData.id}`}
-            parameterData={parameterData}
-            parametersState={parametersState}
-            setParametersState={setParametersState}
-            context={context}
-          />
-        ))}
-      </div>
+      <Grid container key={parametersGroupData.id}>
+        <Grid item xs={12}>
+          <Stack spacing={2} alignItems="stretch" direction="column" justifyContent="center">
+            {parametersGroupData.parameters
+              .filter((parameter) => isParameterVisible(parameter))
+              .map((parameterData) => (
+                <ScenarioParameterInput
+                  key={`${scenarioId}_${parameterData.id}`}
+                  parameterData={parameterData}
+                  context={context}
+                />
+              ))}
+          </Stack>
+        </Grid>
+      </Grid>
     </PermissionsGate>
   );
 };
 
 ScenarioParametersTab.propTypes = {
   parametersGroupData: PropTypes.object.isRequired,
-  parametersState: PropTypes.object.isRequired,
-  setParametersState: PropTypes.func.isRequired,
   context: PropTypes.object.isRequired,
   userAppRoles: PropTypes.array.isRequired,
 };

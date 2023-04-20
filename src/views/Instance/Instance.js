@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { CytoViz, HierarchicalComboBox } from '@cosmotech/ui';
 import { sortScenarioList } from '../../utils/SortScenarioListUtils';
@@ -11,7 +10,8 @@ import { STATUSES } from '../../state/commons/Constants';
 import { AppInsights } from '../../services/AppInsights';
 import { fetchData, processGraphElements } from './data';
 import useStyles from './style';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/styles';
+import { useInstance } from './InstanceHook';
 
 const EXTRA_LAYOUTS = {
   breadthfirst: null,
@@ -22,7 +22,17 @@ const Instance = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const { t } = useTranslation();
-  const { currentScenario, scenarioList, findScenarioById, workspace } = props;
+  const {
+    organizationId,
+    workspaceId,
+    scenarioList,
+    currentScenario,
+    findScenarioById,
+    useRedirectionToScenario,
+    useRedirectFromInstanceToSenarioView,
+    instanceViewConfig,
+  } = useInstance();
+
   const [graphElements, setGraphElements] = useState([]);
   const [cytoscapeStylesheet, setCytoscapeStylesheet] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -32,18 +42,20 @@ const Instance = (props) => {
   useEffect(() => {
     appInsights.setScenarioData(currentScenario.data);
   }, [currentScenario]);
-  const workspaceId = workspace.data.id;
+
   const handleScenarioChange = (event, scenario) => {
     if (scenario.id !== currentScenario.data?.id) {
       setIsLoadingData(true);
     }
-    findScenarioById(workspaceId, scenario.id);
+    findScenarioById(scenario.id);
   };
   const sortedScenarioList = sortScenarioList(scenarioList.data.slice());
   const noScenario = currentScenario.data === null;
   const scenarioListDisabled = scenarioList === null || noScenario;
   const scenarioListLabel = noScenario ? null : t('views.scenario.dropdown.scenario.label', 'Scenario');
   const isSwitchingScenario = currentScenario.status === STATUSES.LOADING;
+  useRedirectionToScenario(sortedScenarioList);
+  useRedirectFromInstanceToSenarioView();
 
   useEffect(() => {
     // Note that the "active" variable is necessary to prevent race conditions when the effect is called several times
@@ -63,17 +75,21 @@ const Instance = (props) => {
         setIsLoadingData(false);
       } else {
         try {
-          const scenario = await fetchData(currentScenario.data?.id);
+          const scenario = await fetchData(instanceViewConfig, organizationId, workspaceId, currentScenario.data?.id);
+          if (!active) return;
+
           // TODO: (refactor) to improve performance, we don't need to recompute the whole graph elements set when the
           // theme is changed, we could rebuild only the stylesheet
-          const { graphElements: newGraphElements, stylesheet } = await processGraphElements(scenario.data, theme);
+          const { graphElements: newGraphElements, stylesheet } = processGraphElements(
+            instanceViewConfig,
+            scenario.data,
+            theme
+          );
 
-          if (active) {
-            setGraphElements(newGraphElements);
-            setCytoscapeStylesheet(stylesheet);
-            setErrorBannerMessage(null);
-            setIsLoadingData(false);
-          }
+          setGraphElements(newGraphElements);
+          setCytoscapeStylesheet(stylesheet);
+          setErrorBannerMessage(null);
+          setIsLoadingData(false);
         } catch (error) {
           setErrorBannerMessage(parseError(error));
         }
@@ -198,13 +214,6 @@ const Instance = (props) => {
       </div>
     </>
   );
-};
-
-Instance.propTypes = {
-  currentScenario: PropTypes.object.isRequired,
-  findScenarioById: PropTypes.func.isRequired,
-  scenarioList: PropTypes.object.isRequired,
-  workspace: PropTypes.object.isRequired,
 };
 
 export default Instance;

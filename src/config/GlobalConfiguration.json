@@ -1,0 +1,8 @@
+{
+  "APP_REGISTRATION_CLIENT_ID": "1722e44e-c605-4242-b2d2-30f59a601277",
+  "AZURE_TENANT_ID": "e413b834-8be8-4822-a370-be619545cb49",
+  "COSMOTECH_API_SCOPE": "http://dev.api.cosmotech.com/platform",
+  "DEFAULT_BASE_PATH": "https://dev.api.cosmotech.com/v2",
+  "ORGANIZATION_ID": "O-gZYpnd27G7",
+  "WORKSPACES_IDS_FILTER": ["W-QPpQ47r2L9"]
+}

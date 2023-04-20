@@ -2,17 +2,18 @@
 // Licensed under the MIT license.
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, Typography, Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { SCENARIO_PARAMETERS_CONFIG } from '../../config/ScenarioParameters';
-import { DATASET_ID_VARTYPE, SCENARIO_RUN_STATE, SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants';
+import { Grid, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { SCENARIO_RUN_STATE, SCENARIO_VALIDATION_STATUS } from '../../services/config/ApiConstants';
 import { ACL_PERMISSIONS } from '../../services/config/accessControl';
 import { EditModeButton, NormalModeButton, ScenarioParametersTabsWrapper } from './components';
 import { useTranslation } from 'react-i18next';
 import { SimpleTwoActionsDialog, DontAskAgainDialog, PermissionsGate } from '@cosmotech/ui';
-import { FileManagementUtils } from './FileManagementUtils';
-import { ScenarioParametersUtils } from '../../utils';
+import { useScenarioParameters } from './ScenarioParametersHook';
+import { ScenarioParametersUtils, FileManagementUtils } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -25,11 +26,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
     display: 'flex',
     alignItems: 'center',
-    margin: `0 ${theme.spacing(3)}px`,
+    margin: `0 ${theme.spacing(3)}`,
   },
   accordionSummary: {
     flexDirection: 'row-reverse',
-    marginLeft: '-10px',
   },
   accordionDetailsContent: {
     width: '100%',
@@ -51,192 +51,121 @@ const getRunTemplateParametersIds = (runTemplatesParametersIdsDict, runTemplateI
 const ScenarioParameters = ({
   editMode,
   changeEditMode,
-  addDatasetToStore,
-  updateAndLaunchScenario,
-  launchScenario,
   onChangeAccordionSummaryExpanded,
   accordionSummaryExpanded,
-  workspaceId,
-  scenarioList,
-  currentScenario,
-  solution,
-  datasets,
-  scenarioId,
-  userRoles,
-  isDarkTheme,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const {
+    scenariosData,
+    datasetsData,
+    addDatasetToStore,
+    currentScenarioData,
+    organizationId,
+    workspaceId,
+    solutionData,
+    userRoles,
+    launchScenario,
+    updateAndLaunchScenario,
+    userPermissionsOnCurrentScenario,
+    isDarkTheme,
+  } = useScenarioParameters();
+  const scenarioId = currentScenarioData?.id;
   const [showDiscardConfirmationPopup, setShowDiscardConfirmationPopup] = useState(false);
+
+  const { reset, getValues, setValue } = useFormContext();
 
   // Memoize the parameters ids for the current run template
   const runTemplateParametersIds = useMemo(
-    () => getRunTemplateParametersIds(solution.runTemplatesParametersIdsDict, currentScenario.data?.runTemplateId),
-    [solution.runTemplatesParametersIdsDict, currentScenario.data?.runTemplateId]
+    () => getRunTemplateParametersIds(solutionData.runTemplatesParametersIdsDict, currentScenarioData?.runTemplateId),
+    [solutionData.runTemplatesParametersIdsDict, currentScenarioData?.runTemplateId]
   );
-  // Memoize default values for run template parameters, based on config and solution description
+  // Memoize default values for run template parameters, based on solutionData description
   const defaultParametersValues = useMemo(
-    () =>
-      ScenarioParametersUtils.getDefaultParametersValues(
-        runTemplateParametersIds,
-        solution.parameters,
-        SCENARIO_PARAMETERS_CONFIG.parameters
-      ),
-    [runTemplateParametersIds, solution.parameters]
+    () => ScenarioParametersUtils.getDefaultParametersValues(runTemplateParametersIds, solutionData.parameters),
+    [runTemplateParametersIds, solutionData.parameters]
   );
   // Memoize the data of parameters (not including the current state of scenario parameters)
   const parametersMetadata = useMemo(
-    () =>
-      ScenarioParametersUtils.generateParametersMetadata(
-        solution,
-        SCENARIO_PARAMETERS_CONFIG,
-        runTemplateParametersIds
-      ),
-    [solution, runTemplateParametersIds]
+    () => ScenarioParametersUtils.generateParametersMetadata(solutionData, runTemplateParametersIds),
+    [solutionData, runTemplateParametersIds]
   );
   // Memoize the data of parameters groups (not including the current state of scenario parameters)
   const parametersGroupsMetadata = useMemo(
-    () =>
-      ScenarioParametersUtils.generateParametersGroupsMetadata(
-        solution,
-        SCENARIO_PARAMETERS_CONFIG,
-        currentScenario.data?.runTemplateId
-      ),
-    [solution, currentScenario.data?.runTemplateId]
+    () => ScenarioParametersUtils.generateParametersGroupsMetadata(solutionData, currentScenarioData?.runTemplateId),
+    [solutionData, currentScenarioData?.runTemplateId]
   );
   // Memoize the parameters values for reset
   const parametersValuesForReset = useMemo(
     () =>
       ScenarioParametersUtils.getParametersValuesForReset(
-        datasets,
+        datasetsData,
         runTemplateParametersIds,
         defaultParametersValues,
-        currentScenario.data?.parametersValues
+        currentScenarioData?.parametersValues
       ),
-    [datasets, runTemplateParametersIds, defaultParametersValues, currentScenario.data?.parametersValues]
+    [datasetsData, runTemplateParametersIds, defaultParametersValues, currentScenarioData?.parametersValues]
   );
 
-  // Store the reset values for the run template parameters, based on defaultParametersValues and scenario data.
-  const parametersValuesRef = useRef(null);
-  function getParametersValuesRef() {
-    if (parametersValuesRef.current === null) {
-      parametersValuesRef.current = parametersValuesForReset;
-    }
-    return parametersValuesRef.current;
-  }
-
-  const generateParametersValuesToRenderFromParametersValuesRef = () => {
-    const newParametersValuesToRender = {};
-    for (const parameterId in getParametersValuesRef()) {
-      if (parametersMetadata[parameterId]?.varType === DATASET_ID_VARTYPE) {
-        const datasetId = getParametersValuesRef()[parameterId];
-        newParametersValuesToRender[parameterId] = FileManagementUtils.buildClientFileDescriptorFromDataset(
-          datasets,
-          datasetId
-        );
-      } else {
-        newParametersValuesToRender[parameterId] = getParametersValuesRef()[parameterId];
-      }
-    }
-    return newParametersValuesToRender;
+  const generateParametersValuesFromOriginalValues = () => {
+    return ScenarioParametersUtils.buildParametersValuesFromOriginalValues(
+      parametersValuesForReset,
+      parametersMetadata,
+      datasetsData,
+      FileManagementUtils.buildClientFileDescriptorFromDataset
+    );
   };
 
-  // Add scenario parameters data in state
-  const [parametersValuesToRender, setParametersValuesToRender] = useState(
-    generateParametersValuesToRenderFromParametersValuesRef()
-  );
-
-  const setParametersValuesToRenderFromParametersValuesRef = () => {
-    setParametersValuesToRender(generateParametersValuesToRenderFromParametersValuesRef());
+  const resetParametersValues = () => {
+    const resetValues = generateParametersValuesFromOriginalValues();
+    reset(resetValues);
   };
-
-  // // Generate input components for each scenario parameters tab
-  // for (const parametersGroupMetadata of parametersGroupsMetadata) {
-  //   parametersGroupMetadata.tab = SupplychainParametersTabFactory.create(
-  //     t,
-  //     datasets,
-  //     parametersGroupMetadata,
-  //     parametersValuesToRender,
-  //     setParametersValuesToRender,
-  //     editMode,
-  //     workspaceId,
-  //     currentScenario
-  //   );
-  // }
 
   const discardLocalChanges = () => {
-    setParametersValuesToRenderFromParametersValuesRef();
+    resetParametersValues();
   };
 
-  const setParametersValuesRefFromParametersValuesToRender = async () => {
-    const newParametersValuesToPatch = {};
-    for (const parameterId in parametersValuesToRender) {
-      // Do not process "file" parameters, they will be handled in the function applyPendingOperationsOnFileParameters
-      if (parametersMetadata[parameterId]?.varType !== DATASET_ID_VARTYPE) {
-        newParametersValuesToPatch[parameterId] = parametersValuesToRender[parameterId];
-      }
-    }
-    parametersValuesRef.current = {
-      ...getParametersValuesRef(),
-      ...newParametersValuesToPatch,
-    };
+  const updateParameterValue = (parameterId, keyToPatch, newValue) => {
+    const currentValue = getValues(parameterId);
+    setValue(parameterId, {
+      ...currentValue,
+      [keyToPatch]: newValue,
+    });
+  };
+
+  const processFilesParameters = async () => {
+    const parametersValues = getValues();
     await FileManagementUtils.applyPendingOperationsOnFileParameters(
-      solution,
+      organizationId,
+      workspaceId,
+      solutionData,
       parametersMetadata,
-      parametersValuesToRender,
-      setParametersValuesToRender,
-      parametersValuesRef,
+      parametersValues,
+      updateParameterValue,
       addDatasetToStore
     );
   };
 
-  useEffect(() => {
-    setParametersValuesToRenderFromParametersValuesRef();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parametersValuesRef]);
-
   // You can use the context object to pass all additional information to custom tab factory
   const context = {
-    editMode: editMode,
-    isDarkTheme: isDarkTheme,
-    currentScenario: currentScenario?.data, // TODO use custom hooks when migrate to V4,
-    workspaceId,
+    editMode,
+    isDarkTheme,
   };
 
   useEffect(() => {
-    parametersValuesRef.current = parametersValuesForReset;
     discardLocalChanges();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentScenario.data.id]);
+    // eslint-disable-next-line
+  }, [currentScenarioData?.id]);
 
   const getParametersForUpdate = () => {
-    const parametersData = ScenarioParametersUtils.buildParametersForUpdate(
-      solution,
-      getParametersValuesRef(),
-      runTemplateParametersIds
+    const parametersValues = getValues();
+    return ScenarioParametersUtils.buildParametersForUpdate(
+      solutionData,
+      parametersValues,
+      runTemplateParametersIds,
+      currentScenarioData,
+      scenariosData
     );
-    const additionalParameters = ScenarioParametersUtils.buildAdditionalParameters(currentScenario, scenarioList);
-
-    const keptAdditionalParameters = additionalParameters.filter((elem) => {
-      return !parametersData.some((elem2) => {
-        return elem.parameterId === elem2.parameterId;
-      });
-    });
-    const toUpdateAdditionalParameters = additionalParameters.filter((elem) => {
-      return parametersData.some((elem2) => {
-        return elem.parameterId === elem2.parameterId;
-      });
-    });
-
-    toUpdateAdditionalParameters.forEach((element) => {
-      parametersData.forEach((element2, index, arr) => {
-        if (element.parameterId === element2.parameterId) {
-          arr[index].value = element.value;
-        }
-      });
-    });
-
-    return parametersData.concat(keptAdditionalParameters);
   };
 
   const startParametersEdition = (event) => {
@@ -264,7 +193,7 @@ const ScenarioParameters = ({
   };
 
   const startScenarioLaunch = async () => {
-    const forceUpdate = ScenarioParametersUtils.shouldForceUpdateScenarioParameters();
+    const forceUpdate = ScenarioParametersUtils.shouldForceScenarioParametersUpdate(runTemplateParametersIds);
     await processScenarioLaunch(forceUpdate || updateBeforeLaunch.current);
   };
 
@@ -283,15 +212,16 @@ const ScenarioParameters = ({
 
   const processScenarioLaunch = async (forceUpdate) => {
     // If scenario parameters have never been updated, force parameters update
-    if (!currentScenario.data.parametersValues || currentScenario.data.parametersValues.length === 0) {
+    if (!currentScenarioData?.parametersValues || currentScenarioData?.parametersValues.length === 0) {
       forceUpdate = true;
     }
-    await setParametersValuesRefFromParametersValuesToRender();
+
+    await processFilesParameters();
     if (forceUpdate) {
       const parametersForUpdate = getParametersForUpdate();
-      updateAndLaunchScenario(workspaceId, scenarioId, parametersForUpdate);
+      updateAndLaunchScenario(scenarioId, parametersForUpdate);
     } else {
-      launchScenario(workspaceId, scenarioId);
+      launchScenario(scenarioId);
     }
     changeEditMode(false);
   };
@@ -301,9 +231,11 @@ const ScenarioParameters = ({
   };
 
   const noTabsShown = parametersGroupsMetadata.length === 0;
-  const isCurrentScenarioRunning = currentScenario.data.state === SCENARIO_RUN_STATE.RUNNING;
-  const isCurrentScenarioRejected = currentScenario.data.validationStatus === SCENARIO_VALIDATION_STATUS.REJECTED;
-  const isCurrentScenarioValidated = currentScenario.data.validationStatus === SCENARIO_VALIDATION_STATUS.VALIDATED;
+  const isCurrentScenarioRunning =
+    currentScenarioData?.state === SCENARIO_RUN_STATE.RUNNING ||
+    currentScenarioData?.state === SCENARIO_RUN_STATE.DATA_INGESTION_IN_PROGRESS;
+  const isCurrentScenarioRejected = currentScenarioData?.validationStatus === SCENARIO_VALIDATION_STATUS.REJECTED;
+  const isCurrentScenarioValidated = currentScenarioData?.validationStatus === SCENARIO_VALIDATION_STATUS.VALIDATED;
   const isEditDisabled =
     noTabsShown || isCurrentScenarioRunning || isCurrentScenarioRejected || isCurrentScenarioValidated;
 
@@ -336,22 +268,18 @@ const ScenarioParameters = ({
     onChangeAccordionSummaryExpanded(expandedNewState);
   };
 
-  const userPermissionsOnCurrentScenario = currentScenario?.data?.security?.currentUserPermissions ?? [];
-
   return (
     <div>
       <Accordion expanded={accordionSummaryExpanded}>
         <AccordionSummary
           data-cy="scenario-params-accordion-summary"
           className={classes.accordionSummary}
-          expandIcon={<ExpandMoreIcon color="secondary" />}
+          expandIcon={<ExpandMoreIcon />}
           onClick={handleSummaryClick}
         >
           <Grid container className={classes.gridContainerSummary}>
             <Grid className={classes.gridSummary}>
-              <Typography variant="subtitle1" color="secondary">
-                {t('genericcomponent.text.scenario.parameters.title', 'Scenario parameters')}
-              </Typography>
+              <Typography>{t('genericcomponent.text.scenario.parameters.title', 'Scenario parameters')}</Typography>
             </Grid>
             <Grid item>
               {/* FIXME: add PLATFORM.ADMIN bypass */}
@@ -385,8 +313,6 @@ const ScenarioParameters = ({
               <form onSubmit={preventSubmit}>
                 <ScenarioParametersTabsWrapper
                   parametersGroupsMetadata={parametersGroupsMetadata}
-                  parametersValuesToRender={parametersValuesToRender}
-                  setParametersValuesToRender={setParametersValuesToRender}
                   userRoles={userRoles}
                   context={context}
                 />
@@ -430,19 +356,8 @@ const ScenarioParameters = ({
 ScenarioParameters.propTypes = {
   editMode: PropTypes.bool.isRequired,
   changeEditMode: PropTypes.func.isRequired,
-  addDatasetToStore: PropTypes.func.isRequired,
-  updateAndLaunchScenario: PropTypes.func.isRequired,
   onChangeAccordionSummaryExpanded: PropTypes.func.isRequired,
-  launchScenario: PropTypes.func.isRequired,
   accordionSummaryExpanded: PropTypes.bool.isRequired,
-  workspaceId: PropTypes.string.isRequired,
-  scenarioId: PropTypes.string.isRequired,
-  scenarioList: PropTypes.array.isRequired,
-  solution: PropTypes.object.isRequired,
-  datasets: PropTypes.array.isRequired,
-  currentScenario: PropTypes.object.isRequired,
-  userRoles: PropTypes.array.isRequired,
-  isDarkTheme: PropTypes.bool.isRequired,
 };
 
 export default ScenarioParameters;

@@ -10,6 +10,9 @@ export {
   ScenarioManager,
   Scenarios,
   ScenarioParameters,
+  ScenarioSelector,
   Login,
   ErrorBanner,
+  RolesEdition,
+  Workspaces,
 } from './generic';

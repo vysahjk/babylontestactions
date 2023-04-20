@@ -8,7 +8,7 @@ import {
   DEFAULT_WORKSPACE,
   DEFAULT_WORKSPACES_LIST,
   DEFAULT_SOLUTIONS_LIST,
-  SCENARIO_EXAMPLE
+  SCENARIO_EXAMPLE,
 } from '../../fixtures/stubbing/default';
 import utils from '../TestUtils';
 import { API_REGEX, LOCAL_WEBAPP_URL } from '../constants/generic/TestConstants';
@@ -22,20 +22,18 @@ const STUB_TYPES = [
   'GET_SCENARIOS',
   'LAUNCH_SCENARIO', // Not supported yet for stubbing
   'PERMISSIONS_MAPPING',
-  'UPDATE_SCENARIO'
+  'UPDATE_SCENARIO',
 ];
 
 // Fake API data makes us able to stub the received workspace data while still using a real workspace for back-end calls
 //  - actualWorkspaceId is retrieved from the first API call whose endpoint contains a workspace id (when
 //    GET_WORKSPACES is true)
-//  - fakeWorkspaceId can be set from the Cypress tests with stub.setFakeWorkspaceId( ... ) to stub all calls to
-//    getWorkspaceById and use mock data instead of the data of the actual workspace
 //  - organizationPermissions define the roles/permissions mapping currently returned by an endpoint at the organization
 //    level
 const DEFAULT_API_DATA = {
   actualWorkspaceId: null,
   fakeWorkspaceId: null,
-  organizationPermissions: DEFAULT_ORGANIZATION_PERMISSIONS
+  organizationPermissions: DEFAULT_ORGANIZATION_PERMISSIONS,
 };
 
 // Fake authentication data makes us able to stub the webapp user identity while still using the token of the user
@@ -51,7 +49,7 @@ const DEFAULT_AUTH_DATA = {
   actualAccessToken: null,
   actualUser: null,
   fakeUser: null,
-  fakeRoles: null
+  fakeRoles: null,
 };
 
 // Fake resources data allows us to stub CRUD operations on different types of resources such as datasets, scenarios,
@@ -61,7 +59,7 @@ const DEFAULT_RESOURCES_DATA = {
   scenarioRuns: [],
   scenarios: DEFAULT_SCENARIOS_LIST,
   solutions: DEFAULT_SOLUTIONS_LIST,
-  workspaces: DEFAULT_WORKSPACES_LIST
+  workspaces: DEFAULT_WORKSPACES_LIST,
 };
 
 export const isStubTypeValid = (stubType) => {
@@ -122,7 +120,7 @@ class Stubbing {
     if (resourceIndex !== -1)
       this.resources[resourceType][resourceIndex] = {
         ...this.resources[resourceType][resourceIndex],
-        ...resourcePatch
+        ...resourcePatch,
       };
   };
   _getResourceById = (resourceType, resourceId) => {
@@ -155,8 +153,7 @@ class Stubbing {
 
   setActualWorkspaceId = (workspaceId) => (this.api.actualWorkspaceId = workspaceId);
   getActualWorkspaceId = () => this.api.actualWorkspaceId;
-  setFakeWorkspaceId = (workspaceId) => (this.api.actualWorkspaceId = workspaceId);
-  getFakeWorkspaceId = () => this.api.actualWorkspaceId;
+  getFakeWorkspaceId = () => this.api.fakeWorkspaceId;
   setOrganizationPermissions = (newMapping) => (this.api.organizationPermissions = newMapping);
   getOrganizationPermissions = () => this.api.organizationPermissions;
 
@@ -172,10 +169,10 @@ class Stubbing {
     const newScenarioSecurity = {
       security: {
         default: newDefaultSecurity,
-        accessControlList: scenario.security.accessControlList
-      }
+        accessControlList: scenario.security.accessControlList,
+      },
     };
-    patchScenario(scenarioId, newScenarioSecurity);
+    this.patchScenario(scenarioId, newScenarioSecurity);
   };
 
   patchScenarioACLSecurity = (scenarioId, newACLSecurity) => {
@@ -183,10 +180,10 @@ class Stubbing {
     const newScenarioSecurity = {
       security: {
         default: scenario.security.default,
-        accessControlList: newACLSecurity
-      }
+        accessControlList: newACLSecurity,
+      },
     };
-    patchScenario(scenarioId, newScenarioSecurity);
+    this.patchScenario(scenarioId, newScenarioSecurity);
   };
 
   getDatasets = () => this._getResources('datasets');
@@ -199,8 +196,9 @@ class Stubbing {
   getSolutionById = (solutionId) => this._getResourceById('solutions', solutionId);
 
   getWorkspaces = () => this._getResources('workspaces');
-  setWorkspaces = (newSolutions) => this._setResources('workspaces', newWorkspaces);
+  setWorkspaces = (newWorkspaces) => this._setResources('workspaces', newWorkspaces);
   getWorkspaceById = (workspaceId) => this._getResourceById('workspaces', workspaceId);
+  getDefaultWorkspaceId = () => DEFAULT_WORKSPACE.id;
 }
 
 export const stub = new Stubbing();

@@ -3,10 +3,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, ButtonBase, Link } from '@material-ui/core';
+import { Grid, ButtonBase, Link } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { pictureLight, pictureDark } from '../../theme';
 import { useTranslation } from 'react-i18next';
-import { SUPPORT_URL, COSMOTECH_URL, APP_VERSION } from '../../config/HelpMenuConfiguration';
+import { useWorkspaceData } from '../../state/hooks/WorkspaceHooks';
+import ConfigService from '../../services/ConfigService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +36,12 @@ export const AboutContent = ({ isDarkTheme }) => {
   const classes = useStyles();
   const logo = isDarkTheme ? pictureDark.darkLogo : pictureLight.lightLogo;
 
+  const currentWorkspaceData = useWorkspaceData();
+  const organizationUrl =
+    currentWorkspaceData?.webApp?.options?.menu?.organizationUrl ?? ConfigService.getParameterValue('ORGANIZATION_URL');
+  const supportUrl =
+    currentWorkspaceData?.webApp?.options?.menu?.supportUrl ?? ConfigService.getParameterValue('SUPPORT_URL');
+
   return (
     <Grid container spacing={2} className={classes.root}>
       <Grid item className={classes.picture}>
@@ -47,19 +55,19 @@ export const AboutContent = ({ isDarkTheme }) => {
             {t('genericcomponent.dialog.about.title')}
           </Grid>
           <Grid item className={classes.version}>
-            {APP_VERSION}
+            {ConfigService.getParameterValue('APP_VERSION')}
           </Grid>
           <Grid item className={classes.content}>
             {t('genericcomponent.dialog.about.content')}
           </Grid>
           <Grid item>
-            <Link href={SUPPORT_URL} target="_blank" rel="noreferrer">
-              {SUPPORT_URL}
+            <Link href={supportUrl} target="_blank" rel="noreferrer">
+              {supportUrl}
             </Link>
           </Grid>
           <Grid item>
-            <Link href={COSMOTECH_URL} target="_blank" rel="noreferrer">
-              {COSMOTECH_URL}
+            <Link href={organizationUrl} target="_blank" rel="noreferrer">
+              {organizationUrl}
             </Link>
           </Grid>
         </Grid>

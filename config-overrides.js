@@ -1,17 +1,6 @@
 const { override } = require('customize-cra');
 const webpack = require('webpack');
-
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
-const instanceViewData = require('./src/config/InstanceVisualization.js');
-
-const extraConnectSources = [];
-try {
-  const azureFunctionHostname = new URL(instanceViewData.dataSource.functionUrl).hostname;
-  console.debug(`CSP: parsed data source for instance view, adding connect-src: "${azureFunctionHostname}"`);
-  extraConnectSources.push(azureFunctionHostname);
-} catch {
-  console.debug('CSP: data source for instance view not configured, skipping addition of specific connect-src...');
-}
 
 const cspConfigPolicy = {
   'default-src': "'none'",
@@ -22,7 +11,7 @@ const cspConfigPolicy = {
     '*.api.cosmotech.com',
     'https://login.microsoftonline.com',
     'https://dc.services.visualstudio.com',
-  ].concat(extraConnectSources),
+  ],
   'script-src': ["'self'"],
   'img-src': ["'self'", 'data:'],
   'style-src': ["'self'", "'unsafe-inline'"],

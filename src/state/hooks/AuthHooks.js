@@ -21,6 +21,22 @@ export const useUser = () => {
   return useSelector((state) => state.auth);
 };
 
+export const useUserId = () => {
+  return useSelector((state) => state.auth.userId);
+};
+
+export const useUserName = () => {
+  return useSelector((state) => state.auth.userName);
+};
+
+export const useUserEmail = () => {
+  return useSelector((state) => state.auth.userEmail);
+};
+
+export const useUserProfilePic = () => {
+  return useSelector((state) => state.auth.profilePic);
+};
+
 export const useLogIn = () => {
   const dispatch = useDispatch();
   return useCallback((authProvider) => dispatch(dispatchLogIn(authProvider)), [dispatch]);

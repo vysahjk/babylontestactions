@@ -1,18 +1,19 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import React, { useEffect, useState } from 'react';
-import { AppBar, Fade, Tabs, Tab, Box, Toolbar, Tooltip, IconButton, makeStyles } from '@material-ui/core';
-import { Link, useLocation, useMatch, Outlet } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
+import { Tabs as MuiTabs, Tab, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Link, useLocation, useMatch, Outlet, useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Auth } from '@cosmotech/core';
-import { UserInfo, HelpMenu, ErrorBanner } from '@cosmotech/ui';
+import { ErrorBanner } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
-import { LANGUAGES } from '../../config/Languages';
-import { SUPPORT_URL, DOCUMENTATION_URL } from '../../config/HelpMenuConfiguration';
-import { About } from '../../services/config/Menu';
-import { Brightness2 as Brightness2Icon, WbSunny as WbSunnyIcon } from '@material-ui/icons';
-import { pictureDark, pictureLight } from '../../theme/';
+import { AppBar } from '../../components/AppBar';
+import { useApplicationError, useClearApplicationErrorMessage } from '../../state/hooks/ApplicationHooks';
+import { DashboardsManager } from '../../managers';
+import { useSelectWorkspace, useWorkspace } from '../../state/hooks/WorkspaceHooks';
+import { filterTabsForCurrentWorkspace } from '../../AppLayout';
+import { ConfigUtils } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -23,115 +24,69 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0),
     boxSizing: 'border-box',
   },
-  tabs: {
-    flexGrow: 1,
-  },
-  appBar: {
-    backgroundColor: theme.palette.appbar.main,
-    color: theme.palette.appbar.contrastText,
-  },
-  switchToDarkTheme: {
-    color: theme.palette.appbar.contrastText,
-  },
-  logo: {
-    marginLeft: '8px',
-    marginRight: '8px',
-  },
 }));
 
-const TabLayout = (props) => {
+export const TabLayout = (props) => {
   const classes = useStyles();
-  const { tabs, error, clearApplicationErrorMessage, setApplicationTheme } = props;
-  const { t, i18n } = useTranslation();
+  const { tabs } = props;
+  const { t } = useTranslation();
   const location = useLocation();
-
-  const userInfoLabels = {
-    language: t('genericcomponent.userinfo.button.change.language'),
-    logOut: t('genericcomponent.userinfo.button.logout'),
-  };
-  const helpLabels = {
-    title: t('genericcomponent.helpmenu.title'),
-    documentation: t('genericcomponent.helpmenu.documentation'),
-    support: t('genericcomponent.helpmenu.support'),
-    aboutTitle: t('genericcomponent.helpmenu.about'),
-    close: t('genericcomponent.dialog.about.button.close'),
-  };
   const currentTabPathname = location?.pathname;
-  const scenarioViewUrl = useMatch('/scenario/:id');
-
-  // Add theme light/dark status in state
-  const [darkThemeUsed, setDarkThemeUsed] = useState(localStorage.getItem('darkThemeUsed') === 'true');
+  const scenarioViewUrl = useMatch(':workspaceId/scenario/:scenarioId');
+  const instanceViewUrl = useMatch(':workspaceId/instance/:scenarioId');
+  const applicationError = useApplicationError();
+  const clearApplicationErrorMessage = useClearApplicationErrorMessage();
+  const routerParameters = useParams();
+  sessionStorage.removeItem('providedUrlBeforeSignIn');
+  const currentWorkspace = useWorkspace();
+  const navigate = useNavigate();
+  const selectWorkspace = useSelectWorkspace();
+  const filteredTabs = useMemo(
+    () => filterTabsForCurrentWorkspace(tabs, currentWorkspace?.data),
+    [tabs, currentWorkspace?.data]
+  );
 
   useEffect(() => {
-    localStorage.setItem('darkThemeUsed', darkThemeUsed);
-  }, [darkThemeUsed]);
+    if (currentWorkspace?.status === 'ERROR') {
+      navigate('/workspaces');
+    } else if (currentWorkspace?.status === 'IDLE' && routerParameters?.workspaceId) {
+      selectWorkspace(routerParameters.workspaceId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWorkspace?.status, currentWorkspace?.data?.webApp?.options?.instanceView, currentTabPathname]);
 
-  return (
-    <>
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar variant="dense" disableGutters={true}>
-          <Tabs value={currentTabPathname} className={classes.tabs}>
-            {tabs.map((tab) => (
-              <Tab
-                data-cy={tab.key}
-                key={tab.key}
-                value={scenarioViewUrl != null && tab.to === '/scenario' ? scenarioViewUrl.pathname : tab.to}
-                label={t(tab.label, tab.key)}
-                component={Link}
-                to={tab.to}
-                className={classes.tab}
-              />
-            ))}
-          </Tabs>
-          {
-            <Tooltip
-              TransitionComponent={Fade}
-              TransitionProps={{ timeout: 600 }}
-              title={
-                darkThemeUsed
-                  ? t('genericcomponent.switchtheme.light', 'Switch to light')
-                  : t('genericcomponent.switchtheme.dark', 'Switch to dark')
-              }
-            >
-              <IconButton
-                className={classes.switchToDarkTheme}
-                onClick={() => {
-                  setDarkThemeUsed(!darkThemeUsed);
-                  setApplicationTheme(!darkThemeUsed);
-                }}
-              >
-                {darkThemeUsed ? <WbSunnyIcon /> : <Brightness2Icon />}
-              </IconButton>
-            </Tooltip>
+  const isPathInvalid =
+    currentTabPathname.startsWith(`/${routerParameters.workspaceId}/instance`) &&
+    !ConfigUtils.isInstanceViewConfigValid(currentWorkspace?.data?.webApp?.options?.instanceView);
+  const tabValue = isPathInvalid ? `/${routerParameters.workspaceId}/scenario` : currentTabPathname;
+
+  const viewTabs = (
+    <MuiTabs value={tabValue} indicatorColor="secondary" textColor="inherit">
+      {filteredTabs.map((tab) => (
+        <Tab
+          data-cy={tab.key}
+          key={tab.key}
+          value={
+            (tab.to === 'scenario' && scenarioViewUrl?.pathname) ||
+            (tab.to === 'instance' && instanceViewUrl?.pathname) ||
+            `/${routerParameters.workspaceId}/${tab.to}`
           }
-          <HelpMenu
-            documentationUrl={DOCUMENTATION_URL}
-            supportUrl={SUPPORT_URL}
-            about={About ? <About /> : <></>}
-            labels={helpLabels}
-          />
-          <UserInfo
-            languages={LANGUAGES}
-            changeLanguage={(lang) => i18n.changeLanguage(lang)}
-            language={i18n.language}
-            labels={userInfoLabels}
-            userName={props.userEmail}
-            profilePlaceholder={props.userProfilePic ? props.userProfilePic : undefined}
-            onLogout={Auth.signOut}
-          />
-          <img
-            alt="Cosmo Tech"
-            height="28px"
-            // AppBar always has a dark background, use the theme dark logo
-            src={darkThemeUsed ? pictureDark.darkLogo : pictureLight.darkLogo}
-            className={classes.logo}
-          />
-        </Toolbar>
-      </AppBar>
+          label={t(tab.label, tab.key)}
+          component={Link}
+          to={`${currentWorkspace?.data?.id}/${tab.to}`}
+        />
+      ))}
+    </MuiTabs>
+  );
+
+  return currentWorkspace?.data ? (
+    <>
+      <DashboardsManager />
+      <AppBar>{viewTabs}</AppBar>
       <Box className={classes.content}>
-        {error && (
+        {applicationError && (
           <ErrorBanner
-            error={error}
+            error={applicationError}
             labels={{
               dismissButtonText: t('commoncomponents.banner.button.dismiss', 'Dismiss'),
               tooLongErrorMessage: t(
@@ -148,17 +103,9 @@ const TabLayout = (props) => {
         <Outlet />
       </Box>
     </>
-  );
+  ) : null;
 };
 
 TabLayout.propTypes = {
   tabs: PropTypes.array.isRequired,
-  userName: PropTypes.string.isRequired,
-  userEmail: PropTypes.string.isRequired,
-  userProfilePic: PropTypes.string.isRequired,
-  error: PropTypes.object,
-  clearApplicationErrorMessage: PropTypes.func.isRequired,
-  setApplicationTheme: PropTypes.func.isRequired,
 };
-
-export default TabLayout;

@@ -3,10 +3,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tooltip, Typography, Zoom, withStyles } from '@material-ui/core';
+import { Grid, Tooltip, Typography, Zoom } from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 import { BasicEnumInput, BasicNumberInput, BasicToggleInput } from '@cosmotech/ui';
 import { useTranslation } from 'react-i18next';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 
 const StyledTooltip = withStyles((theme) => ({
   tooltip: {

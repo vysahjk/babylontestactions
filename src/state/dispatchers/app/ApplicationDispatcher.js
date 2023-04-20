@@ -3,18 +3,16 @@
 
 import { APPLICATION_ACTIONS_KEY } from '../../commons/ApplicationConstants';
 import { STATUSES } from '../../commons/Constants';
-import { WORKSPACE_ID } from '../../../config/GlobalConfiguration';
 import { t } from 'i18next';
 
-export const dispatchSetApplicationStatus = (payLoad) => ({
+export const dispatchSetApplicationStatus = (payload) => ({
   type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
-  status: payLoad,
+  status: payload,
 });
 
-export const dispatchGetAllInitialData = () => ({
+export const dispatchGetAllInitialData = (payload) => ({
   type: APPLICATION_ACTIONS_KEY.GET_ALL_INITIAL_DATA,
   status: STATUSES.LOADING,
-  workspaceId: WORKSPACE_ID,
 });
 
 export const dispatchClearApplicationErrorMessage = () => ({
@@ -27,17 +25,19 @@ export const dispatchSetApplicationErrorMessage = (error, errorMessage) => ({
   type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_ERROR_MESSAGE,
   error: {
     title: navigator.onLine
-      ? error.response?.message ||
+      ? error.title ||
+        error.message ||
+        error.response?.message ||
         error.response?.data?.title ||
         t('commoncomponents.banner.unknownError', 'Unknown error')
       : t('commoncomponents.banner.network', 'Network problem, please check your internet connection'),
-    detail: error.response?.data?.detail || '',
-    status: error.response?.data?.status || '',
+    detail: error.detail || error.response?.data?.detail || '',
+    status: error.status || error.response?.data?.status || '',
     comment: errorMessage,
   },
 });
 
 export const dispatchSetApplicationTheme = (isDarkTheme) => ({
   type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_THEME,
-  isDarkTheme: isDarkTheme,
+  isDarkTheme,
 });

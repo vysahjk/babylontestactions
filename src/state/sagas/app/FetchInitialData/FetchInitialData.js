@@ -1,33 +1,44 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import { put, takeEvery, call, select, fork, all, take } from 'redux-saga/effects';
+import { put, takeEvery, call, select } from 'redux-saga/effects';
 import { APPLICATION_ACTIONS_KEY } from '../../../commons/ApplicationConstants';
-import { SCENARIO_ACTIONS_KEY } from '../../../commons/ScenarioConstants';
-import { STATUSES } from '../../../commons/Constants';
-import { SCENARIO_RUN_STATE } from '../../../../services/config/ApiConstants';
-import { getAllScenariosData } from '../../scenario/FindAllScenarios/FindAllScenariosData';
-import { fetchAllDatasetsData } from '../../datasets/FindAllDatasets/FindAllDatasets';
-import { fetchWorkspaceByIdData } from '../../workspace/FindWorkspaceById/FindWorkspaceByIdData';
-import { fetchSolutionByIdData } from '../../solution/FindSolutionById/FindSolutionByIdData';
-import { getPowerBIEmbedInfoSaga } from '../../powerbi/GetPowerBIEmbedInfo/GetPowerBIEmbedInfoData';
-import { POWER_BI_ACTIONS_KEY } from '../../../commons/PowerBIConstants';
-import { DATASET_ACTIONS_KEY } from '../../../commons/DatasetConstants';
 import { WORKSPACE_ACTIONS_KEY } from '../../../commons/WorkspaceConstants';
-import { SOLUTION_ACTIONS_KEY } from '../../../commons/SolutionConstants';
-import { getFirstScenarioMaster } from '../../../../utils/SortScenarioListUtils';
+import { STATUSES } from '../../../commons/Constants';
+import { getAllWorkspaces } from '../../workspace/GetAllWorkspaces/GetAllWorkspaces';
+import { fetchAllDatasetsData } from '../../datasets/FindAllDatasets/FindAllDatasets';
+import { fetchOrganizationById } from '../../organization/FindOrganizationById/FindOrganizationById';
 import { parseError } from '../../../../utils/ErrorsUtils';
 import { Api } from '../../../../services/config/Api';
+import { matchPath } from 'react-router-dom';
+import ConfigService from '../../../../services/ConfigService';
 
-const selectSolutionIdFromCurrentWorkspace = (state) => state.workspace.current.data.solution.solutionId;
-const selectScenarioList = (state) => state.scenario.list.data;
+const ORGANIZATION_ID = ConfigService.getParameterValue('ORGANIZATION_ID');
 
-export function* fetchAllInitialData(action) {
+const getWorkspaces = (state) => state?.workspace?.list?.data;
+const providedUrlBeforeSignIn = sessionStorage.getItem('providedUrlBeforeSignIn');
+const providedUrl = window.location.pathname;
+const path = matchPath(':firstParam/*', providedUrlBeforeSignIn || providedUrl);
+const firstParam = path?.params?.firstParam;
+const isRedirectedToWorkspaces = !firstParam || ['workspaces', 'sign-in', 'accessDenied'].includes(firstParam);
+let providedWorkspaceId;
+sessionStorage.removeItem('providedUrl');
+if (!isRedirectedToWorkspaces) {
+  providedWorkspaceId = firstParam;
+  sessionStorage.setItem('providedUrl', providedUrl);
+}
+
+export function* fetchAllInitialData() {
+  yield put({
+    type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
+    status: STATUSES.LOADING,
+  });
+
   try {
-    const { data: organizationPermissions } = yield call(Api.Organization.getAllPermissions);
+    const { data: organizationPermissions } = yield call(Api.Organizations.getAllPermissions);
     yield put({
       type: APPLICATION_ACTIONS_KEY.SET_PERMISSIONS_MAPPING,
-      organizationPermissions: organizationPermissions,
+      organizationPermissions,
     });
   } catch (error) {
     console.error(error);
@@ -44,43 +55,11 @@ export function* fetchAllInitialData(action) {
   }
 
   try {
-    const workspaceId = action.workspaceId;
-    yield put({
-      type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
-      status: STATUSES.LOADING,
-    });
-    // Fetch all scenarios
-    yield call(getAllScenariosData, workspaceId);
-    yield call(fetchAllDatasetsData);
-    yield call(fetchWorkspaceByIdData, workspaceId);
-    const solutionId = yield select(selectSolutionIdFromCurrentWorkspace);
-    yield call(fetchSolutionByIdData, workspaceId, solutionId);
-    const scenarioList = yield select(selectScenarioList);
-    yield put({
-      type: SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO,
-      scenario: getFirstScenarioMaster(scenarioList), // Function returns null if list is empty
-      status: STATUSES.SUCCESS,
-    });
-    if (scenarioList.length !== 0) {
-      // Start run status polling for running scenarios
-      for (let i = 0; i < scenarioList.length; ++i) {
-        if (scenarioList[i].state === SCENARIO_RUN_STATE.RUNNING) {
-          yield put({
-            type: SCENARIO_ACTIONS_KEY.START_SCENARIO_STATUS_POLLING,
-            workspaceId: workspaceId,
-            scenarioId: scenarioList[i].id,
-          });
-        }
-      }
-    }
-
-    yield fork(getPowerBIEmbedInfoSaga);
-    yield put({
-      type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
-      status: STATUSES.SUCCESS,
-    });
+    // TODO: fork datasets download, or change the datasets usage in app to download them only when necessary
+    yield call(fetchAllDatasetsData, ORGANIZATION_ID);
+    yield call(fetchOrganizationById, ORGANIZATION_ID);
+    yield call(getAllWorkspaces, ORGANIZATION_ID);
   } catch (error) {
-    console.log(error);
     const errorDetails = parseError(error);
     yield put({
       type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
@@ -88,41 +67,17 @@ export function* fetchAllInitialData(action) {
       error: errorDetails,
     });
   }
-}
-
-export function* watchNeededApplicationData() {
-  const actions = yield all([
-    take(POWER_BI_ACTIONS_KEY.SET_EMBED_INFO),
-    take(SCENARIO_ACTIONS_KEY.SET_ALL_SCENARIOS),
-    take(DATASET_ACTIONS_KEY.SET_ALL_DATASETS),
-    take(WORKSPACE_ACTIONS_KEY.SET_CURRENT_WORKSPACE),
-    take(SOLUTION_ACTIONS_KEY.SET_CURRENT_SOLUTION),
-    take(SCENARIO_ACTIONS_KEY.SET_CURRENT_SCENARIO),
-  ]);
-
-  const unSuccessfulActions = actions.filter((action) => action.status !== STATUSES.SUCCESS);
-
-  if (unSuccessfulActions.length !== 0) {
-    const powerBIError = unSuccessfulActions.find(
-      (action) => action.type === POWER_BI_ACTIONS_KEY.SET_EMBED_INFO && action.status === STATUSES.ERROR
-    );
-    // PowerBI Error should not block the web application
-    if (unSuccessfulActions.length === 1 && powerBIError !== undefined) {
-      yield put({
-        type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
-        status: STATUSES.SUCCESS,
-      });
-    } else {
-      yield put({
-        type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
-        status: STATUSES.ERROR,
-        error: {
-          title: 'App initialization error',
-          status: null,
-          detail: 'Something went wrong during the initialization of the webapp',
-        },
-      });
-    }
+  const workspaces = yield select(getWorkspaces);
+  if (providedWorkspaceId) {
+    yield put({
+      type: WORKSPACE_ACTIONS_KEY.SELECT_WORKSPACE,
+      workspaceId: providedWorkspaceId,
+    });
+  } else if (workspaces?.length === 1) {
+    yield put({
+      type: WORKSPACE_ACTIONS_KEY.SELECT_WORKSPACE,
+      workspaceId: workspaces[0].id,
+    });
   } else {
     yield put({
       type: APPLICATION_ACTIONS_KEY.SET_APPLICATION_STATUS,
@@ -131,6 +86,8 @@ export function* watchNeededApplicationData() {
   }
 }
 
-export function* getAllInitialData() {
+function* watchGetAllInitialData() {
   yield takeEvery(APPLICATION_ACTIONS_KEY.GET_ALL_INITIAL_DATA, fetchAllInitialData);
 }
+
+export default watchGetAllInitialData;

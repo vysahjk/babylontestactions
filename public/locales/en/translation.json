@@ -154,6 +154,7 @@
             },
             "error": "An error occured during the scenario run",
             "running": "Scenario run in progress...",
+            "dataInTransfer": "Scenario results transfer in progress..",
             "uninitialized": "The scenario has not been run yet"
           },
           "button": {
@@ -177,6 +178,10 @@
             "label": "Unknown error"
           }
         }
+      },
+      "errorPlaceholder": {
+        "title": "Unexpected error",
+        "description": "Something went wrong when trying to display PowerBI dashboards. If the problem persists, please contact an administrator."
       }
     },
     "scenariomanager": {
@@ -188,6 +193,7 @@
             "label": "Run status:",
             "successful": "Successful",
             "running": "Running",
+            "dataingestioninprogress": "Transferring results",
             "failed": "Failed",
             "created": "Created"
           },
@@ -295,9 +301,11 @@
           "buttons": {
             "share": "Share",
             "cancel": "Cancel",
+            "close": "Close",
             "done": "Done"
           },
           "title": "Share ",
+          "readOnlyTitle": "Permissions for ",
           "select": {
             "addPeople": "Add people",
             "userSelected": "Selected user"
@@ -395,13 +403,22 @@
       "mass_action_lever": {
         "download": "Download dataset from ADT",
         "generate": "Generate download link"
-      }
+      },
+      "noFileMessage": "None"
     },
     "loading": {
       "line": {
         "workspace": {
+          "list": {
+            "title": "Loading workspaces"
+          },
           "current": {
             "title": "Loading workspace"
+          }
+        },
+        "organization": {
+          "current": {
+            "title": "Loading organization"
           }
         },
         "solution": {
@@ -462,6 +479,28 @@
     "switchtheme": {
       "light": "Switch to light",
       "dark": "Switch to dark"
+    },
+    "workspaceselector": {
+      "homebutton": "Workspaces",
+      "card": {
+        "button": {
+          "open": "Open"
+        }
+      },
+      "placeholder": {
+        "noworkspace": {
+          "title": "No workspace available",
+          "description": {
+            "reason": "This could mean you don't have permission to access existing workspaces.",
+            "contact": "If you think this is a mistake, please contact your administrator."
+          }
+        }
+      },
+      "error": {
+        "title": "App initialization error",
+        "message": "Could not find workspace with id {{workspaceId}} in workspaces list",
+        "comment": "You have been redirected to the list of available workspaces"
+      }
     },
     "dialog": {
       "scenario": {
@@ -763,13 +802,24 @@
       "button": {
         "clearErrors": "Clear",
         "fileImport": "Import file",
-        "csvExport": "Export CSV"
+        "csvExport": "Export"
       },
       "labels": {
         "loading": "Loading...",
         "fileImportError": "File load failed.",
+        "maxErrorsCount": "(only the top first {{maxCount}} results)",
         "errorsCount_one": "{{count}} error occurred:",
         "errorsCount_other": "{{count}} errors occurred:"
+      },
+      "export": {
+        "labels": {
+          "cancel": "Cancel",
+          "export": "Export",
+          "fileNameInputLabel": "Name",
+          "fileTypeSelectLabel": "Type",
+          "title": "Export file",
+          "exportDescription": "Your file will be saved on your computer."
+        }
       }
     }
   },
