@@ -4,7 +4,7 @@
 import { DATASET_ID_VARTYPE } from '../../../services/config/ApiConstants';
 import {
   GenericDateInput,
-  GenericEnumInput,
+  CustomEnumInput,
   GenericNumberInput,
   GenericSliderInput,
   GenericRadioInput,
@@ -17,7 +17,7 @@ import {
 export const GENERIC_VAR_TYPES_COMPONENTS_MAPPING = {
   bool: GenericToggleInput,
   date: GenericDateInput,
-  enum: GenericEnumInput,
+  enum: CustomEnumInput,
   'enum-RADIO': GenericRadioInput,
   int: GenericNumberInput,
   'number-SLIDER': GenericSliderInput,
