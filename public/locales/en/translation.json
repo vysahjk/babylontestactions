@@ -533,263 +533,284 @@
           "placeholder": "No parameters to edit.",
           "title": "Scenario parameters",
           "time_configuration": {
-            "start_date": "Start date",
-            "end_date": "End date",
-            "date_boundaries_error": "The simulation start date must be before the simulation end date",
-            "simulation_granularity": "Simulation granularity"
+            "date_boundaries_error": "The simulation start date must be before the simulation end date"
           },
-          "units": {
-            "min": "Minute",
-            "hour": "Hour",
-            "day": "Day",
-            "week": "Week",
-            "month": "Month",
-            "quarter": "Quarter",
-            "year": "Year"
-          },
-          "optimization_configuration": {
-            "optimization_objective": {
-              "service_level_maximization": "Service level maximization",
-              "profit_maximization": "Profit maximization",
-              "title": "Optimization objective",
-              "tooltip": "Objective pursued by automatic optimization"
+          "simulation_granularity": {
+            "minute": {
+              "label": "Minute"
+            },
+            "hour": {
+              "label": "Hour"
+            },
+            "day": {
+              "label": "Day"
+            },
+            "week": {
+              "label": "Week"
+            },
+            "month": {
+              "label": "Month"
+            },
+            "quarter": {
+              "label": "Quarter"
+            },
+            "year": {
+              "label": "Year"
             }
           },
-          "uncertainty": {
-            "distribution": {
-              "gaussian": "Gaussian",
-              "uniform": "Uniform",
-              "title": "Probability distribution used for the demands and operational performances",
-              "tooltip": "Select the type of probability distribution used for the demand and operational performance"
+          "optimization_objective": {
+            "ServiceLevelMaximization": {
+              "label": "Service level maximization"
+            },
+            "ProfitMaximization": {
+              "label": "Profit maximization"
             }
           },
-          "transportUncertainty": {
-            "distribution": {
-              "discreteuniform": "Discrete uniform",
-              "gamma": "Gamma",
-              "beta": "Beta",
-              "truncnorm": "Truncated Normal",
-              "truncexpon": "Truncated exponential",
-              "weibull": "Weibull",
-              "triangular": "Triangular",
-              "normal": "Normal",
-              "exponential": "Exponential",
-              "poisson": "Poisson",
-              "binomial": "Binomial",
-              "betabinom": "Beta binomial",
-              "geom": "Geometric",
-              "lognormal": "Lognormal",
-              "title": "Probability distribution used for the transport durations",
-              "tooltip": "Select the type of distribution used for the transport durations"
+          "uncertainties_probability_distribution": {
+            "Gaussian": {
+              "label": "Gaussian"
+            },
+            "Uniform": {
+              "label": "Uniform"
             }
           },
-          "sensitivity_analysis": {
-            "sensitive_parameter": {
-              "fixed_production_cost": "Fixed Production Cost",
-              "production_resource_opening_time": "Production Resource Opening Time",
-              "operating_performance": "Operating Performance",
-              "cycle_time": "Cycle Time",
-              "variable_production_cost": "Variable Production Cost",
-              "production_co2_unit_emissions": "Production CO2 Unit Emissions",
-              "production_minimum_order_quantity": "Production Minimum Order Quantity",
-              "production_multiple_order_quantity": "Production Multiple Order Quantity",
-              "production_plan": "Production Plan",
-              "initial_stock": "Initial Stock",
-              "purchasing_unit_cost": "Purchasing Unit Cost",
-              "unit_income": "Unit Income",
-              "storage_unit_cost": "Storage Unit Cost",
-              "order_point": "Order Point",
-              "order_quantities": "Order Quantities",
-              "order_up_to_levels": "Order Up To Levels",
-              "safety_quantities": "Safety Quantities",
-              "transport_unit_cost": "Transport Unit Cost",
-              "custom_fees": "Custom Fees",
-              "transport_duration": "Transport Duration",
-              "transport_co2_unit_emission": "Transport CO2 Unit Emission",
-              "transport_minimum_order_quantity": "Transport Minimum Order Quantity",
-              "transport_multiple_order_quantity": "Transport Multiple Order Quantity",
-              "title": "Variable",
-              "tooltip": "Type of parameter on which the study will be performed."
+          "transport_uncertainty_distribution": {
+            "discreteuniform": {
+              "label": "Discrete uniform"
             },
-            "change": {
-              "relative": {
-                "value": "Relative",
-                "tooltip": "variable = reference * (1 + variation)"
-              },
-              "absolute": {
-                "value": "Absolute",
-                "tooltip": "variable = reference + variation"
-              },
-              "replacement": {
-                "value": "Replacement",
-                "tooltip": "variable = variation"
-              },
-              "title": "Change",
-              "tooltip": "Mode used by the one-at-a-time method to vary each variable one by one."
+            "gamma": {
+              "label": "Gamma"
             },
-            "variation": {
-              "title": "Variation",
-              "tooltip": "Decimal value used by the one-at-a-time method to vary each variable one by one. Validity depends on selected change:\n• Relative: variation ≥ -1\n• Absolute: variation ≥ - reference\n• Replacement: variation ≥ 0"
+            "beta": {
+              "label": "Beta"
             },
-            "timeinterval": {
-              "title": "Time interval",
-              "tooltip": "Option to specify whether the change happens during a specific interval (otherwise it is applied for the complete duration of the simulation)."
+            "truncnorm": {
+              "label": "Truncated Normal"
             },
-            "initialtimestep": {
-              "title": "Initial time step",
-              "tooltip": "Time step at which the change starts to take place (included)."
+            "truncexpon": {
+              "label": "Truncated exponential"
             },
-            "finaltimestep": {
-              "title": "Final time step",
-              "tooltip": "Time step after which the change ends (included)."
+            "weibull": {
+              "label": "Weibull"
+            },
+            "triangular": {
+              "label": "Triangular"
+            },
+            "normal": {
+              "label": "Normal"
+            },
+            "exponential": {
+              "label": "Exponential"
+            },
+            "poisson": {
+              "label": "Poisson"
+            },
+            "binomial": {
+              "label": "Binomial"
+            },
+            "betabinom": {
+              "label": "Beta binomial"
+            },
+            "geom": {
+              "label": "Geometric"
+            },
+            "lognormal": {
+              "label": "Lognormal"
             }
           },
-          "behavior": {
-            "stock_dispatch": {
-              "title": "Intermediary stock dispatch policy",
-              "tooltip": "Option to adjust the flows behavior at intermediate stocks",
-              "dispatch_all": {
-                "value": "Dispatch all quantities downstream",
-                "tooltip": "Default behavior"
-              },
-              "allow_retention": {
-                "value": "Can retain quantities",
-                "tooltip": "For an optimization run type, it removes a constraint which forces having all intermediary stocks, with only transport operations downstream, empty at the end of each timestep. For a simulation run type, it enables to take into account demands on intermediary stocks in the stock dispatch policy, except for the \"Standard\" stock dispatch policy. (If there is no demand on intermediary stocks, then it will have no impact on the simulation.)"
-              }
+          "sensitive_parameter": {
+            "fixed_production_cost": {
+              "label": "Fixed Production Cost"
             },
-            "manage_backlog": {
-              "title": "Track and serve backlog orders",
-              "tooltip": "Activate the ability to keep in memory the quantities not served in full on time and to serve them as soon as possible"
+            "production_resource_opening_time": {
+              "label": "Production Resource Opening Time"
             },
-            "obsolete_stock": {
-              "title": "Automatic obsolete stock deletion",
-              "tooltip": "If activated: model will automatically delete stocks during simulation when no further demand exists"
+            "operating_performance": {
+              "label": "Operating Performance"
             },
-            "actualize_shipments": {
-              "title": "Ongoing transports update",
-              "tooltip": "Consider actual durations of transports instead of theoretical durations for stock levels projections."
+            "cycle_time": {
+              "label": "Cycle Time"
             },
-            "batch_size": {
-              "title": "Batch size",
-              "tooltip": "Multiple to be observed at the end of production operation before being able to move on to the next operation (default value is 0 which means no batch size constraint) - Is applied to all production operations."
+            "variable_production_cost": {
+              "label": "Variable Production Cost"
             },
-            "financial_cost": {
-              "title": "Financial cost of stock",
-              "tooltip": "Cost of the financial asset due to inventory (ratio between 0 and 1 applied to inventory value for each time step)"
+            "production_co2_unit_emissions": {
+              "label": "Production CO2 Unit Emissions"
             },
-            "carbon_tax": {
-              "title": "Carbon tax",
-              "tooltip": "Cost per CO2 unit emission: Cost linked to CO2 emissions is calculated at the end of simulation based on all CO2 emissions (production, purchasing, transport) following the formula: carbon tax x CO2 emissions."
+            "production_minimum_order_quantity": {
+              "label": "Production Minimum Order Quantity"
+            },
+            "production_multiple_order_quantity": {
+              "label": "Production Multiple Order Quantity"
+            },
+            "production_plan": {
+              "label": "Production Plan"
+            },
+            "initial_stock": {
+              "label": "Initial Stock"
+            },
+            "purchasing_unit_cost": {
+              "label": "Purchasing Unit Cost"
+            },
+            "unit_income": {
+              "label": "Unit Income"
+            },
+            "storage_unit_cost": {
+              "label": "Storage Unit Cost"
+            },
+            "order_point": {
+              "label": "Order Point"
+            },
+            "order_quantities": {
+              "label": "Order Quantities"
+            },
+            "order_up_to_levels": {
+              "label": "Order Up To Levels"
+            },
+            "safety_quantities": {
+              "label": "Safety Quantities"
+            },
+            "transport_unit_cost": {
+              "label": "Transport Unit Cost"
+            },
+            "custom_fees": {
+              "label": "Custom Fees"
+            },
+            "transport_duration": {
+              "label": "Transport Duration"
+            },
+            "transport_co2_unit_emission": {
+              "label": "Transport CO2 Unit Emission"
+            },
+            "transport_minimum_order_quantity": {
+              "label": "Transport Minimum Order Quantity"
+            },
+            "transport_multiple_order_quantity": {
+              "label": "Transport Multiple Order Quantity"
             }
           },
-          "flow_management_policies": {
-            "stock": {
-              "label": "Stock policy",
-              "tooltip": "Will be applied to all stocks.",
-              "none": {
-                "value": "None",
-                "tooltip": "No stock policy."
-              },
-              "op_fixed": {
-                "value": "Order point, fixed quantity",
-                "tooltip": "Stock policy on order point and fixed quantity (r,q)."
-              },
-              "op_variable": {
-                "value": "Order point, variable quantity",
-                "tooltip": "Stock policy on order point aiming at replenishing the stock up to an user-defined level (s,S)."
-              },
-              "make_to_forecast": {
-                "value": "Make to forecast",
-                "tooltip": "Stock policy aiming at replenishing the stock to have enough quantities available to serve the forecasted demand and maintaining the defined safety stock."
-              },
-              "make_to_order": {
-                "value": "Make to order",
-                "tooltip": "Stock policy initiating supply orders based on orders to be served."
-              },
-              "from_dataset": {
-                "value": "Mixed",
-                "tooltip": "Enables to use different stock policies (to be defined for each stock in the dataset)."
-              }
+          "change": {
+            "relative": {
+              "label": "Relative",
+              "tooltip": "variable = reference * (1 + variation)"
             },
-            "sourcing": {
-              "label": "Sourcing policy",
-              "tooltip": "Rule to apply in case of multi-sources to a stock.\nWill be applied to all stocks.",
-              "equi": {
-                "value": "Equidistribution",
-                "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations, respecting their maximum capacities. If a quantity to order remains, it is evenly distributed among all the directly upstream production operations and transports."
-              },
-              "proportions": {
-                "value": "Sourcing proportions",
-                "tooltip": "The quantity ordered from the stock is distributed among the directly upstream production operations and transports following the defined sourcing proportions, respecting their maximum capacities. If there is a remaining quantity to allocate due to a capacity constraint, then this quantity is again distributed among the directly upstream production operations and transports following the defined sourcing proportions."
-              },
-              "highest": {
-                "value": "The highest available stock first",
-                "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their available quantities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned following an equidistribution."
-              },
-              "priority": {
-                "value": "The highest priority first",
-                "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned to the first."
-              },
-              "from_dataset": {
-                "value": "Mixed",
-                "tooltip": "Enables to use different sourcing policies (to be defined for each stock in the dataset)."
-              }
+            "absolute": {
+              "label": "Absolute",
+              "tooltip": "variable = reference + variation"
             },
-            "stockDispatch": {
-              "label": "Stock dispatch policy",
-              "tooltip": "Rule to apply in case of multi-destinations from a stock.\nWill be applied to all stocks.",
-              "equi": {
-                "value": "Equidistribution",
-                "tooltip": "The available quantity in the stock is evenly distributed among the directly downstream production operations and transports which received an order for the current time step and the stock itself if stock retention is allowed and the stock has a demand or a backlog for the current time step."
-              },
-              "greatest": {
-                "value": "The greatest required quantity first",
-                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
-              },
-              "smallest": {
-                "value": "The smallest required quantity first",
-                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
-              },
-              "priority": {
-                "value": "The highest priority first",
-                "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
-              },
-              "none": {
-                "value": "Standard",
-                "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports (even if the quantity available is greater than the quantities ordered; therefore no quantity will be kept in stock, unless a downstream production operation reaches its capacity limit and therefore returns excess quantities to inventory)."
-              },
-              "from_dataset": {
-                "value": "Mixed",
-                "tooltip": "Enables to use different stock dispatch policies (to be defined for each stock in the dataset)."
-              }
+            "replacement": {
+              "label": "Replacement",
+              "tooltip": "variable = variation"
+            }
+          },
+          "intermediary_stock_dispatch": {
+            "DispatchAll": {
+              "label": "Dispatch all quantities downstream",
+              "tooltip": "Default behavior"
             },
-            "production": {
-              "label": "Production policy",
-              "tooltip": "Rule to apply in case of multi-operations for a production resource.\nWill be applied to all production resources.",
-              "equi": {
-                "value": "Equidistribution",
-                "tooltip": "The available time of the production resource is evenly distributed among the contained production operations which received an order for the current time step."
-              },
-              "greatest": {
-                "value": "The greatest workload first",
-                "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
-              },
-              "smallest": {
-                "value": "The smallest workload first",
-                "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
-              },
-              "priority": {
-                "value": "The highest priority first",
-                "tooltip": "Consider the contained production operations one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
-              },
-              "none": {
-                "value": "None",
-                "tooltip": "No production policy."
-              },
-              "from_dataset": {
-                "value": "Mixed",
-                "tooltip": "Enables to use different production policies (to be defined for each production resource in the dataset)."
-              }
+            "AllowRetention": {
+              "label": "Can retain quantities",
+              "tooltip": "For an optimization run type, it removes a constraint which forces having all intermediary stocks, with only transport operations downstream, empty at the end of each timestep. For a simulation run type, it enables to take into account demands on intermediary stocks in the stock dispatch policy, except for the \"Standard\" stock dispatch policy. (If there is no demand on intermediary stocks, then it will have no impact on the simulation.)"
+            }
+          },
+          "stock_policy": {
+            "None": {
+              "label": "None",
+              "tooltip": "No stock policy."
+            },
+            "OrderPointFixedQuantity": {
+              "label": "Order point, fixed quantity",
+              "tooltip": "Stock policy on order point and fixed quantity (r,q)."
+            },
+            "OrderPointVariableQuantity": {
+              "label": "Order point, variable quantity",
+              "tooltip": "Stock policy on order point aiming at replenishing the stock up to an user-defined level (s,S)."
+            },
+            "MakeToForecast": {
+              "label": "Make to forecast",
+              "tooltip": "Stock policy aiming at replenishing the stock to have enough quantities available to serve the forecasted demand and maintaining the defined safety stock."
+            },
+            "MakeToOrder": {
+              "label": "Make to order",
+              "tooltip": "Stock policy initiating supply orders based on orders to be served."
+            },
+            "FromDataset": {
+              "label": "Mixed",
+              "tooltip": "Enables to use different stock policies (to be defined for each stock in the dataset)."
+            }
+          },
+          "sourcing_policy": {
+            "Equidistribution": {
+              "label": "Equidistribution",
+              "tooltip": "The quantity ordered from the stock is evenly distributed among all the directly upstream production operations, respecting their maximum capacities. If a quantity to order remains, it is evenly distributed among all the directly upstream production operations and transports."
+            },
+            "SourcingProportions": {
+              "label": "Sourcing proportions",
+              "tooltip": "The quantity ordered from the stock is distributed among the directly upstream production operations and transports following the defined sourcing proportions, respecting their maximum capacities. If there is a remaining quantity to allocate due to a capacity constraint, then this quantity is again distributed among the directly upstream production operations and transports following the defined sourcing proportions."
+            },
+            "HighestStock": {
+              "label": "The highest available stock first",
+              "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their available quantities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned following an equidistribution."
+            },
+            "HighestPriority": {
+              "label": "The highest priority first",
+              "tooltip": "Consider the directly upstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Assign the quantity to order by allocating to each one a quantity equal to the minimum between its available quantity and the remaining quantity to order. If a quantity to order remains, it is assigned to the first."
+            },
+            "FromDataset": {
+              "label": "Mixed",
+              "tooltip": "Enables to use different sourcing policies (to be defined for each stock in the dataset)."
+            }
+          },
+          "stock_dispatch_policy": {
+            "Equidistribution": {
+              "label": "Equidistribution",
+              "tooltip": "The available quantity in the stock is evenly distributed among the directly downstream production operations and transports which received an order for the current time step and the stock itself if stock retention is allowed and the stock has a demand or a backlog for the current time step."
+            },
+            "GreatestQuantity": {
+              "label": "The greatest required quantity first",
+              "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
+            },
+            "SmallestQuantity": {
+              "label": "The smallest required quantity first",
+              "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their required quantities with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
+            },
+            "HighestPriority": {
+              "label": "The highest priority first",
+              "tooltip": "Consider the directly downstream production operations and transports one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available quantity by allocating to each one a quantity equal to the minimum between its required quantity and the remaining available quantity."
+            },
+            "None": {
+              "label": "Standard",
+              "tooltip": "The available quantity in the stock is evenly distributed among all the directly downstream production operations and transports (even if the quantity available is greater than the quantities ordered; therefore no quantity will be kept in stock, unless a downstream production operation reaches its capacity limit and therefore returns excess quantities to inventory)."
+            },
+            "FromDataset": {
+              "label": "Mixed",
+              "tooltip": "Enables to use different stock dispatch policies (to be defined for each stock in the dataset)."
+            }
+          },
+          "production_policy": {
+            "Equidistribution": {
+              "label": "Equidistribution",
+              "tooltip": "The available time of the production resource is evenly distributed among the contained production operations which received an order for the current time step."
+            },
+            "GreatestWorkload": {
+              "label": "The greatest workload first",
+              "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the greatest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
+            },
+            "SmallestWorkload": {
+              "label": "The smallest workload first",
+              "tooltip": "Consider the contained production operations one by one in a determined order following their required times with the smallest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
+            },
+            "HighestPriority": {
+              "label": "The highest priority first",
+              "tooltip": "Consider the contained production operations one by one in a determined order following their priorities with the highest first, in the event of a tie, the choice is based on the alphabetical order of their ID. Distribute the available time by allocating to each one a time equal to the minimum between its required time and the remaining available time."
+            },
+            "None": {
+              "label": "None",
+              "tooltip": "No production policy."
+            },
+            "FromDataset": {
+              "label": "Mixed",
+              "tooltip": "Enables to use different production policies (to be defined for each production resource in the dataset)."
             }
           },
           "tabs": {

@@ -531,264 +531,287 @@
     "text": {
       "scenario": {
         "parameters": {
+          "placeholder": "Pas de paramètre à éditer.",
+          "title": "Paramètres du scénario",
           "time_configuration": {
-            "start_date": "Date de début",
-            "end_date": "Date de fin",
-            "date_boundaries_error": "La date de début de la simulation doit être avant la date de fin de la simulation",
-            "simulation_granularity": "Pas de temps de la simulation"
+            "date_boundaries_error": "La date de début de la simulation doit être avant la date de fin de la simulation"
           },
-          "units": {
-            "min": "Minute",
-            "hour": "Heure",
-            "day": "Jour",
-            "week": "Semaine",
-            "month": "Mois",
-            "quarter": "Trimestre",
-            "year": "Année"
-          },
-          "optimization_configuration": {
-            "optimization_objective": {
-              "service_level_maximization": "Maximisation du taux de service",
-              "profit_maximization": "Maximisation du profit",
-              "title": "Objectif de l'optimisation",
-              "tooltip": "Objectif poursuivi par l'optimisation automatique"
+          "simulation_granularity": {
+            "minute": {
+              "label": "Minute"
+            },
+            "hour": {
+              "label": "Heure"
+            },
+            "day": {
+              "label": "Jour"
+            },
+            "week": {
+              "label": "Semaine"
+            },
+            "month": {
+              "label": "Mois"
+            },
+            "quarter": {
+              "label": "Trimestre"
+            },
+            "year": {
+              "label": "Année"
             }
           },
-          "uncertainty": {
-            "distribution": {
-              "gaussian": "Gaussienne",
-              "uniform": "Uniforme",
-              "title": "Loi de probabilité  pour les demandes et performances opérationnelles",
-              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les demandes et performances opérationnelles"
+          "optimization_objective": {
+            "ServiceLevelMaximization": {
+              "label": "Maximisation du taux de service"
+            },
+            "ProfitMaximization": {
+              "label": "Maximisation du profit"
             }
           },
-          "transportUncertainty": {
-            "distribution": {
-              "discreteuniform": "Uniforme discrète",
-              "gamma": "Gamma",
-              "beta": "Bêta",
-              "truncnorm": "Normale Tronquée",
-              "truncexpon": "Exponentielle Tronquée",
-              "weibull": "Weibull",
-              "triangular": "Triangulaire",
-              "normal": "Normale",
-              "exponential": "Exponentielle",
-              "poisson": "Poisson",
-              "binomial": "Binomiale",
-              "betabinom": "Bêta-Binomiale",
-              "geom": "Géométrique",
-              "lognormal": "Log-Normale",
-              "title": "Loi de probabilité utilisée pour les temps de transport",
-              "tooltip": "Sélectionnez la loi de probabilité utilisée pour les temps de transports"
+          "uncertainties_probability_distribution": {
+            "Gaussian": {
+              "label": "Gaussienne"
+            },
+            "Uniform": {
+              "label": "Uniforme"
             }
           },
-          "sensitivity_analysis": {
-            "sensitive_parameter": {
-              "fixed_production_cost": "Coût de production fixe",
-              "production_resource_opening_time": "Temps d'ouverture de ressource de production",
-              "operating_performance": "Performance opérationnelle",
-              "cycle_time": "Temps de cycle",
-              "variable_production_cost": "Coût de production variable",
-              "production_co2_unit_emissions": "Émissions de CO2 liées à la production",
-              "production_minimum_order_quantity": "Quantité minimum de commande",
-              "production_multiple_order_quantity": "Multiple de commande",
-              "production_plan": "Plan de production",
-              "initial_stock": "Quantité initiale",
-              "purchasing_unit_cost": "Coût d'achat",
-              "unit_income": "Revenu",
-              "storage_unit_cost": "Coût de stockage",
-              "order_point": "Seuil de commande",
-              "order_quantities": "Quantité commandée",
-              "order_up_to_levels": "Quantité cible",
-              "safety_quantities": "Quantité de sûreté",
-              "transport_unit_cost": "Coût de transport",
-              "custom_fees": "Frais de douane",
-              "transport_duration": "Durée de transport",
-              "transport_co2_unit_emission": "Émissions de CO2 liées au transport",
-              "transport_minimum_order_quantity": "Quantité minimum de commande au transport",
-              "transport_multiple_order_quantity": "Multiple de commande au transport",
-              "title": "Variable",
-              "tooltip": "Type de paramètre sur lequel l'étude portera."
+          "transport_uncertainty_distribution": {
+            "discreteuniform": {
+              "label": "Uniforme discrète"
             },
-            "change": {
-              "relative": {
-                "value": "Relatif",
-                "tooltip": "variable = référence * (1 + variation)"
-              },
-              "absolute": {
-                "value": "Absolu",
-                "tooltip": "variable = référence + variation"
-              },
-              "replacement": {
-                "value": "Remplacement",
-                "tooltip": "variable = variation"
-              },
-              "title": "Changement",
-              "tooltip": "Mode utilisé par la méthode un à la fois pour faire varier chaque variable une par une."
+            "gamma": {
+              "label": "Gamma"
             },
-            "variation": {
-              "title": "Variation",
-              "tooltip": "Valeur décimale utilisée par la méthode un à la fois pour faire varier chaque variable une par une. La validité dépend du changement sélectionné :\n• Relatif : variation ≥ -1\n• Absolu : variation ≥ - référence\n• Remplacement : variation ≥ 0"
+            "beta": {
+              "label": "Bêta"
             },
-            "timeinterval": {
-              "title": "Intervalle de temps",
-              "tooltip": "Option pour définir si le changement se produit pendant un intervalle de temps spécifique (sinon, il est appliqué pendant toute la durée de la simulation)."
+            "truncnorm": {
+              "label": "Normale Tronquée"
             },
-            "initialtimestep": {
-              "title": "Premier pas de temps",
-              "tooltip": "Pas de temps auquel le changement commence à avoir lieu (inclus)."
+            "truncexpon": {
+              "label": "Exponentielle Tronquée"
             },
-            "finaltimestep": {
-              "title": "Dernier pas de temps",
-              "tooltip": "Pas de temps après lequel le changement se termine (inclus)."
+            "weibull": {
+              "label": "Weibull"
+            },
+            "triangular": {
+              "label": "Triangulaire"
+            },
+            "normal": {
+              "label": "Normale"
+            },
+            "exponential": {
+              "label": "Exponentielle"
+            },
+            "poisson": {
+              "label": "Poisson"
+            },
+            "binomial": {
+              "label": "Binomiale"
+            },
+            "betabinom": {
+              "label": "Bêta-Binomiale"
+            },
+            "geom": {
+              "label": "Géométrique"
+            },
+            "lognormal": {
+              "label": "Log-Normale"
             }
           },
-          "behavior": {
-            "stock_dispatch": {
-              "title": "Politique de distribution des stocks intermédiaires",
-              "tooltip": "Option pour ajuster le comportement d'écoulement des flux au niveau des stocks intermédiaires",
-              "dispatch_all": {
-                "value": "Distribue toutes les quantités vers l'aval",
-                "tooltip": "Comportement par défaut"
-              },
-              "allow_retention": {
-                "value": "Peut retenir des quantités",
-                "tooltip": "Pour un scénario de type optimisation, cela supprime une contrainte qui oblige à avoir tous les stocks intermédiaires, avec uniquement des opérations de transport en aval, vides à la fin de chaque pas de temps. Pour un scénario de type simulation, cela permet de prendre en compte les demandes sur les stocks intermédiaires dans la politique de distribution des stocks, sauf pour la politique de distribution des stocks \"Standard\". (S'il n'y a pas de demande sur les stocks intermédiaires, alors cela n'aura aucun impact sur la simulation.)"
-              }
+          "sensitive_parameter": {
+            "fixed_production_cost": {
+              "label": "Coût de production fixe"
             },
-            "manage_backlog": {
-              "title": "Prise en compte des retards de service de la demande",
-              "tooltip": "Activer la capacité de garder en mémoire les quantités non servies en totalité et à temps puis de les servir dès que possible"
+            "production_resource_opening_time": {
+              "label": "Temps d'ouverture de ressource de production"
             },
-            "obsolete_stock": {
-              "title": "Suppression automatique des stocks obsolètes",
-              "tooltip": "Si activé : le modèle supprimera automatiquement les stocks pendant la simulation lorsqu'il n'y aura plus de demande"
+            "operating_performance": {
+              "label": "Performance opérationnelle"
             },
-            "actualize_shipments": {
-              "title": "Actualisation des transports en cours",
-              "tooltip": "Considérer les durées effectives des transports au lieu des durées théoriques pour les projections des niveaux de stock."
+            "cycle_time": {
+              "label": "Temps de cycle"
             },
-            "batch_size": {
-              "title": "Taille de lot",
-              "tooltip": "Multiple à observer en fin d'opération de production avant de pouvoir passer à l'opération suivante (la valeur par défaut est 0 ce qui signifie aucune contrainte de taille de lot) - S'applique à toutes les opérations de production."
+            "variable_production_cost": {
+              "label": "Coût de production variable"
             },
-            "financial_cost": {
-              "title": "Coût financier des stocks",
-              "tooltip": "Coût financier dû au cash immobilisé en stock (ratio entre 0 et 1 appliqué à la valeur de stock pour chaque pas de temps)"
+            "production_co2_unit_emissions": {
+              "label": "Émissions de CO2 liées à la production"
             },
-            "carbon_tax": {
-              "title": "Taxe Carbone",
-              "tooltip": "Coût par émission unitaire de CO2 : Le coût lié aux émissions de CO2 est calculé à la fin de la simulation sur la base de l'ensemble des émissions de CO2 (production, achat, transport) selon la formule : taxe carbone x émissions totales de CO2."
+            "production_minimum_order_quantity": {
+              "label": "Quantité minimum de commande"
+            },
+            "production_multiple_order_quantity": {
+              "label": "Multiple de commande"
+            },
+            "production_plan": {
+              "label": "Plan de production"
+            },
+            "initial_stock": {
+              "label": "Quantité initiale"
+            },
+            "purchasing_unit_cost": {
+              "label": "Coût d'achat"
+            },
+            "unit_income": {
+              "label": "Revenu"
+            },
+            "storage_unit_cost": {
+              "label": "Coût de stockage"
+            },
+            "order_point": {
+              "label": "Seuil de commande"
+            },
+            "order_quantities": {
+              "label": "Quantité commandée"
+            },
+            "order_up_to_levels": {
+              "label": "Quantité cible"
+            },
+            "safety_quantities": {
+              "label": "Quantité de sûreté"
+            },
+            "transport_unit_cost": {
+              "label": "Coût de transport"
+            },
+            "custom_fees": {
+              "label": "Frais de douane"
+            },
+            "transport_duration": {
+              "label": "Durée de transport"
+            },
+            "transport_co2_unit_emission": {
+              "label": "Émissions de CO2 liées au transport"
+            },
+            "transport_minimum_order_quantity": {
+              "label": "Quantité minimum de commande au transport"
+            },
+            "transport_multiple_order_quantity": {
+              "label": "Multiple de commande au transport"
             }
           },
-          "flow_management_policies": {
-            "stock": {
-              "label": "Politique de stock",
-              "tooltip": "S’appliquera à tous les stocks.",
-              "none": {
-                "value": "Aucune",
-                "tooltip": "Pas de politique de stock"
-              },
-              "op_fixed": {
-                "value": "Point de commande, quantité fixe",
-                "tooltip": "Politique de stock sur point de commande et à quantité fixe (r,q)."
-              },
-              "op_variable": {
-                "value": "Point de commande, quantité variable",
-                "tooltip": "Politique de stock sur point de commande visant à réapprovisionner le stock jusqu'à un niveau défini par l'utilisateur (s,S)."
-              },
-              "make_to_forecast": {
-                "value": "Production sur prévision",
-                "tooltip": "Politique de stock visant à réapprovisionner le stock afin d'avoir suffisamment de quantités disponibles pour répondre à la demande prévue et maintenir le stock de sécurité défini."
-              },
-              "make_to_order": {
-                "value": "Production à la commande",
-                "tooltip": "Politique de stock lancant des ordres d'approvisionnement sur la base des commandes à servir."
-              },
-              "from_dataset": {
-                "value": "Mixte",
-                "tooltip": "Permet d'utiliser différentes politiques de stock (à définir pour chaque stock dans le jeu de données)."
-              }
+          "change": {
+            "relative": {
+              "label": "Relatif",
+              "tooltip": "variable = référence * (1 + variation)"
             },
-            "sourcing": {
-              "label": "Politique d'approvisionnement",
-              "tooltip": "Règle à appliquer en cas de plusieurs sources possibles vers un même stock.\nS’appliquera à tous les stocks.",
-              "equi": {
-                "value": "Equirépartition",
-                "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production, en respectant leurs capacités maximales. Si une quantité à commander reste, elle est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
-              },
-              "proportions": {
-                "value": "Proportions d'approvisionnement",
-                "tooltip": "La quantité à commander est répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies, en respectant leurs capacités maximales. S'il reste une quantité à allouer à cause d'une contrainte de capacité, alors cette quantité est encore répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies."
-              },
-              "highest": {
-                "value": "La plus grande quantité disponible en premier",
-                "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs quantités disponibles, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée en suivant une équirépartition."
-              },
-              "priority": {
-                "value": "La plus haute priorité en premier",
-                "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée au premier."
-              },
-              "from_dataset": {
-                "value": "Mixte",
-                "tooltip": "Permet d'utiliser différentes politiques d'approvisionnement (à définir pour chaque stock dans le jeu de données)."
-              }
+            "absolute": {
+              "label": "Absolu",
+              "tooltip": "variable = référence + variation"
             },
-            "stockDispatch": {
-              "label": "Politique de distribution des stocks",
-              "tooltip": "Règle à appliquer en cas de plusieurs destinations possibles depuis un même stock.\nS’appliquera à tous les stocks.",
-              "equi": {
-                "value": "Equirépartition",
-                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre les opérations de production et les transports directement en aval qui ont reçu une commande pour le pas de temps en cours et le stock lui-même si la rétention de stock est autorisée et que le stock a une demande ou un arriéré pour le pas de temps en cours."
-              },
-              "greatest": {
-                "value": "La plus grande quantité requise en premier",
-                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
-              },
-              "smallest": {
-                "value": "La plus petite quantité requise en premier",
-                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre croissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
-              },
-              "priority": {
-                "value": "La plus haute priorité en premier",
-                "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
-              },
-              "none": {
-                "value": "Standard",
-                "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval (même si la quantité disponible est supérieure aux quantités commandées ; donc aucune quantité ne sera conservée dans le stock, sauf si une opération de production en aval atteint sa limite de capacité et renvoie donc les quantités en excès dans le stock)."
-              },
-              "from_dataset": {
-                "value": "Mixte",
-                "tooltip": "Permet d'utiliser différentes politiques de distribution des stock (à définir pour chaque stock dans le jeu de données)."
-              }
+            "replacement": {
+              "label": "Remplacement",
+              "tooltip": "variable = variation"
+            }
+          },
+          "intermediary_stock_dispatch": {
+            "DispatchAll": {
+              "label": "Distribue toutes les quantités vers l'aval",
+              "tooltip": "Comportement par défaut"
             },
-            "production": {
-              "label": "Politique de production",
-              "tooltip": "Règle à appliquer en cas de plusieurs opérations faisables par une même ressource de production.\nS’appliquera à toutes les ressources de production.",
-              "equi": {
-                "value": "Equirépartition",
-                "tooltip": "Le temps disponible de la ressource de production est réparti uniformément entre les opérations de production contenues qui requièrent une quantité."
-              },
-              "greatest": {
-                "value": "La plus grande charge de travail en premier",
-                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
-              },
-              "smallest": {
-                "value": "La plus petite charge de travail en premier",
-                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre croissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
-              },
-              "priority": {
-                "value": "La plus haute priorité en premier",
-                "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs priorités, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
-              },
-              "none": {
-                "value": "Aucune",
-                "tooltip": "Pas de politique de production"
-              },
-              "from_dataset": {
-                "value": "Mixte",
-                "tooltip": "Permet d'utiliser différentes politiques de production (à définir pour chaque ressource de production dans le jeu de données)."
-              }
+            "AllowRetention": {
+              "label": "Peut retenir des quantités",
+              "tooltip": "Pour un scénario de type optimisation, cela supprime une contrainte qui oblige à avoir tous les stocks intermédiaires, avec uniquement des opérations de transport en aval, vides à la fin de chaque pas de temps. Pour un scénario de type simulation, cela permet de prendre en compte les demandes sur les stocks intermédiaires dans la politique de distribution des stocks, sauf pour la politique de distribution des stocks \"Standard\". (S'il n'y a pas de demande sur les stocks intermédiaires, alors cela n'aura aucun impact sur la simulation.)"
+            }
+          },
+          "stock_policy": {
+            "None": {
+              "label": "Aucune",
+              "tooltip": "Pas de politique de stock"
+            },
+            "OrderPointFixedQuantity": {
+              "label": "Point de commande, quantité fixe",
+              "tooltip": "Politique de stock sur point de commande et à quantité fixe (r,q)."
+            },
+            "OrderPointVariableQuantity": {
+              "label": "Point de commande, quantité variable",
+              "tooltip": "Politique de stock sur point de commande visant à réapprovisionner le stock jusqu'à un niveau défini par l'utilisateur (s,S)."
+            },
+            "MakeToForecast": {
+              "label": "Production sur prévision",
+              "tooltip": "Politique de stock visant à réapprovisionner le stock afin d'avoir suffisamment de quantités disponibles pour répondre à la demande prévue et maintenir le stock de sécurité défini."
+            },
+            "MakeToOrder": {
+              "label": "Production à la commande",
+              "tooltip": "Politique de stock lancant des ordres d'approvisionnement sur la base des commandes à servir."
+            },
+            "FromDataset": {
+              "label": "Mixte",
+              "tooltip": "Permet d'utiliser différentes politiques de stock (à définir pour chaque stock dans le jeu de données)."
+            }
+          },
+          "sourcing_policy": {
+            "Equidistribution": {
+              "label": "Equirépartition",
+              "tooltip": "La quantité à commander est répartie uniformément entre toutes les opérations de production, en respectant leurs capacités maximales. Si une quantité à commander reste, elle est répartie uniformément entre toutes les opérations de production et tous les transports directement en amont."
+            },
+            "SourcingProportions": {
+              "label": "Proportions d'approvisionnement",
+              "tooltip": "La quantité à commander est répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies, en respectant leurs capacités maximales. S'il reste une quantité à allouer à cause d'une contrainte de capacité, alors cette quantité est encore répartie entre les opérations de production et les transports suivant les proportions d'approvisionnement définies."
+            },
+            "HighestStock": {
+              "label": "La plus grande quantité disponible en premier",
+              "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs quantités disponibles, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée en suivant une équirépartition."
+            },
+            "HighestPriority": {
+              "label": "La plus haute priorité en premier",
+              "tooltip": "Les opérations de production et les transports directement en amont sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité à commander est répartie en assignant à chacun une quantité égale au minimum entre sa quantité disponible et la quantité à commander restante. Si une quantité à commander reste, elle est assignée au premier."
+            },
+            "FromDataset": {
+              "label": "Mixte",
+              "tooltip": "Permet d'utiliser différentes politiques d'approvisionnement (à définir pour chaque stock dans le jeu de données)."
+            }
+          },
+          "stock_dispatch_policy": {
+            "Equidistribution": {
+              "label": "Equirépartition",
+              "tooltip": "La quantité disponible dans le stock est répartie uniformément entre les opérations de production et les transports directement en aval qui ont reçu une commande pour le pas de temps en cours et le stock lui-même si la rétention de stock est autorisée et que le stock a une demande ou un arriéré pour le pas de temps en cours."
+            },
+            "GreatestQuantity": {
+              "label": "La plus grande quantité requise en premier",
+              "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
+            },
+            "SmallestQuantity": {
+              "label": "La plus petite quantité requise en premier",
+              "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre croissant de leurs quantités requises, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
+            },
+            "HighestPriority": {
+              "label": "La plus haute priorité en premier",
+              "tooltip": "Les opérations de production et les transports directement en aval sont considérés un par un dans l'ordre décroissant de leurs priorités, les égalités étant départagées par l'ordre alphabétique de leurs identifiants. La quantité disponible est répartie en assignant à chacun une quantité égale au minimum entre sa quantité requise et la quantité disponible restante."
+            },
+            "None": {
+              "label": "Standard",
+              "tooltip": "La quantité disponible dans le stock est répartie uniformément entre toutes les opérations de production et tous les transports directement en aval (même si la quantité disponible est supérieure aux quantités commandées ; donc aucune quantité ne sera conservée dans le stock, sauf si une opération de production en aval atteint sa limite de capacité et renvoie donc les quantités en excès dans le stock)."
+            },
+            "FromDataset": {
+              "label": "Mixte",
+              "tooltip": "Permet d'utiliser différentes politiques de distribution des stock (à définir pour chaque stock dans le jeu de données)."
+            }
+          },
+          "production_policy": {
+            "Equidistribution": {
+              "label": "Equirépartition",
+              "tooltip": "Le temps disponible de la ressource de production est réparti uniformément entre les opérations de production contenues qui requièrent une quantité."
+            },
+            "GreatestWorkload": {
+              "label": "La plus grande charge de travail en premier",
+              "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
+            },
+            "SmallestWorkload": {
+              "label": "La plus petite charge de travail en premier",
+              "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre croissant de leurs temps requis, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
+            },
+            "HighestPriority": {
+              "label": "La plus haute priorité en premier",
+              "tooltip": "Les opérations de production contenues sont considérées une par une dans l'ordre décroissant de leurs priorités, les égalités étant départagées suivant l'ordre alphabétique de leurs identifiants. Le temps disponible est réparti en allouant à chacune un temps égal au minimum entre son temps requis et le temps disponible restant."
+            },
+            "None": {
+              "label": "Aucune",
+              "tooltip": "Pas de politique de production"
+            },
+            "FromDataset": {
+              "label": "Mixte",
+              "tooltip": "Permet d'utiliser différentes politiques de production (à définir pour chaque ressource de production dans le jeu de données)."
             }
           },
           "tabs": {
