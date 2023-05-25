@@ -15,3 +15,5 @@
 //   SimulationParameterTab,
 //   UncertaintyAnalysisParameterTab,
 // };
+
+export { default as MassActionLeverParameterTab } from './MassActionLeverParameterTab';
