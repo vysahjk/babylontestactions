@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 export { GenericDateInput } from './GenericDateInput';
+export { CustomDateInput } from './CustomDateInput';
 export { GenericEnumInput } from './GenericEnumInput';
 export { CustomEnumInput } from './CustomEnumInput';
 export { GenericRadioInput } from './GenericRadioInput';
