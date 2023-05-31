@@ -1,38 +1,48 @@
 // Copyright (c) Cosmo Tech.
 // Licensed under the MIT license.
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
 import rfdc from 'rfdc';
+import equal from 'fast-deep-equal';
 import { Table, TABLE_DATA_STATUS, UPLOAD_FILE_STATUS_KEY } from '@cosmotech/ui';
-import { Button } from '@mui/material';
 import { AgGridUtils, Auth, FileBlobUtils } from '@cosmotech/core';
-import { gridDark, gridLight } from '../../../theme';
+import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+// eslint-disable-next-line
+import { TableExportDialog } from '../../../components/ScenarioParameters/components/ScenarioParametersInputs/components';
+import { gridLight, gridDark } from '../../../theme/';
+import { ConfigUtils, TranslationUtils, FileManagementUtils } from '../../../utils';
+import { useOrganizationId } from '../../../state/hooks/OrganizationHooks.js';
+import { useWorkspaceId } from '../../../state/hooks/WorkspaceHooks.js';
 import axios from 'axios';
-import ConfigService from '../../../services/ConfigService';
-import { FileManagementUtils } from '../../../utils/FileManagementUtils';
-
-const ORGANIZATION_ID = ConfigService.getParameterValue('ORGANIZATION_ID');
-const WORKSPACE_ID = ConfigService.getParameterValue('WORKSPACE_ID');
-
-const theme = { gridDark, gridLight };
 
 const clone = rfdc();
 
 const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd';
+const MAX_ERRORS_COUNT = 100;
 
-const _generateGridDataFromCSV = (fileContent, parameterMetadata, options) => {
-  return AgGridUtils.fromCSV(fileContent, parameterMetadata.hasHeader || true, parameterMetadata?.columns, options);
+const _generateGridDataFromCSV = (fileContent, parameterData, options) => {
+  return AgGridUtils.fromCSV(
+    fileContent,
+    ConfigUtils.getParameterAttribute(parameterData, 'hasHeader') || true,
+    ConfigUtils.getParameterAttribute(parameterData, 'columns'),
+    options
+  );
 };
 
 const _generateGridDataFromXLSX = async (fileBlob, parameterData, options) => {
-  return await AgGridUtils.fromXLSX(fileBlob, parameterData.hasHeader || true, parameterData.columns, options);
+  return await AgGridUtils.fromXLSX(
+    fileBlob,
+    ConfigUtils.getParameterAttribute(parameterData, 'hasHeader') || true,
+    ConfigUtils.getParameterAttribute(parameterData, 'columns'),
+    options
+  );
 };
 
-const checkCsvContent = (data, parameterData, parameterDescriptor, options) => {
-  const fileContent = AgGridUtils.toCSV(data.rows, data.columns);
+const checkCsvContent = (data, parameterData, options) => {
+  const fileContent = AgGridUtils.toCSV(data.rows, ConfigUtils.getParameterAttribute(parameterData, 'columns'));
   const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
   if (agGridData.error) {
     return {
@@ -45,7 +55,7 @@ const checkCsvContent = (data, parameterData, parameterDescriptor, options) => {
       name: 'content.csv',
       content: fileContent,
       agGridRows: data.rows,
-      agGridColumns: data.columns,
+      agGridColumns: ConfigUtils.getParameterAttribute(parameterData, 'columns'),
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
       tableDataStatus: TABLE_DATA_STATUS.READY,
@@ -53,40 +63,94 @@ const checkCsvContent = (data, parameterData, parameterDescriptor, options) => {
   }
 };
 
-export const AzureFunctionTableFactory = ({ parameterData, parametersState, setParametersState, context }) => {
+export const AzureFunctionTableFactory = ({ parameterData, context, parameterValue, setParameterValue }) => {
   const { t } = useTranslation();
-  const parameterId = parameterData.id;
-  const parameter = parametersState[parameterId] || {};
+  const organizationId = useOrganizationId();
+  const workspaceId = useWorkspaceId();
   const datasets = useSelector((state) => state.dataset?.list?.data);
   const scenarioId = useSelector((state) => state.scenario?.current?.data?.id);
+
+  const parameterId = parameterData.id;
+  const [parameter, setParameter] = useState(parameterValue || {});
+
   const lockId = `${scenarioId}_${parameterId}`;
 
-  const labels = {
+  const tableLabels = {
     label: t(`solution.parameters.${parameterId}`, parameterId),
     loading: t('genericcomponent.table.labels.loading', 'Loading...'),
     clearErrors: t('genericcomponent.table.button.clearErrors', 'Clear'),
     errorsPanelMainError: t('genericcomponent.table.labels.fileImportError', 'File load failed.'),
   };
-  const columns = parameterData?.columns || [];
-  const dateFormat = parameterData?.dateFormat ?? DEFAULT_DATE_FORMAT;
+  const tableExportDialogLabels = {
+    cancel: t('genericcomponent.table.export.labels.cancel', 'Cancel'),
+    export: t('genericcomponent.table.export.labels.export', 'Export'),
+    fileNameInputLabel: t('genericcomponent.table.export.labels.fileNameInputLabel', 'Name'),
+    fileTypeSelectLabel: t('genericcomponent.table.export.labels.fileTypeSelectLabel', 'Type'),
+    title: t('genericcomponent.table.export.labels.title', 'Export file'),
+    exportDescription: t(
+      'genericcomponent.table.export.labels.exportDescription',
+      'Your file will be saved on your computer.'
+    ),
+  };
+
+  const columns = ConfigUtils.getParameterAttribute(parameterData, 'columns');
+  const dateFormat = ConfigUtils.getParameterAttribute(parameterData, 'dateFormat') || DEFAULT_DATE_FORMAT;
   const options = { dateFormat };
 
-  function setParameterInState(newValuePart) {
-    setParametersState((currentParametersState) => ({
-      ...currentParametersState,
-      [parameterId]: {
-        ...currentParametersState[parameterId],
-        ...newValuePart,
-      },
-    }));
-  }
+  const isUnmount = useRef(false);
+  const gridApiRef = useRef();
+  useEffect(() => {
+    return () => {
+      isUnmount.current = true;
+      gridApiRef.current = undefined;
+    };
+  }, []);
 
-  function setClientFileDescriptorStatuses(newFileStatus, newTableDataStatus) {
-    setParameterInState({
+  // Store last parameter in a ref
+  // Update a state is async, so, in case of multiple call of updateParameterValue in same function
+  // parameter state value will be update only in last call.
+  // We need here to use a ref value for be sure to have the good value.
+  const lastNewParameterValue = useRef(parameter);
+  const updateParameterValue = (newValuePart) => {
+    const newParameterValue = {
+      ...lastNewParameterValue.current,
+      ...newValuePart,
+    };
+
+    lastNewParameterValue.current = newParameterValue;
+
+    if (!isUnmount.current) {
+      setParameter(newParameterValue);
+    }
+
+    // Update parameterValue in another process to allow grid to update parameter before.
+    // if not, the parent should update parameterValue in same time that grid refreshing by update local parameter.
+    setTimeout(() => {
+      // Prevent useless update of parameterValue if multiple updateParameterValue was done before
+      if (lastNewParameterValue.current === newParameterValue) {
+        setParameterValue(newParameterValue);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (
+      parameterValue?.status !== parameter.status ||
+      !equal(parameterValue?.errors, parameter.errors) ||
+      !equal(parameterValue?.agGridRows, parameter.agGridRows)
+    ) {
+      lastNewParameterValue.current = parameterValue;
+      setParameter(parameterValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parameterValue]);
+
+  const setClientFileDescriptorStatuses = (newFileStatus, newTableDataStatus) => {
+    updateParameterValue({
       status: newFileStatus,
       tableDataStatus: newTableDataStatus,
     });
-  }
+  };
 
   const _checkForLock = () => {
     if (AzureFunctionTableFactory.downloadLocked === undefined) {
@@ -99,22 +163,31 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     return false;
   };
 
-  const _downloadDatasetContentFromAzureFunction = async (parameterDescriptor, setparameterDescriptor) => {
-    if (_checkForLock()) {
-      return;
-    }
-    AzureFunctionTableFactory.downloadLocked[parameterId] = true;
-    setparameterDescriptor({
-      agGridRows: null,
-      name: parameterDescriptor.name,
+  const _downloadDatasetContentFromAzureFunction = async (
+    organizationId,
+    workspaceId,
+    datasets,
+    clientFileDescriptor,
+    setClientFileDescriptor
+  ) => {
+    // Setting the table status to DOWNLOADING again even when the download is already active (and thus locked) seems
+    // to fix a race condition in the table parameter state. This can be used to fix the missing loading spinner.
+    setClientFileDescriptor({
       file: null,
       content: null,
+      agGridRows: null,
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD,
       tableDataStatus: TABLE_DATA_STATUS.DOWNLOADING,
     });
-    const azureFunctionAddress = parameterData?.azureFunction;
-    const azureFunctionHeaders = parameterData?.azureFunctionHeaders;
+
+    if (_checkForLock()) {
+      return;
+    }
+    AzureFunctionTableFactory.downloadLocked[lockId] = true;
+
+    const azureFunctionAddress = ConfigUtils.getParameterAttribute(parameterData, 'azureFunction');
+    const azureFunctionHeaders = ConfigUtils.getParameterAttribute(parameterData, 'azureFunctionHeaders');
     if (azureFunctionAddress) {
       const tokens = await Auth.acquireTokens();
       const headers = { ...azureFunctionHeaders };
@@ -127,26 +200,19 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
         url: azureFunctionAddress,
         headers,
         params: {
-          'organization-id': ORGANIZATION_ID,
-          'scenario-id': context.currentScenario.id,
-          'workspace-id': WORKSPACE_ID,
+          'organization-id': organizationId,
+          'scenario-id': scenarioId,
+          'workspace-id': workspaceId,
         },
       });
+
       if (data) {
-        const responseDescriptor = checkCsvContent(
-          data,
-          parameterData,
-          setparameterDescriptor,
-          parameterDescriptor,
-          options
-        );
-        setparameterDescriptor(responseDescriptor);
+        const responseDescriptor = checkCsvContent(data, parameterData, options);
+        setClientFileDescriptor(responseDescriptor);
       } else {
-        setparameterDescriptor({
-          ...parameterDescriptor,
+        setClientFileDescriptor({
           file: null,
           content: null,
-          agGridRows: null,
           errors: [
             {
               summary: 'Error while calling the azure function',
@@ -154,14 +220,15 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
               context: null,
             },
           ],
+          agGridRows: null,
+          status: UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD,
           tableDataStatus: TABLE_DATA_STATUS.ERROR,
         });
       }
     } else {
-      setparameterDescriptor({
+      setClientFileDescriptor({
         file: null,
         content: null,
-        agGridRows: null,
         errors: [
           {
             summary: 'Azure function is not declared',
@@ -169,43 +236,61 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
             context: null,
           },
         ],
+        agGridRows: null,
+        status: UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD,
         tableDataStatus: TABLE_DATA_STATUS.ERROR,
       });
     }
-    AzureFunctionTableFactory.downloadLocked[parameterId] = false;
+    AzureFunctionTableFactory.downloadLocked[lockId] = false;
   };
 
-  const _downloadDatasetFileContentFromStorage = async (datasets, clientFileDescriptor, setClientFileDescriptor) => {
-    if (_checkForLock()) {
-      return;
-    }
-    AzureFunctionTableFactory.downloadLocked[parameterId] = true;
+  const _downloadDatasetFileContentFromStorage = async (
+    organizationId,
+    workspaceId,
+    datasets,
+    clientFileDescriptor,
+    setClientFileDescriptor
+  ) => {
+    // Setting the table status to DOWNLOADING again even when the download is already active (and thus locked) seems
+    // to fix a race condition in the table parameter state. This can be used to fix the missing loading spinner.
     setClientFileDescriptor({
-      agGridRows: null,
       file: null,
       content: null,
+      agGridRows: null,
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD,
       tableDataStatus: TABLE_DATA_STATUS.DOWNLOADING,
     });
 
+    if (_checkForLock()) {
+      return;
+    }
+    AzureFunctionTableFactory.downloadLocked[lockId] = true;
+
     const datasetId = clientFileDescriptor.id;
-    const data = await FileManagementUtils.downloadFileData(datasets, datasetId, setClientFileDescriptorStatuses);
+    const data = await FileManagementUtils.downloadFileData(
+      organizationId,
+      workspaceId,
+      datasets,
+      datasetId,
+      setClientFileDescriptorStatuses
+    );
+
     if (data) {
       const fileName = clientFileDescriptor.name;
-      const finalStatus = UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD;
+      const finalStatus = UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD;
       _parseCSVFileContent(data, fileName, clientFileDescriptor, setClientFileDescriptor, finalStatus);
     } else {
       setClientFileDescriptor({
-        agGridRows: null,
         file: null,
         content: null,
         errors: null,
+        agGridRows: null,
         status: UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD,
         tableDataStatus: TABLE_DATA_STATUS.ERROR,
       });
     }
-    AzureFunctionTableFactory.downloadLocked[parameterId] = false;
+    AzureFunctionTableFactory.downloadLocked[lockId] = false;
   };
 
   const _parseCSVFileContent = (
@@ -217,14 +302,15 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     clientFileDescriptorRestoreValue
   ) => {
     setClientFileDescriptor({
-      agGridRows: null,
       name: fileName,
       file: null,
-      content: fileContent,
+      agGridRows: null,
       errors: null,
+      content: fileContent,
       status: finalStatus,
       tableDataStatus: TABLE_DATA_STATUS.PARSING,
     });
+
     const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
     if (agGridData.error) {
       if (clientFileDescriptorRestoreValue) {
@@ -234,18 +320,17 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
         });
       } else {
         setClientFileDescriptor({
-          errors: agGridData.error,
           tableDataStatus: TABLE_DATA_STATUS.ERROR,
+          errors: agGridData.error,
         });
       }
     } else {
       setClientFileDescriptor({
-        agGridRows: agGridData.rows,
-        agGridColumns: agGridData.cols,
         name: fileName,
         file: null,
-        content: fileContent,
+        agGridRows: agGridData.rows,
         errors: agGridData.error,
+        content: fileContent,
         status: finalStatus,
         tableDataStatus: TABLE_DATA_STATUS.READY,
         uploadPreprocess: null,
@@ -262,12 +347,11 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     if (!file) {
       return;
     }
-
     setClientFileDescriptor({
-      agGridRows: null,
       name: file.name,
       file: null,
       content: null,
+      agGridRows: null,
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
       tableDataStatus: TABLE_DATA_STATUS.UPLOADING,
@@ -289,55 +373,6 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     reader.readAsText(file);
   };
 
-  const onCellChange = (event) => {
-    const newFileContent = AgGridUtils.toCSV(parameter.agGridRows, parameter.agGridColumns || columns, options);
-    setParameterInState({
-      ...parameter,
-      errors: [],
-      content: newFileContent,
-      status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
-      tableDataStatus: TABLE_DATA_STATUS.READY,
-    });
-  };
-
-  const onClearErrors = () => {
-    setParameterInState({
-      errors: [],
-    });
-  };
-
-  const buildErrorsPanelTitle = (errorsCount) => {
-    return t('genericcomponent.table.labels.errorsCount', '{{count}} errors occured:', {
-      count: errorsCount,
-    });
-  };
-
-  const alreadyDownloaded =
-    parameter.tableDataStatus !== undefined &&
-    [
-      TABLE_DATA_STATUS.ERROR,
-      TABLE_DATA_STATUS.DOWNLOADING,
-      TABLE_DATA_STATUS.READY,
-      TABLE_DATA_STATUS.PARSING,
-    ].includes(parameter.tableDataStatus);
-
-  if (
-    parameter.id &&
-    !parameter.content &&
-    parameter.status === UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD &&
-    !alreadyDownloaded
-  ) {
-    _downloadDatasetFileContentFromStorage(datasets, parameter, setParameterInState);
-  } else if (!parameter.content && parameter.status === UPLOAD_FILE_STATUS_KEY.EMPTY && !alreadyDownloaded) {
-    _downloadDatasetContentFromAzureFunction(parameter, setParameterInState);
-  }
-
-  const exportCSV = (event) => {
-    const fileName = parameterId.concat('.csv');
-    const fileContent = AgGridUtils.toCSV(parameter.agGridRows, parameter.agGridColumns, options);
-    FileBlobUtils.downloadFileFromData(fileContent, fileName);
-  };
-
   const _readAndParseXLSXFile = async (
     file,
     clientFileDescriptor,
@@ -348,10 +383,10 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
       return;
     }
     setClientFileDescriptor({
-      agGridRows: null,
       name: file.name,
       file,
       content: null,
+      agGridRows: null,
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
       tableDataStatus: TABLE_DATA_STATUS.PARSING,
@@ -371,12 +406,16 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
         });
       }
     } else {
-      const newFileContent = AgGridUtils.toCSV(agGridData.rows, parameterData.columns, options);
+      const newFileContent = AgGridUtils.toCSV(
+        agGridData.rows,
+        ConfigUtils.getParameterAttribute(parameterData, 'columns'),
+        options
+      );
       setClientFileDescriptor({
-        agGridRows: agGridData.rows,
         name: file.name,
         file: null,
         content: newFileContent,
+        agGridRows: agGridData.rows,
         errors: agGridData.error,
         status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
         tableDataStatus: TABLE_DATA_STATUS.READY,
@@ -388,23 +427,110 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
   const importFile = (event) => {
     // TODO: ask confirmation if data already exist
     const previousFileBackup = clone(parameter);
-    const file = FileManagementUtils.prepareToUpload(event, parameter, setParameterInState);
+    const file = FileManagementUtils.prepareToUpload(event, parameter, updateParameterValue);
     if (file.name.endsWith('.csv')) {
-      _readAndParseCSVFile(file, parameter, setParameterInState, previousFileBackup);
+      _readAndParseCSVFile(file, parameter, updateParameterValue, previousFileBackup);
     } else if (file.name.endsWith('.xlsx')) {
-      _readAndParseXLSXFile(file, parameter, setParameterInState, previousFileBackup);
+      _readAndParseXLSXFile(file, parameter, updateParameterValue, previousFileBackup);
     } else {
-      setParameterInState({
+      updateParameterValue({
         errors: [{ summary: 'Unknown file type, please provide a CSV or XLSX file.', loc: file.name }],
       });
     }
   };
+
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const openExportDialog = () => setIsExportDialogOpen(true);
+  const closeExportDialog = () => setIsExportDialogOpen(false);
+  const exportTable = (fileName) => {
+    closeExportDialog();
+    exportFile(fileName);
+  };
+
+  const exportFile = (fileName) => {
+    if (fileName.toLowerCase().endsWith('.xlsx')) exportXSLX(fileName);
+    else exportCSV(fileName);
+  };
+
+  const exportCSV = (fileName) => {
+    const fileContent = AgGridUtils.toCSV(parameter.agGridRows, columns, options);
+    FileBlobUtils.downloadFileFromData(fileContent, fileName);
+  };
+  const exportXSLX = (fileName) => {
+    const fileContent = AgGridUtils.toXLSX(parameter.agGridRows, columns, options);
+    FileBlobUtils.downloadFileFromData(fileContent, fileName);
+  };
+
+  const _uploadPreprocess = (clientFileDescriptor) => {
+    const newFileContent = AgGridUtils.toCSV(parameter.agGridRows, columns, options);
+    updateParameterValue({
+      content: newFileContent,
+    });
+    gridApiRef.current?.stopEditing();
+    return newFileContent;
+  };
+
+  const onCellChange = (event) => {
+    gridApiRef.current = event.api;
+    if (!parameter.uploadPreprocess) {
+      updateParameterValue({
+        status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
+        tableDataStatus: TABLE_DATA_STATUS.READY,
+        errors: null,
+        uploadPreprocess: { content: _uploadPreprocess },
+      });
+    }
+  };
+
+  const onClearErrors = () => {
+    updateParameterValue({
+      errors: null,
+    });
+  };
+
+  const buildErrorsPanelTitle = (errorsCount, maxErrorsCount) => {
+    let title = t('genericcomponent.table.labels.errorsCount', '{{count}} errors occured:', {
+      count: errorsCount,
+    });
+    if (errorsCount > maxErrorsCount) {
+      title +=
+        ' ' +
+        t('genericcomponent.table.labels.maxErrorsCount', '(only the top first {{maxCount}} results)', {
+          maxCount: maxErrorsCount,
+        });
+    }
+    return title;
+  };
+
+  const alreadyDownloaded =
+    parameter.tableDataStatus !== undefined &&
+    [
+      TABLE_DATA_STATUS.ERROR,
+      TABLE_DATA_STATUS.DOWNLOADING,
+      TABLE_DATA_STATUS.PARSING,
+      TABLE_DATA_STATUS.READY,
+    ].includes(parameter.tableDataStatus);
+
+  // Trigger dataset download only when mounting the component
+  useEffect(() => {
+    if (
+      parameter.id &&
+      !parameter.content &&
+      parameter.status === UPLOAD_FILE_STATUS_KEY.READY_TO_DOWNLOAD &&
+      !alreadyDownloaded
+    ) {
+      _downloadDatasetFileContentFromStorage(organizationId, workspaceId, datasets, parameter, updateParameterValue);
+    } else if (!parameter.content && parameter.status === UPLOAD_FILE_STATUS_KEY.EMPTY && !alreadyDownloaded) {
+      _downloadDatasetContentFromAzureFunction(organizationId, workspaceId, datasets, parameter, updateParameterValue);
+    }
+  });
 
   const csvImportButton = (
     <Button
       key="import-file-button"
       data-cy="import-file-button"
       disabled={!context.editMode}
+      color="primary"
       variant="outlined"
       component="label"
       onChange={importFile}
@@ -418,41 +544,52 @@ export const AzureFunctionTableFactory = ({ parameterData, parametersState, setP
     <Button
       style={{ marginLeft: '16px' }}
       key="export-csv-button"
-      data-cy="export-csv-button"
+      data-cy="export-button"
+      color="primary"
       variant="outlined"
       component="label"
-      onClick={exportCSV}
+      onClick={openExportDialog}
     >
       {t('genericcomponent.table.button.csvExport')}
     </Button>
   );
 
-  // eslint-disable-next-line no-unused-vars
   const extraToolbarActions = [csvImportButton, csvExportButton];
 
   return (
-    <Table
-      key={parameterId}
-      data-cy={parameterData.dataCy}
-      labels={labels}
-      dateFormat={dateFormat}
-      editMode={context.editMode}
-      dataStatus={parameter.tableDataStatus}
-      errors={parameter.errors}
-      columns={parameter.agGridColumns || columns}
-      rows={parameter.agGridRows || []}
-      agTheme={context.isDarkTheme ? theme.gridDark.agTheme : theme.gridLight.agTheme}
-      // extraToolbarActions={extraToolbarActions}
-      onCellChange={onCellChange}
-      onClearErrors={onClearErrors}
-      buildErrorsPanelTitle={buildErrorsPanelTitle}
-    />
+    <>
+      <TableExportDialog
+        defaultFileName={parameterId}
+        labels={tableExportDialogLabels}
+        open={isExportDialogOpen}
+        onClose={closeExportDialog}
+        onExport={exportTable}
+      />
+      <Table
+        key={parameterId}
+        data-cy={`table-${parameterData.id}`}
+        labels={tableLabels}
+        tooltipText={t(TranslationUtils.getParameterTooltipTranslationKey(parameterData.id), '')}
+        dateFormat={dateFormat}
+        editMode={context.editMode}
+        dataStatus={parameter.tableDataStatus || TABLE_DATA_STATUS.EMPTY}
+        errors={parameter.errors}
+        columns={columns}
+        rows={parameter.agGridRows || []}
+        agTheme={context.isDarkTheme ? gridDark.agTheme : gridLight.agTheme}
+        extraToolbarActions={extraToolbarActions}
+        onCellChange={onCellChange}
+        onClearErrors={onClearErrors}
+        buildErrorsPanelTitle={buildErrorsPanelTitle}
+        maxErrorsCount={MAX_ERRORS_COUNT}
+      />
+    </>
   );
 };
 
 AzureFunctionTableFactory.propTypes = {
   parameterData: PropTypes.object.isRequired,
-  parametersState: PropTypes.object.isRequired,
-  setParametersState: PropTypes.func.isRequired,
   context: PropTypes.object.isRequired,
+  parameterValue: PropTypes.any,
+  setParameterValue: PropTypes.func.isRequired,
 };
