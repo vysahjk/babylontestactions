@@ -42,7 +42,7 @@ const _generateGridDataFromXLSX = async (fileBlob, parameterData, options) => {
 };
 
 const checkCsvContent = (data, parameterData, options) => {
-  const fileContent = AgGridUtils.toCSV(data.rows, ConfigUtils.getParameterAttribute(parameterData, 'columns'));
+  const fileContent = AgGridUtils.toCSV(data.rows, data.columns);
   const agGridData = _generateGridDataFromCSV(fileContent, parameterData, options);
   if (agGridData.error) {
     return {
@@ -54,7 +54,7 @@ const checkCsvContent = (data, parameterData, options) => {
       file: null,
       name: 'content.csv',
       content: fileContent,
-      agGridRows: data.rows,
+      agGridRows: agGridData.rows,
       agGridColumns: ConfigUtils.getParameterAttribute(parameterData, 'columns'),
       errors: null,
       status: UPLOAD_FILE_STATUS_KEY.READY_TO_UPLOAD,
@@ -108,7 +108,7 @@ export const AzureFunctionTableFactory = ({ parameterData, context, parameterVal
 
   // Store last parameter in a ref
   // Update a state is async, so, in case of multiple call of updateParameterValue in same function
-  // parameter state value will be update only in last call.
+  // parameter state value will be updated only in last call.
   // We need here to use a ref value for be sure to have the good value.
   const lastNewParameterValue = useRef(parameter);
   const updateParameterValue = (newValuePart) => {
