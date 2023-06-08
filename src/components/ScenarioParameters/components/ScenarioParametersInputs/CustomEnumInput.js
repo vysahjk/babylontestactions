@@ -73,12 +73,12 @@ export const CustomEnumInput = ({ parameterData, context, parameterValue, setPar
   const baseTranslation = 'genericcomponent.text.scenario.parameters.' + id + '.';
 
   const enumText = enumValues.map((option) => ({
-    key: option.key,
-    value: t(`${baseTranslation}${option.key}.label`, option.value),
-    tooltip: t(`${baseTranslation}${option.key}.tooltip`, ''),
+    key: option?.key,
+    value: t(`${baseTranslation}${option?.key}.label`, option?.value),
+    tooltip: t(`${baseTranslation}${option?.key}.tooltip`, ''),
   }));
 
-  const enumTooltipValue = enumText.find((elem) => elem.key === value).tooltip;
+  const enumTooltipValue = enumText.find((elem) => elem?.key === value)?.tooltip;
 
   if (textFieldProps.disabled)
     return (
@@ -91,7 +91,7 @@ export const CustomEnumInput = ({ parameterData, context, parameterValue, setPar
         </Stack>
         <FadingTooltip title={enumTooltipValue}>
           <Typography data-cy="disabled-input-value" variant="body2" sx={{ ml: 1, width: 'fit-content' }}>
-            {enumText.find((elem) => elem.key === value).value}
+            {enumText.find((elem) => elem?.key === value)?.value}
           </Typography>
         </FadingTooltip>
       </Stack>
@@ -113,8 +113,8 @@ export const CustomEnumInput = ({ parameterData, context, parameterValue, setPar
             }}
           >
             {enumValues.map((option) => (
-              <MenuItem key={option.key} value={option.key} data-cy={option.key}>
-                {enumText.find((elem) => elem.key === option.key).value}
+              <MenuItem key={option?.key} value={option?.key} data-cy={option?.key}>
+                {enumText.find((elem) => elem?.key === option?.key)?.value}
               </MenuItem>
             ))}
           </TextField>
