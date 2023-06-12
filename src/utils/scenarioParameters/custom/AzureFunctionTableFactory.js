@@ -195,21 +195,23 @@ export const AzureFunctionTableFactory = ({ parameterData, context, parameterVal
         headers.common = {};
         headers.common.Authorization = 'Bearer ' + tokens.accessToken;
       }
-      const { data } = await axios({
-        method: 'post',
-        url: azureFunctionAddress,
-        headers,
-        params: {
-          'organization-id': organizationId,
-          'scenario-id': scenarioId,
-          'workspace-id': workspaceId,
-        },
-      });
-
-      if (data) {
-        const responseDescriptor = checkCsvContent(data, parameterData, options);
-        setClientFileDescriptor(responseDescriptor);
-      } else {
+      try {
+        const { data } = await axios({
+          method: 'post',
+          url: azureFunctionAddress,
+          headers,
+          params: {
+            'organization-id': organizationId,
+            'scenario-id': scenarioId,
+            'workspace-id': workspaceId,
+          },
+        });
+        if (data) {
+          const responseDescriptor = checkCsvContent(data, parameterData, options);
+          setClientFileDescriptor(responseDescriptor);
+        }
+      } catch (e) {
+        console.error(e);
         setClientFileDescriptor({
           file: null,
           content: null,
