@@ -27,17 +27,17 @@ export const CustomDateInput = ({ parameterData, context, parameterValue, setPar
   });
   const minDate = useMemo(() => {
     return parameterData.id === 'end_date'
-      ? new Date(startDate)
+      ? dayjs(startDate).add(1, 'day')
       : parameterData.minValue
-      ? new Date(parameterData.minValue)
+      ? dayjs(parameterData.minValue)
       : undefined;
   }, [parameterData.id, startDate, parameterData.minValue]);
 
   const maxDate = useMemo(() => {
     return parameterData.id === 'start_date'
-      ? new Date(endDate)
+      ? dayjs(endDate).subtract(1, 'day')
       : parameterData.maxValue
-      ? new Date(parameterData.maxValue)
+      ? dayjs(parameterData.maxValue)
       : undefined;
   }, [parameterData.id, endDate, parameterData.maxValue]);
 
